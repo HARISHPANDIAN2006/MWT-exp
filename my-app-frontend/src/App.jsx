@@ -1,16 +1,16 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import ServicesSection from "./ServicesSection";
-import HeroSection from "./HeroSection";
-import PopularServices from "./PopularServices";
-import CopySection from "./CopySection";
-import CombinedSection from "./CombinedSection";
-import ImageGallery from "./ImageGallery";
-import RemainingSection from "./RemainingSection";
-import FooterSection from "./FooterSection";
-import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
-import ForgetForm from "./ForgetForm";
+import ServicesSection from "./HomeSections/ServicesSection";
+import HeroSection from "./HomeSections/HeroSection";
+import PopularServices from "./HomeSections/PopularServices";
+import CopySection from "./HomeSections/CopySection";
+import CombinedSection from "./HomeSections/CombinedSection";
+import ImageGallery from "./HomeSections/ImageGallery";
+import RemainingSection from "./HomeSections/RemainingSection";
+import FooterSection from "./HomeSections/FooterSection";
+import LoginForm from "./AuthSections/LoginForm";
+import SignupForm from "./AuthSections/SignupForm";
+import ForgetForm from "./AuthSections/ForgetForm";
 
 function HomePage() {
   return (
