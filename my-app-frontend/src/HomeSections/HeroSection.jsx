@@ -14,10 +14,10 @@ const HeroSection = () => {
 
       {/* Navbar */}
       <nav className="flex justify-evenly items-center py-6 bg-white text-black shadow fixed top-0 left-0 w-full z-10">
-        <div className="text-4xl font-bold text-green-600">fiverr.</div>
+        <div className="text-4xl font-bold text-green-600">Servizio</div>
         <div className="flex items-center space-x-8 text-sm font-semibold">
           <a href="#" className="hover:underline">
-            Fiverr Pro
+            Activate Pro
           </a>
           <a href="#" className="hover:underline">
             Explore
@@ -79,19 +79,19 @@ const HeroSection = () => {
       <section className="flex justify-start pl-24 -mt-24">
         <div className="flex justify-start gap-12 px-8 bg-black py-5 rounded-2xl shadow-lg">
           <span>
-            <img src="images/meta.png" alt="Meta" className="w-28 h-10" />
+            <img src="images/meta.png" alt="Meta" className="w-14 h-7" />
           </span>
           <span>
-            <img src="images/google.png" alt="Google" className="w-28 h-10" />
+            <img src="images/google.png" alt="Google" className="w-14 h-8" />
           </span>
           <span>
-            <img src="images/netflix.png" alt="Netflix" className="w-28 h-10" />
+            <img src="images/netflix.png" alt="Netflix" className="w-14 h-7" />
           </span>
           <span>
-            <img src="images/p&g.png" alt="P&G" className="w-28 h-10" />
+            <img src="images/p&g.png" alt="P&G" className="w-10 h-6" />
           </span>
           <span>
-            <img src="images/paypal.png" alt="PayPal" className="w-28 h-10" />
+            <img src="images/paypal.png" alt="PayPal" className="w-14 h-8" />
           </span>
         </div>
       </section>
