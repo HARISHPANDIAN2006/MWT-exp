@@ -39,6 +39,7 @@ const PopularServices = () => {
         ))}
       </Swiper>
     </section>
+    
   );
 };
 

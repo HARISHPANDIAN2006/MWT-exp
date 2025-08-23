@@ -6,7 +6,7 @@ const HeroSection = () => {
       {/* Background Video */}
       <video autoPlay muted loop className="video-bg">
         <source
-          src="https://www.w3schools.com/howto/rain.mp4"
+          src="/Homevideo.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.
