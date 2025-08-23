@@ -10,7 +10,7 @@ async function connectDB() {
       useUnifiedTopology: true,
     });
     console.log("✅ MongoDB Atlas connected successfully!");
-    process.exit(0); // exit after success
+    process.exit(0); 
   } catch (error) {
     console.error("❌ MongoDB connection failed:", error.message);
     process.exit(1);
