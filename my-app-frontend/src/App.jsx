@@ -11,6 +11,7 @@ import FooterSection from "./HomeSections/FooterSection";
 import LoginForm from "./AuthSections/LoginForm";
 import SignupForm from "./AuthSections/SignupForm";
 import ForgetForm from "./AuthSections/ForgetForm";
+import LoginSignup from "./AuthSections/LoginSignup";
 
 function HomePage() {
   return (
@@ -23,6 +24,7 @@ function HomePage() {
       <ImageGallery />
       <RemainingSection />
       <FooterSection />
+      <LoginSignup />
     </>
   );
 }
