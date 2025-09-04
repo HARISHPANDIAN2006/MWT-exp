@@ -8,7 +8,7 @@ const LoginSignup = () => {
     <div className="flex min-h-screen items-center justify-center relative bg-gray-100">
       {/* Background Video */}
       <video autoPlay muted loop className="absolute top-0 left-0 w-full h-full object-cover -z-10">
-        <source src="https://www.w3schools.com/howto/rain.mp4" type="video/mp4" />
+        <source src="/Homevideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
