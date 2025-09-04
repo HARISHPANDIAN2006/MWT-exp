@@ -4,7 +4,7 @@ const CopySection = () => {
   return (
     <>
       {/* Section 1 */}
-      <section className="bg-gradient-to-br from-pink-500 to-pink-900 rounded-xl text-white flex flex-col lg:flex-row items-center justify-between gap-6 my-10 px-20 mx-10 py-16 mt-32">
+      <section className="bg-gradient-to-br from-pink-500 to-pink-900 rounded-xl text-white flex flex-col lg:flex-row items-center justify-between gap-6 my-10 px-20 mx-10 py-16 mt-8">
         <div className="max-w-md">
           <h2 className="text-4xl font-bold mb-3">Stuck at vibe coding?</h2>
           <p className="mb-5 text-white/90 font-semibold text-xl">

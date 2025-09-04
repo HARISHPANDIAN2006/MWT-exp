@@ -6,17 +6,20 @@ import CopySection from "./HomeSections/CopySection";
 import RemainingSection from "./HomeSections/RemainingSection";
 import PopularServices from "./HomeSections/PopularServices";
 import ServicesSection from "./HomeSections/ServicesSection";
+import CombinedSection from "./HomeSections/CombinedSection";
+import ImageGallery from "./HomeSections/ImageGallery";
 
 function HomePage() {
   return (
     <>
       <HeroSection />
       <ServicesSection />
-      {/*
       <PopularServices />
-      <RemainingSection />
       <CopySection />
-      <FooterSection />*/}
+      <CombinedSection />
+      <ImageGallery />
+      <RemainingSection />
+      <FooterSection />
     </>
   );
 }

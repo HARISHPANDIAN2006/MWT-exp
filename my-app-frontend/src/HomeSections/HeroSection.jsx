@@ -73,7 +73,7 @@ const HeroSection = () => {
         </div>
 
         {/* Popular Services */}
-        <div className="mt-16 flex flex-wrap gap-3">
+        <div className="mt-8 flex flex-wrap gap-3">
           {services.length > 0 ? (
             services.map((service, index) => (
               <button
@@ -90,7 +90,7 @@ const HeroSection = () => {
       </section>
 
       {/* Brand Logos */}
-      <section className="flex justify-start pl-24 -mt-28">
+      <section className="flex justify-start pl-24 -mt-20">
         <div className="flex justify-start gap-12 px-8 bg-black py-5 rounded-2xl shadow-lg">
           <span>
             <img src="images/meta.png" alt="Meta" className="w-14 h-7" />

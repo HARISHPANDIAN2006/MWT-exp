@@ -12,7 +12,7 @@ const ServicesSection = () => {
 
   return (
     <section className="px-10 mt-12 pt-12 bg-white">
-      <div className="flex gap-6 flex-wrap">
+      <div className="flex gap-6">
         {services.length > 0 ? (
           services.map((service, index) => (
             <div
