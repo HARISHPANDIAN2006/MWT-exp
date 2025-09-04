@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -15,28 +16,32 @@ const HeroSection = () => {
       {/* Navbar */}
       <nav className="flex justify-evenly items-center py-6 bg-white text-black shadow fixed top-0 left-0 w-full z-10">
         <div className="text-4xl font-bold text-green-600">Servizio</div>
+
         <div className="flex items-center space-x-8 text-sm font-semibold">
-          <a href="#" className="hover:underline">
+          <Link to="#" className="hover:underline">
             Activate Pro
-          </a>
-          <a href="#" className="hover:underline">
+          </Link>
+          <Link to="#" className="hover:underline">
             Explore
-          </a>
-          <a href="#" className="hover:underline">
+          </Link>
+          <Link to="#" className="hover:underline">
             Become a Seller
-          </a>
-          <a href="/login">
+          </Link>
+
+          <Link to="/login">
             <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
               Sign in
             </button>
-          </a>
-          <a href="/signup">
+          </Link>
+
+          <Link to="/signup">
             <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
               Join
             </button>
-          </a>
+          </Link>
         </div>
       </nav>
+
 
       {/* Hero Section */}
       <section className="flex flex-col justify-center h-[80vh] px-24 relative z-5 mt-20">
