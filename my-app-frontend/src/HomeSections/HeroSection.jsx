@@ -1,7 +1,18 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 
 const HeroSection = () => {
+  const [services, setServices] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/services") // update if deployed
+      .then((res) => res.json())
+      .then((data) => setServices(data))
+      .catch((err) => console.error("Error fetching services:", err));
+    console.log(services);
+  }, []);
+
   return (
     <div className="relative text-white">
       {/* Background Video */}
@@ -62,26 +73,24 @@ const HeroSection = () => {
         </div>
 
         {/* Popular Services */}
-        <div className="mt-16 flex flex-wrap gap-3 justify-start text-lg">
-          {[
-            "Website development",
-            "Architecture & Interior design",
-            "UGC videos",
-            "Video editing",
-            "Vibe coding",
-          ].map((service, index) => (
-            <button
-              key={index}
-              className="bg-black text-white px-4 py-2 shadow hover:bg-white hover:text-black hover:border-black border-2 border-white rounded-2xl"
-            >
-              {service}
-            </button>
-          ))}
+        <div className="mt-16 flex flex-wrap gap-3">
+          {services.length > 0 ? (
+            services.map((service, index) => (
+              <button
+                key={index}
+                className="bg-black text-white text-xl px-4 py-2 border-2 rounded-2xl hover:bg-white hover:text-black hover:border-black"
+              >
+                {service.title}
+              </button>
+            ))
+          ) : (
+            <p className="text-gray-500">Loading services...</p>
+          )}
         </div>
       </section>
 
       {/* Brand Logos */}
-      <section className="flex justify-start pl-24 -mt-24">
+      <section className="flex justify-start pl-24 -mt-28">
         <div className="flex justify-start gap-12 px-8 bg-black py-5 rounded-2xl shadow-lg">
           <span>
             <img src="images/meta.png" alt="Meta" className="w-14 h-7" />

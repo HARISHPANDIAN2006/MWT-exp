@@ -4,14 +4,19 @@ import HeroSection from "./HomeSections/HeroSection";
 import FooterSection from "./HomeSections/FooterSection";
 import CopySection from "./HomeSections/CopySection";
 import RemainingSection from "./HomeSections/RemainingSection";
+import PopularServices from "./HomeSections/PopularServices";
+import ServicesSection from "./HomeSections/ServicesSection";
 
 function HomePage() {
   return (
     <>
       <HeroSection />
-      <CopySection />
+      <ServicesSection />
+      {/*
+      <PopularServices />
       <RemainingSection />
-      <FooterSection />
+      <CopySection />
+      <FooterSection />*/}
     </>
   );
 }
