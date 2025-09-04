@@ -39,13 +39,13 @@ const HeroSection = () => {
       </nav>
 
       {/* Hero Section */}
-      <section className="flex flex-col justify-center h-[80vh] px-24 relative z-5 mt-5">
+      <section className="flex flex-col justify-center h-[80vh] px-24 relative z-5 mt-20">
         <h1 className="text-8xl font-bold mb-8 drop-shadow-lg font-sans text-outline-white">
           Our freelancers <br /> will take it from here
         </h1>
 
         {/* Search Bar */}
-        <div className="w-full max-w-5xl flex bg-white rounded-2xl overflow-hidden shadow-lg">
+        <div className="w-full max-w-5xl flex bg-white rounded-2xl overflow-hidden shadow-lg mt-12">
           <input
             type="text"
             placeholder="Search for any service..."
@@ -57,7 +57,7 @@ const HeroSection = () => {
         </div>
 
         {/* Popular Services */}
-        <div className="mt-6 flex flex-wrap gap-3 justify-start text-lg">
+        <div className="mt-16 flex flex-wrap gap-3 justify-start text-lg">
           {[
             "Website development",
             "Architecture & Interior design",
