@@ -13,7 +13,7 @@ export default function SignupForm() {
         loop
         className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
       >
-        <source src="Vibe_coding_video.mp4" type="video/mp4" />
+        <source src="/Vibe_coding_video.mp4" type="video/mp4" />
         Your browser does not support HTML5 video.
       </video>
 

@@ -7,15 +7,10 @@ const LoginSignup = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center relative bg-gray-100">
-      {/* Background Video */}
-      <video autoPlay muted loop className="absolute top-0 left-0 w-full h-full object-cover -z-10">
-        <source src="/Homevideo.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
 
       {/* Dark Overlay */}
 
-      <div className="absolute top-0 left-0 w-full h-full bg-black/50 -z-0"></div>
+      <div className="absolute inset-0 bg-black bg-opacity-25 z-0"></div>
 
       {/* Signup/Login Box */}
       <div className="flex w-[90%] max-w-5xl bg-white rounded-lg shadow-md overflow-hidden z-10 border-black border-2">
