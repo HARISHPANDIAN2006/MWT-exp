@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgVideo from "/Vibe_coding_video.mp4"; // adjust path if needed
+import bgVideo from "/Vibe_coding_video.mp4";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -113,13 +113,13 @@ const LoginForm = () => {
             {/* Links */}
             <p className="text-center text-sm mt-6">
               New User?{" "}
-              <a href="/signup" className="text-blue-300 hover:underline">
+              <a href="/loginsignup/signup" className="text-blue-300 hover:underline">
                 Sign up
               </a>
             </p>
             <p className="text-center text-sm mt-3">
               Forget Password?{" "}
-              <a href="/forgot" className="text-blue-300 hover:underline">
+              <a href="/loginsignup/forgot" className="text-blue-300 hover:underline">
                 Click Here
               </a>
             </p>

@@ -48,7 +48,6 @@ const Guide = mongoose.model("guides", GuideSchema);
 app.get("/api/guides", async (req, res) => {
   try {
     const guides = await Guide.find();
-    console.log(guides);
     res.json(guides);
   } catch (err) {
     res.status(500).json({ error: err.message });

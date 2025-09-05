@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import sampleImg from "./assets/image.png"; // adjust path if needed
+import sampleImg from "./assets/image.png";
+import { Link, Outlet } from "react-router-dom";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -13,6 +14,7 @@ const LoginSignup = () => {
       </video>
 
       {/* Dark Overlay */}
+
       <div className="absolute top-0 left-0 w-full h-full bg-black/50 -z-0"></div>
 
       {/* Signup/Login Box */}
@@ -67,15 +69,16 @@ const LoginSignup = () => {
               />{" "}
               Continue with Google
             </button>
-
-            <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
-              <img
-                src="https://img.icons8.com/color/24/email.png"
-                alt="email"
-                className="mr-2"
-              />
-              Continue with Email
-            </button>
+            <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}>
+              <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
+                <img
+                  src="https://img.icons8.com/color/24/email.png"
+                  alt="email"
+                  className="mr-2"
+                />
+                Continue with Email
+              </button>
+            </Link>
           </div>
 
           {/* Divider */}

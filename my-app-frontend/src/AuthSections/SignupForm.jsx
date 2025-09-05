@@ -178,7 +178,7 @@ export default function SignupForm() {
 
             <p className="text-center text-sm mt-3">
               Already registered?{" "}
-              <a href="loginForm.html" className="text-blue-300 hover:underline">
+              <a href="/loginsignup/login" className="text-blue-300 hover:underline">
                 Login
               </a>
             </p>

@@ -21,7 +21,7 @@ const ServicesSection = () => {
             >
               <h3 className="font-bold text-lg mb-3">{service.title}</h3>
               <img
-                src={"https://picsum.photos/750/500"} // fallback image
+                src={service.image || "https://picsum.photos/400/250"} // fallback image
                 className="rounded-xl"
                 alt={service.title}
               />

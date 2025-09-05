@@ -115,7 +115,7 @@ const ImageGallery = () => {
       <section class="bg-pink-50 rounded-2xl p-8 mt-8 flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto shadow border-2 border-neutral-900">
         <div class="max-w-lg">
           <h2 class="text-3xl font-semibold text-gray-900 mb-3">
-            <span class="font-bold">fiverr</span> <span class="font-light">logo maker.</span>
+            <span class="font-bold">Servizio</span> <span class="font-light">logo maker.</span>
           </h2>
           <h3 class="text-4xl font-bold text-gray-900 mb-3">
             Make an incredible logo <span class="text-orange-500">in seconds</span>
@@ -124,7 +124,7 @@ const ImageGallery = () => {
             Pre-designed by top talent. Just add your touch.
           </p>
           <button class="bg-black text-white font-medium px-6 py-3 rounded-lg hover:bg-gray-800 transition">
-            Try Fiverr Logo Maker
+            Try Servizio Logo Maker
           </button>
         </div>
 
@@ -132,9 +132,9 @@ const ImageGallery = () => {
           <div class="bg-green-100 p-3 rounded-lg">
             <img src={sampleImg} alt="Can" class="rounded-lg shadow-md" />
             <div class="flex gap-2 mt-3 justify-center">
-              <div class="w-8 h-8 bg-green-800 text-white flex items-center justify-center rounded cursor-pointer">a</div>
-              <div class="w-8 h-8 bg-orange-200 text-orange-600 flex items-center justify-center rounded cursor-pointer">a</div>
-              <div class="w-8 h-8 bg-pink-200 text-pink-600 flex items-center justify-center rounded cursor-pointer">a</div>
+              <div class="w-8 h-8 bg-green-800 text-white flex items-center justify-center rounded cursor-pointer">.</div>
+              <div class="w-8 h-8 bg-orange-200 text-orange-600 flex items-center justify-center rounded cursor-pointer">.</div>
+              <div class="w-8 h-8 bg-pink-200 text-pink-600 flex items-center justify-center rounded cursor-pointer">.</div>
             </div>
           </div>
         </div>

@@ -39,13 +39,13 @@ const HeroSection = () => {
             Become a Seller
           </Link>
 
-          <Link to="/login">
+          <Link to="/loginsignup">
             <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
               Sign in
             </button>
           </Link>
 
-          <Link to="/signup">
+          <Link to="/loginsignup">
             <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
               Join
             </button>

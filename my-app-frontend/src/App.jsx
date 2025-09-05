@@ -8,6 +8,10 @@ import PopularServices from "./HomeSections/PopularServices";
 import ServicesSection from "./HomeSections/ServicesSection";
 import CombinedSection from "./HomeSections/CombinedSection";
 import ImageGallery from "./HomeSections/ImageGallery";
+import LoginSignup from "./AuthSections/LoginSignup";
+import LoginForm from "./AuthSections/LoginForm";
+import SignupForm from "./AuthSections/SignupForm";
+import ForgetForm from "./AuthSections/ForgetForm";
 
 function HomePage() {
   return (
@@ -30,7 +34,12 @@ function App() {
       <Routes>
 
         <Route path="/" element={<HomePage />} />
-        
+        <Route path="/loginsignup" element={<LoginSignup />} />
+        <Route path="/loginsignup/login" element={<LoginForm />} />
+        <Route path="/loginsignup/signup" element={<SignupForm />} />
+        <Route path="/loginsignup/forgot" element={<ForgetForm />} />
+        <Route path="*" element={<div>404 Not Found</div>} />
+
       </Routes>
     </Router>
   );
