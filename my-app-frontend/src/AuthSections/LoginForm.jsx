@@ -3,9 +3,50 @@ import bgVideo from "/Vibe_coding_video.mp4";
 
 const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    username: "",
+    phno: "",
+    email: "",
+    userType: "",
+    password: "",
+  });
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  // Handle input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: formData.username,
+          password: formData.password,
+          email: formData.email,
+          phno: formData.phno
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`✅ ${data.message}\nWelcome, ${data.user.username}!`);
+      } else {
+        alert(`❌ ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("❌ Something went wrong. Please try again.");
+    }
   };
 
   return (
@@ -29,12 +70,14 @@ const LoginForm = () => {
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white">
           <h2 className="text-3xl font-bold text-center mb-6">Login</h2>
 
-          <form action="/login" method="POST" className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-3">
               <input
                 type="text"
                 name="username"
                 placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
                 required
                 className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
               />
@@ -45,6 +88,8 @@ const LoginForm = () => {
                 type="tel"
                 name="phno"
                 placeholder="Phone Number"
+                value={formData.phno}
+                onChange={handleChange}
                 required
                 className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
               />
@@ -52,6 +97,8 @@ const LoginForm = () => {
                 type="email"
                 name="email"
                 placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
                 required
                 className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
               />
@@ -66,6 +113,8 @@ const LoginForm = () => {
                     type="radio"
                     name="userType"
                     value="user"
+                    checked={formData.userType === "user"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -76,6 +125,8 @@ const LoginForm = () => {
                     type="radio"
                     name="userType"
                     value="provider"
+                    checked={formData.userType === "provider"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -91,6 +142,8 @@ const LoginForm = () => {
                 id="password"
                 name="password"
                 placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
                 required
                 className="w-full p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
               />
@@ -113,13 +166,19 @@ const LoginForm = () => {
             {/* Links */}
             <p className="text-center text-sm mt-6">
               New User?{" "}
-              <a href="/loginsignup/signup" className="text-blue-300 hover:underline">
+              <a
+                href="/loginsignup/signup"
+                className="text-blue-300 hover:underline"
+              >
                 Sign up
               </a>
             </p>
             <p className="text-center text-sm mt-3">
               Forget Password?{" "}
-              <a href="/loginsignup/forgot" className="text-blue-300 hover:underline">
+              <a
+                href="/loginsignup/forgot"
+                className="text-blue-300 hover:underline"
+              >
                 Click Here
               </a>
             </p>

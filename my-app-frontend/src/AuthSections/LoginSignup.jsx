@@ -65,7 +65,7 @@ const LoginSignup = () => {
               Continue with Google
             </button>
             <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}>
-              <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
+              <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5">
                 <img
                   src="https://img.icons8.com/color/24/email.png"
                   alt="email"

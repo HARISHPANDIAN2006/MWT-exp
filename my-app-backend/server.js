@@ -54,5 +54,54 @@ app.get("/api/guides", async (req, res) => {
   }
 });
 
+const userSchema = new mongoose.Schema({
+  username: { type: String, required: true, unique: true },
+  phno: { type: String },
+  email: { type: String, required: true, unique: true },
+  userType: { type: String, enum: ["user", "provider"], required: true },
+  password: { type: String, required: true },
+});
+
+const User = mongoose.model("User", userSchema, "User");
+
+// Login API
+app.post("/api/login", async (req, res) => {
+  const { username, email, phno, password } = req.body;
+
+  try {
+    // Step 1: Find user with username, email, and mobile
+    const user = await User.findOne({ username, email, phno });
+
+    if (!user) {
+      console.log(`❌ User "${username}" with given email & phone not found`);
+      return res.status(404).json({ message: "User not found or details mismatch" });
+    }
+
+    // Step 2: Verify password
+    if (user.password !== password) {
+      console.log(`⚠️ Invalid password for user "${username}"`);
+      return res.status(401).json({ message: "Invalid password" });
+    }
+
+    console.log(`✅ User "${username}" logged in successfully!`);
+
+    // Step 3: Send response
+    res.json({
+      message: "Login successful",
+      user: {
+        username: user.username,
+        email: user.email,
+        phno: user.phno,
+        userType: user.userType,
+      },
+    });
+
+  } catch (error) {
+    console.error("❌ Error during login:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 app.listen(5000, () => console.log("🚀 Server running on http://localhost:5000"));
