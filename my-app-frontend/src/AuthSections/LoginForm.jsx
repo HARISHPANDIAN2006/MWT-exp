@@ -15,12 +15,10 @@ const LoginForm = () => {
     setShowPassword((prev) => !prev);
   };
 
-  // Handle input change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
 

@@ -1,8 +1,50 @@
 import { useState } from "react";
+import bgVideo from "/Vibe_coding_video.mp4";
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname: "",
+    lastname: "",
+    phno: "",
+    email: "",
+    username: "",
+    dob: "",
+    userType: "",
+    gender: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  // handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // handle form submit
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // stop page reload
+
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(`✅ ${data.message}\nWelcome, ${data.user.username}!`);
+      } else {
+        alert(`❌ ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      alert("❌ Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -13,33 +55,37 @@ export default function SignupForm() {
         loop
         className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
       >
-        <source src="/Vibe_coding_video.mp4" type="video/mp4" />
+        <source src={bgVideo} type="video/mp4" />
         Your browser does not support HTML5 video.
       </video>
 
-      {/* Overlay for readability */}
+      {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
 
-      {/* Signup Form Container */}
+      {/* Signup Form */}
       <div className="flex justify-center items-center h-full relative z-10 p-4">
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white">
           <h2 className="text-3xl font-bold text-center mb-6">Create Account</h2>
-          <form action="/signup" method="POST" className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* First & Last Name */}
             <div className="grid grid-cols-2 gap-3">
               <input
                 type="text"
                 name="firstname"
                 placeholder="First Name"
+                value={formData.firstname}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
               <input
                 type="text"
                 name="lastname"
                 placeholder="Last Name"
+                value={formData.lastname}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
             </div>
 
@@ -49,15 +95,19 @@ export default function SignupForm() {
                 type="tel"
                 name="phno"
                 placeholder="Phone Number"
+                value={formData.phno}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
+                value={formData.email}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
             </div>
 
@@ -67,14 +117,18 @@ export default function SignupForm() {
                 type="text"
                 name="username"
                 placeholder="Username"
+                value={formData.username}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
               <input
                 type="date"
                 name="dob"
+                value={formData.dob}
+                onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-white"
+                className="p-2 bg-transparent border border-white rounded-md text-white"
               />
             </div>
 
@@ -87,6 +141,8 @@ export default function SignupForm() {
                     type="radio"
                     name="userType"
                     value="user"
+                    checked={formData.userType === "user"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -97,6 +153,8 @@ export default function SignupForm() {
                     type="radio"
                     name="userType"
                     value="provider"
+                    checked={formData.userType === "provider"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -114,6 +172,8 @@ export default function SignupForm() {
                     type="radio"
                     name="gender"
                     value="male"
+                    checked={formData.gender === "male"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -124,6 +184,8 @@ export default function SignupForm() {
                     type="radio"
                     name="gender"
                     value="female"
+                    checked={formData.gender === "female"}
+                    onChange={handleChange}
                     required
                     className="mr-2"
                   />
@@ -136,11 +198,12 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                id="password"
                 name="password"
                 placeholder="Password"
+                value={formData.password}
+                onChange={handleChange}
                 required
-                className="w-full p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
@@ -154,11 +217,12 @@ export default function SignupForm() {
             <div className="relative">
               <input
                 type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
                 name="confirmPassword"
                 placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 required
-                className="w-full p-2 bg-transparent border border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 placeholder-white"
+                className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
               />
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -178,7 +242,10 @@ export default function SignupForm() {
 
             <p className="text-center text-sm mt-3">
               Already registered?{" "}
-              <a href="/loginsignup/login" className="text-blue-300 hover:underline">
+              <a
+                href="/loginsignup/login"
+                className="text-blue-300 hover:underline"
+              >
                 Login
               </a>
             </p>
