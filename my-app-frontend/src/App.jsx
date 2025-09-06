@@ -12,6 +12,7 @@ import LoginSignup from "./AuthSections/LoginSignup";
 import LoginForm from "./AuthSections/LoginForm";
 import SignupForm from "./AuthSections/SignupForm";
 import ForgetForm from "./AuthSections/ForgetForm";
+import OtpPage from "./AuthSections/OtpPage";
 
 function HomePage() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/loginsignup/login" element={<LoginForm />} />
         <Route path="/loginsignup/signup" element={<SignupForm />} />
         <Route path="/loginsignup/forgot" element={<ForgetForm />} />
+        <Route path="/loginsignup/otp" element={<OtpPage />} />
         <Route path="*" element={<div>404 Not Found</div>} />
 
       </Routes>

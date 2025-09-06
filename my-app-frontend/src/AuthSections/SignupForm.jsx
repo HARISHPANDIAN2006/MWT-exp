@@ -24,19 +24,24 @@ export default function SignupForm() {
 
   // handle form submit
   const handleSubmit = async (e) => {
-    e.preventDefault(); // stop page reload
+    e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch("http://localhost:5000/api/otp/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(formData), // send all form data
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        alert(`✅ ${data.message}\nWelcome, ${data.user.username}!`);
+        alert("✅ OTP sent to your email!");
+
+        // Redirect to OTP page with email + formData
+        localStorage.setItem("pendingSignup", JSON.stringify(formData));
+        // store temporarily in localStorage
+        window.location.href = "/loginsignup/otp"; // go to OTP page
       } else {
         alert(`❌ ${data.message}`);
       }
@@ -45,6 +50,7 @@ export default function SignupForm() {
       alert("❌ Something went wrong. Please try again.");
     }
   };
+
 
   return (
     <div className="relative h-screen overflow-hidden">
