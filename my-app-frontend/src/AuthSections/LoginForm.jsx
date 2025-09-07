@@ -38,6 +38,7 @@ const LoginForm = () => {
 
       if (res.ok) {
         alert(`✅ ${data.message}\nWelcome, ${data.user.username}!`);
+        window.location.href = `/?username=${encodeURIComponent(data.user.username)}`;
       } else {
         alert(`❌ ${data.message}`);
       }

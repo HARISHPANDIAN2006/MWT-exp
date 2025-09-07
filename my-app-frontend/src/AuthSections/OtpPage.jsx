@@ -4,6 +4,7 @@ import bgVideo from "/Vibe_coding_video.mp4";
 const OtpPage = ({ onVerified }) => {
   const storedData = JSON.parse(localStorage.getItem("pendingSignup") || "{}");
   const email = storedData.email;
+  const username = storedData.username;
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60);
@@ -63,7 +64,7 @@ const OtpPage = ({ onVerified }) => {
         localStorage.removeItem("pendingSignup");
         setTimeout(() => {
           onVerified && onVerified();
-          window.location.href = "/";
+          window.location.href = `/?username=${encodeURIComponent(username)}`;
         }, 1500);
       } else {
         setStatusMessage("❌ Invalid OTP. Please try again.");

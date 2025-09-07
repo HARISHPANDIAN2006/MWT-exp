@@ -4,9 +4,15 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   const [services, setServices] = useState([]);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/services") // update if deployed
+    const params = new URLSearchParams(window.location.search);
+    const userFromUrl = params.get("username");
+    if (userFromUrl) {
+      setUsername(userFromUrl);
+    }
+    fetch("http://localhost:5000/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error fetching services:", err));
@@ -39,17 +45,30 @@ const HeroSection = () => {
             Become a Seller
           </Link>
 
-          <Link to="/loginsignup">
-            <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
-              Sign in
-            </button>
-          </Link>
-
-          <Link to="/loginsignup">
-            <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
-              Join
-            </button>
-          </Link>
+          {!username ? (
+            <>
+              <Link to="/loginsignup">
+                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                  Sign in
+                </button>
+              </Link>
+              <Link to="/loginsignup">
+                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                  Join
+                </button>
+              </Link>
+              <h1 className="text-2xl font-bold">Guest</h1>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-red-500">{username}</h1>
+              <Link to="/logout">
+                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                  Logout
+                </button>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
