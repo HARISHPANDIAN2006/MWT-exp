@@ -25,7 +25,7 @@ const HeroSection = () => {
       </video>
 
       {/* Navbar */}
-      <nav className="flex justify-evenly items-center py-6 bg-white text-black shadow fixed top-0 left-0 w-full z-10">
+      <nav className="flex justify-evenly items-center py-4 bg-white text-black shadow fixed top-0 left-0 w-full z-10">
         <div className="text-4xl font-bold text-green-600">Servizio</div>
 
         <div className="flex items-center space-x-8 text-sm font-semibold">
@@ -55,13 +55,13 @@ const HeroSection = () => {
 
 
       {/* Hero Section */}
-      <section className="flex flex-col justify-center h-[80vh] px-24 relative z-5 mt-20">
-        <h1 className="text-8xl font-bold mb-8 drop-shadow-lg font-sans text-outline-white">
+      <section className="flex flex-col justify-center h-[70vh] px-24 relative z-5 mt-16">
+        <h1 className="text-8xl font-bold mb-6 drop-shadow-lg font-sans text-outline-white">
           Our freelancers <br /> will take it from here
         </h1>
 
         {/* Search Bar */}
-        <div className="w-full max-w-5xl flex bg-white rounded-2xl overflow-hidden shadow-lg mt-12">
+        <div className="w-full max-w-5xl flex bg-white rounded-2xl overflow-hidden shadow-lg mt-4">
           <input
             type="text"
             placeholder="Search for any service..."
@@ -90,7 +90,7 @@ const HeroSection = () => {
       </section>
 
       {/* Brand Logos */}
-      <section className="flex justify-start pl-24 -mt-20">
+      <section className="flex justify-start pl-24 -mt-16">
         <div className="flex justify-start gap-12 px-8 bg-black py-5 rounded-2xl shadow-lg">
           <span>
             <img src="images/meta.png" alt="Meta" className="w-14 h-7" />

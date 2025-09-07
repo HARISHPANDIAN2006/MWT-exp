@@ -9,11 +9,16 @@ const OtpPage = ({ onVerified }) => {
   const [timeLeft, setTimeLeft] = useState(60);
   const [loading, setLoading] = useState(false);
   const [resending, setResending] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("📩 Enter the OTP sent to your email");
+  const [canVerify, setCanVerify] = useState(true); // controls verify button
   const firstInputRef = useRef(null);
 
   // Timer countdown
   useEffect(() => {
-    if (timeLeft === 0) return;
+    if (timeLeft === 0) {
+      setCanVerify(false); // disable verify when timer hits 0
+      return;
+    }
     const timer = setInterval(() => setTimeLeft((t) => t - 1), 1000);
     return () => clearInterval(timer);
   }, [timeLeft]);
@@ -31,11 +36,18 @@ const OtpPage = ({ onVerified }) => {
   // Submit OTP
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!canVerify) return;
+
     const enteredOtp = otp.join("");
-    if (enteredOtp.length !== 6) return alert("Enter a 6-digit OTP");
+    if (enteredOtp.length !== 6) {
+      setStatusMessage("⚠️ Please enter a 6-digit OTP");
+      return;
+    }
 
     try {
       setLoading(true);
+      setStatusMessage("🔄 Verifying OTP...");
+
       const res = await fetch("http://localhost:5000/api/otp/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -46,17 +58,20 @@ const OtpPage = ({ onVerified }) => {
       setLoading(false);
 
       if (res.ok) {
-        alert("✅ OTP Verified Successfully");
+        alert("Account Created Successfully! You can now log in.");
+        setStatusMessage("✅ OTP Verified! Redirecting to Home Page...");
         localStorage.removeItem("pendingSignup");
-        onVerified && onVerified();
-        window.location.href = "/";
+        setTimeout(() => {
+          onVerified && onVerified();
+          window.location.href = "/";
+        }, 1500);
       } else {
-        alert("❌ " + data.message);
+        setStatusMessage("❌ Invalid OTP. Please try again.");
       }
     } catch (err) {
       setLoading(false);
       console.error("Verify OTP error:", err);
-      alert("Server error");
+      setStatusMessage("🚨 Server error. Please try again.");
     }
   };
 
@@ -65,6 +80,8 @@ const OtpPage = ({ onVerified }) => {
     if (timeLeft > 0) return;
     try {
       setResending(true);
+      setStatusMessage("📤 Resending OTP...");
+
       const res = await fetch("http://localhost:5000/api/otp/resend-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -75,17 +92,18 @@ const OtpPage = ({ onVerified }) => {
       setResending(false);
 
       if (res.ok) {
-        alert("📩 OTP resent successfully");
+        setStatusMessage("✅ OTP resent successfully. Please check your email.");
         setTimeLeft(60);
-        setOtp(new Array(6).fill("")); // clear inputs
+        setOtp(new Array(6).fill(""));
+        setCanVerify(true); // allow verify again after resend
         if (firstInputRef.current) firstInputRef.current.focus();
       } else {
-        alert("❌ " + data.message);
+        setStatusMessage("❌ " + data.message);
       }
     } catch (err) {
       setResending(false);
       console.error("Resend OTP error:", err);
-      alert("Server error");
+      setStatusMessage("🚨 Server error while resending.");
     }
   };
 
@@ -102,16 +120,17 @@ const OtpPage = ({ onVerified }) => {
         Your browser does not support HTML5 video.
       </video>
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
 
-      {/* OTP Form Box */}
       <div className="flex justify-center items-center h-full relative z-10 p-4">
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white text-center">
-          <h2 className="text-3xl font-bold mb-4">Enter OTP</h2>
-          <p className="mb-6">
+          <h2 className="text-3xl font-bold mb-2">Enter OTP</h2>
+
+          <p className="mb-4">
             OTP sent to <b>{email}</b>
           </p>
+
+          <p className="text-sm text-blue-300 mb-6 mt-3">{statusMessage}</p>
 
           <form onSubmit={handleSubmit}>
             <div className="flex justify-center gap-2 mb-6">
@@ -123,6 +142,12 @@ const OtpPage = ({ onVerified }) => {
                   value={val}
                   ref={idx === 0 ? firstInputRef : null}
                   onChange={(e) => handleChange(e.target, idx)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Backspace" && !otp[idx] && idx > 0) {
+                      const prev = e.target.previousSibling;
+                      if (prev) prev.focus(); // move cursor back
+                    }
+                  }}
                   className="w-12 h-14 text-xl text-center bg-transparent border border-white rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-400"
                 />
               ))}
@@ -130,27 +155,36 @@ const OtpPage = ({ onVerified }) => {
 
             <button
               type="submit"
-              disabled={loading}
-              className="w-full py-2 bg-blue-600 hover:bg-blue-700 transition rounded-md text-white font-semibold"
+              disabled={loading || !canVerify}
+              className={`w-full py-2 rounded-md text-white font-semibold transition 
+                ${loading || !canVerify
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-600 hover:bg-blue-700"}`}
             >
               {loading ? "Verifying..." : "Verify OTP"}
             </button>
           </form>
 
           <p className="mt-6 text-sm">
-            ⏳ Expires in:{" "}
-            <span className="text-red-400 font-semibold">{timeLeft}</span>s
+            ⏳ Expires in :{" "}
+            <span className="text-red-400 font-semibold">{timeLeft}</span> s
           </p>
 
           <button
             onClick={handleResend}
             disabled={timeLeft > 0 || resending}
-            className={`mt-5 text-white text-2xl hover:underline ${
-              timeLeft > 0 || resending ? "opacity-50 cursor-not-allowed" : ""
-            }`}
+            className={`mt-5 text-white text-2xl hover:underline ${timeLeft > 0 || resending ? "opacity-50 cursor-not-allowed" : ""
+              }`}
           >
             {resending ? "Resending..." : "Resend OTP"}
-          </button> <span className="text-2xl text-white px-5">|</span> <a href="/loginsignup/login" className="text-2xl mt-5 hover:underline text-white">Login</a>
+          </button>
+          <span className="text-2xl text-white px-5">|</span>
+          <a
+            href="/loginsignup/login"
+            className="text-2xl mt-5 hover:underline text-white"
+          >
+            Login
+          </a>
         </div>
       </div>
     </div>

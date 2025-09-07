@@ -17,6 +17,8 @@ export default function SignupForm() {
     confirmPassword: "",
   });
 
+  const [currentStep, setCurrentStep] = useState("Fill in your details");
+
   // handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +27,7 @@ export default function SignupForm() {
   // handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
+     setCurrentStep("Sending OTP...");
 
     try {
       const res = await fetch("http://localhost:5000/api/otp/send-otp", {
@@ -36,18 +39,20 @@ export default function SignupForm() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("✅ OTP sent to your email!");
+        setCurrentStep("✅ OTP sent! Redirecting to OTP page...");
 
         // Redirect to OTP page with email + formData
         localStorage.setItem("pendingSignup", JSON.stringify(formData));
         // store temporarily in localStorage
-        window.location.href = "/loginsignup/otp"; // go to OTP page
+        setInterval(()=>window.location.href = "/loginsignup/otp",1500); // go to OTP page
       } else {
         alert(`❌ ${data.message}`);
+        setCurrentStep(`❌ ${data.message}`);
       }
     } catch (error) {
       console.error("Signup error:", error);
       alert("❌ Something went wrong. Please try again.");
+      setCurrentStep("❌ Something went wrong. Please try again.");
     }
   };
 
@@ -71,7 +76,11 @@ export default function SignupForm() {
       {/* Signup Form */}
       <div className="flex justify-center items-center h-full relative z-10 p-4">
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white">
-          <h2 className="text-3xl font-bold text-center mb-6">Create Account</h2>
+          <h2 className="text-3xl font-bold text-center mb-3">Create Account</h2>
+          {/* ✅ Current Step Message */}
+          <p className="text-center text-yellow-300 font-semibold mb-6">
+            {currentStep}
+          </p>
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* First & Last Name */}
             <div className="grid grid-cols-2 gap-3">
