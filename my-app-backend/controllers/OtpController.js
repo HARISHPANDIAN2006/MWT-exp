@@ -21,7 +21,7 @@ const sendOtp = async (req, res) => {
     const otp = generateOtp();
     otpStore[email] = {
       otp,
-      expires: Date.now() + 60 * 1000, // 1 min
+      expires: Date.now() + 60 * 1000, 
       userData: { firstname, lastname, phno, email, username, dob, userType, gender, password },
     };
 
@@ -48,7 +48,6 @@ const sendOtp = async (req, res) => {
 
 // Verify OTP
 const verifyOtp = async (req, res) => {
-  console.log("Verify OTP body:", req.body);
   const { email, otp } = req.body;
   if (!email || !otp) return res.status(400).json({ message: "Email & OTP required" });
 

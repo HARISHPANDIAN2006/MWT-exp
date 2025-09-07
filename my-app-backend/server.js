@@ -18,6 +18,7 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/services", require("./routes/serviceRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/otp", require("./routes/otpRoutes"));
+app.use("/api/forget", require("./routes/forgetRoutes.js"));
 
 // Start server
 const PORT = process.env.PORT || 5000;
