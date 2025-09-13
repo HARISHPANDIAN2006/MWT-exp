@@ -25,6 +25,7 @@ const LoginForm = () => {
     try {
       const res = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           username: formData.username,
@@ -37,8 +38,8 @@ const LoginForm = () => {
       const data = await res.json();
 
       if (res.ok) {
-        alert(`✅ ${data.message}\nWelcome, ${data.user.username}!`);
-        window.location.href = `/?username=${encodeURIComponent(data.user.username)}`;
+        alert(`✅ ${data.message}`);
+        window.location.href = "/";
       } else {
         alert(`❌ ${data.message}`);
       }

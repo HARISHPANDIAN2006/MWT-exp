@@ -83,6 +83,12 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ message: "⚠️ Invalid password" });
     }
 
+    req.session.user = {
+      username: user.username,
+      email: user.email,
+      phno: user.phno,
+    };
+
     // 3. Success response
     res.json({
       message: "✅ Login successful",

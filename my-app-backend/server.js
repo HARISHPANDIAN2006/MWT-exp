@@ -1,6 +1,6 @@
 const express = require("express");
-const session = require("express-session");
 const cors = require("cors");
+const session = require("express-session");
 require("dotenv").config();
 const connectDB = require("./config/db");
 
@@ -18,19 +18,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Session setup
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || "mySuperSecretKey", // change in .env
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false, // true if HTTPS
-      maxAge: 1000 * 60 * 60, // 1 hour
-    },
-  })
-);
+app.use(session({
+  secret: process.env.SESSION_SECRET, // keep it safe
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: false, // true if using https
+    maxAge: 1000 * 60 * 60, // 1 hour
+  },
+}));
 
 // ✅ Connect to DB
 connectDB();
@@ -38,6 +35,7 @@ connectDB();
 // ✅ Routes
 app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/services", require("./routes/serviceRoutes"));
+app.use("/api/session", require("./routes/sessionRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/otp", require("./routes/otpRoutes"));
 app.use("/api/forget", require("./routes/forgetRoutes"));

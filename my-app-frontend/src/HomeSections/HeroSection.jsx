@@ -6,12 +6,30 @@ const HeroSection = () => {
   const [services, setServices] = useState([]);
   const [username, setUsername] = useState(null);
 
+  const handleLogout = () => {
+    fetch("http://localhost:5000/api/session/logout", {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(() => {
+        setUsername("Guest");
+      })
+      .catch((err) => console.error("Error logging out:", err));
+  };
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const userFromUrl = params.get("username");
-    if (userFromUrl) {
-      setUsername(userFromUrl);
-    }
+    fetch("http://localhost:5000/api/session/me", {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Session Data from Backend:", data); // 👈 Add this
+        if (data.user) {
+          setUsername(data.user.username); // or data.user if just string
+        }
+      })
+      .catch((err) => console.error("Error fetching session:", err));
+
     fetch("http://localhost:5000/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data))
@@ -45,7 +63,7 @@ const HeroSection = () => {
             Become a Seller
           </Link>
 
-          {!username ? (
+          {username==="Guest" || !username ? (
             <>
               <Link to="/loginsignup">
                 <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
@@ -61,12 +79,15 @@ const HeroSection = () => {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-bold text-red-500">{username}</h1>
-              <Link to="/logout">
-                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
-                  Logout
-                </button>
-              </Link>
+              <h1 className="text-2xl font-bold text-red-500">
+                {username}
+              </h1>
+              <button
+                onClick={handleLogout}
+                className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition"
+              >
+                Logout
+              </button>
             </>
           )}
         </div>
