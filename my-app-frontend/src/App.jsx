@@ -14,6 +14,7 @@ import SignupForm from "./AuthSections/SignupForm";
 import ForgetForm from "./AuthSections/ForgetForm";
 import OtpPage from "./AuthSections/OtpPage";
 import ServiceInfo from "./ServiceList/ServiceInfo";
+import JustDialPages from "./Pages/JustDialPages";
 
 function HomePage() {
   return (
@@ -43,6 +44,7 @@ function App() {
         <Route path="/loginsignup/otp" element={<OtpPage />} />
         <Route path="/services/:id" element={<ServiceInfo />} />
         <Route path="*" element={<div>404 Not Found</div>} />
+        <Route path="/JustDialPages" element={<JustDialPages />} />
 
       </Routes>
     </Router>

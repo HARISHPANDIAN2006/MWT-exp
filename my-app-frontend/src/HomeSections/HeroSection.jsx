@@ -24,9 +24,9 @@ const HeroSection = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Session Data from Backend:", data); // 👈 Add this
+        console.log("Session Data from Backend:", data); 
         if (data.user) {
-          setUsername(data.user.username); // or data.user if just string
+          setUsername(data.user.username); 
         }
       })
       .catch((err) => console.error("Error fetching session:", err));
