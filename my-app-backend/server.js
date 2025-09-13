@@ -39,6 +39,7 @@ app.use("/api/session", require("./routes/sessionRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/otp", require("./routes/otpRoutes"));
 app.use("/api/forget", require("./routes/forgetRoutes"));
+app.use("/api/businesses", require("./routes/businessRoutes"));
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
