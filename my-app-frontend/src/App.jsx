@@ -14,6 +14,8 @@ import SignupForm from "./AuthSections/SignupForm";
 import ForgetForm from "./AuthSections/ForgetForm";
 import OtpPage from "./AuthSections/OtpPage";
 import ServiceInfo from "./ServiceList/ServiceInfo";
+import SubcategoryInfo from "./ServiceList/SubcategoryInfo";
+import JustDialPages from "./Pages/JustDialPages";
 
 function HomePage() {
   return (
