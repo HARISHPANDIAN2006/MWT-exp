@@ -12,6 +12,7 @@ const HeroSection = () => {
       credentials: "include",
     })
       .then(() => {
+        alert("Logged out successfully...");
         setUsername("Guest");
       })
       .catch((err) => console.error("Error logging out:", err));

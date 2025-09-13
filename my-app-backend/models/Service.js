@@ -1,9 +1,16 @@
 const mongoose = require("mongoose");
 
-const ServiceSchema = new mongoose.Schema({
-  title: String,
-  description: String,
-  image: String,
+const SubcategorySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  image: { type: String, required: true },
 });
+
+const ServiceSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  homeImage: { type: String }, // image for main listing
+  subcategories: [SubcategorySchema], // array of subcategories
+}, { timestamps: true });
 
 module.exports = mongoose.model("Service", ServiceSchema, "services");

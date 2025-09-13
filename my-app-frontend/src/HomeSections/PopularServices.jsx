@@ -35,7 +35,7 @@ const PopularServices = () => {
             >
               <h3 className="font-bold text-lg mb-3">{service.title}</h3>
               <img
-                src={service.image || "https://picsum.photos/400/250"} // fallback image
+                src={service.homeImage || "https://picsum.photos/400/250"} // fallback image
                 className="rounded-xl"
                 alt={service.title}
               />

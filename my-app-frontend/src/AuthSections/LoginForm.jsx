@@ -182,6 +182,15 @@ const LoginForm = () => {
                 Click Here
               </a>
             </p>
+            <p className="text-center text-sm mt-3">
+              Home Page?{" "}
+              <a
+                href="/"
+                className="text-blue-300 hover:underline"
+              >
+                Click Here
+              </a>
+            </p>
           </form>
         </div>
       </div>
