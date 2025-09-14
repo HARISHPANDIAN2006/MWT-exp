@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import OfflineToggleButton from "../Components/OfflineToggleButton";
 
 const JustDialPages = () => {
   const [search, setSearch] = useState("");
@@ -17,6 +18,8 @@ const JustDialPages = () => {
   );
 
   return (
+    <>
+    <OfflineToggleButton/>
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
       <header className="bg-blue-600 text-white p-4 flex justify-between items-center">
@@ -68,6 +71,7 @@ const JustDialPages = () => {
         © 2025 JustDial Clone | Full-Stack App
       </footer>
     </div>
+    </>
   );
 };
 

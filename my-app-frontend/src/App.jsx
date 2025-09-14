@@ -20,6 +20,7 @@ import OfflineToggleButton from "./Components/OfflineToggleButton";
 function HomePage() {
   return (
     <>
+      <OfflineToggleButton />
       <HeroSection />
       <ServicesSection />
       <PopularServices />
@@ -50,7 +51,6 @@ function App() {
         <Route path="/JustDialPages" element={<JustDialPages />} />
 
       </Routes>
-       <OfflineToggleButton />
     </Router>
   );
 }
