@@ -15,7 +15,7 @@ import ForgetForm from "./AuthSections/ForgetForm";
 import OtpPage from "./AuthSections/OtpPage";
 import ServiceInfo from "./ServiceList/ServiceInfo";
 import JustDialPages from "./Pages/JustDialPages";
-
+import OfflineToggleButton from "./Components/OfflineToggleButton";
 function HomePage() {
   return (
     <>
@@ -27,6 +27,7 @@ function HomePage() {
       <ImageGallery />
       <RemainingSection />
       <FooterSection />
+      <OfflineToggleButton />
     </>
   );
 }
@@ -47,6 +48,7 @@ function App() {
         <Route path="/JustDialPages" element={<JustDialPages />} />
 
       </Routes>
+       <OfflineToggleButton />
     </Router>
   );
 }
