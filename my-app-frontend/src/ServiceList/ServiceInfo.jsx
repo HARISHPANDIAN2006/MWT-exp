@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SampleImg from "./assets/image.png";
 import FooterSection from "../HomeSections/FooterSection";
+import FAQInfo from "./FAQInfo";
+import TopList from "./TopList";
 
 const ServiceInfo = () => {
     const { id } = useParams();
@@ -36,6 +38,9 @@ const ServiceInfo = () => {
                     <h1 className="text-4xl font-bold mb-4">{service.title}</h1>
                     <p className="max-w-2xl mx-auto text-lg">{service.description}</p>
                 </div>
+
+                <TopList/>
+                
                 <section className="mx-20 my-10 bg-green-100 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow">
 
                     {/* Left Section */}
@@ -114,7 +119,7 @@ const ServiceInfo = () => {
                             service.subcategories.map((sub, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => navigate(`/subcategory/${index}`)}
+                                    onClick={() => navigate(`/subcategory/${sub._id}`)}
                                     className="bg-white border rounded-lg shadow-md w-80 p-4 flex flex-col items-center text-center cursor-pointer hover:scale-105 transition"
                                 >
                                     <img
@@ -132,6 +137,7 @@ const ServiceInfo = () => {
                     </div>
                 </section>
             </div>
+            <FAQInfo/>
             <FooterSection />
         </>
     );

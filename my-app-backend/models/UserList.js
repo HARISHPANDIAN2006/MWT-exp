@@ -4,7 +4,7 @@ const UserListSchema = new mongoose.Schema({
   name: { type: String, required: true },         // Full name of provider
   username: { type: String, required: true },     // Unique username
   serviceId: { type: mongoose.Schema.Types.ObjectId, ref: "Service", required: true },   // Links to main service
-  subcategoryId: { type: String, required: true }, // Links to subcategory _id inside service
+  subcategoryId: { type: mongoose.Schema.Types.ObjectId, required: true }, // Links to subcategory _id inside service
   description: { type: String },
   price: { type: Number, required: true },
   rating: { type: Number, default: 0 },
