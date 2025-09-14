@@ -14,6 +14,7 @@ import SignupForm from "./AuthSections/SignupForm";
 import ForgetForm from "./AuthSections/ForgetForm";
 import OtpPage from "./AuthSections/OtpPage";
 import ServiceInfo from "./ServiceList/ServiceInfo";
+import SubcategoryInfo from "./ServiceList/SubcategoryInfo";
 import JustDialPages from "./Pages/JustDialPages";
 import OfflineToggleButton from "./Components/OfflineToggleButton";
 function HomePage() {
@@ -44,6 +45,7 @@ function App() {
         <Route path="/loginsignup/forgot" element={<ForgetForm />} />
         <Route path="/loginsignup/otp" element={<OtpPage />} />
         <Route path="/services/:id" element={<ServiceInfo />} />
+        <Route path="/subcategory/:subId" element={<SubcategoryInfo />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/JustDialPages" element={<JustDialPages />} />
 
