@@ -17,6 +17,8 @@ import ServiceInfo from "./ServiceList/ServiceInfo";
 import SubcategoryInfo from "./ServiceList/SubcategoryInfo";
 import JustDialPages from "./Pages/JustDialPages";
 import OfflineToggleButton from "./Components/OfflineToggleButton";
+import UserProfile from "./ServiceList/UserProfile";
+
 function HomePage() {
   return (
     <>
@@ -47,6 +49,7 @@ function App() {
         <Route path="/loginsignup/otp" element={<OtpPage />} />
         <Route path="/services/:id" element={<ServiceInfo />} />
         <Route path="/subcategory/:subId" element={<SubcategoryInfo />} />
+        <Route path="/userprofile/:userId" element={<UserProfile />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/JustDialPages" element={<JustDialPages />} />
 

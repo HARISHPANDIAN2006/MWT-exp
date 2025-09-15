@@ -176,12 +176,6 @@ const SubcategoryInfo = () => {
                     <h3 className="mt-4 font-bold text-lg text-gray-900">
                       {user.name}
                     </h3>
-                    <p className="text-gray-500 text-sm">@{user.username}</p>
-
-                    {/* Description */}
-                    <p className="text-gray-600 text-sm text-center mt-3">
-                      {user.description || "Experienced professional ready to help"}
-                    </p>
 
                     {/* Location + Availability */}
                     <div className="mt-3 text-sm text-gray-700 space-y-1">
@@ -196,34 +190,16 @@ const SubcategoryInfo = () => {
                       <span className="text-gray-600">{user.experience} yrs exp</span>
                     </div>
 
-                    {/* Completed Projects */}
-                    <p className="mt-2 text-gray-600 text-sm">
-                      ✅ {user.completedProjects} Projects Completed
-                    </p>
-
-                    {/* Skills */}
-                    {user.skills && user.skills.length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-3 justify-center">
-                        {user.skills.map((skill, idx) => (
-                          <span
-                            key={idx}
-                            className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs rounded-full border border-indigo-200"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
                     {/* IDs (optional: show for debugging/admin only) */}
                     <div className="mt-4 text-xs text-gray-400 text-center break-words">
                       <p><b>UserId:</b> {user._id}</p>
-                      <p><b>ServiceId:</b> {user.serviceId}</p>
-                      <p><b>SubcategoryId:</b> {user.subcategoryId}</p>
                     </div>
 
                     {/* Action Button */}
-                    <button className="mt-5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm shadow hover:bg-indigo-700 transition">
+                    <button
+                      onClick={() => navigate(`/userprofile/${user._id}`)}
+                      className="mt-5 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm shadow hover:bg-indigo-700 transition"
+                    >
                       View Profile
                     </button>
                   </div>
