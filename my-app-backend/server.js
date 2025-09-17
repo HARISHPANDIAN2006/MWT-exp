@@ -42,6 +42,7 @@ app.use("/api/forget", require("./routes/forgetRoutes"));
 app.use("/api/businesses", require("./routes/businessRoutes"));
 app.use("/api/subcategory", require("./routes/subcategoryRoutes"));
 app.use("/api/userprofile", require("./routes/userProfileRoutes"));
+app.use("/api/categories", require("./routes/BusinCategory"));
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;

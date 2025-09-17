@@ -3,6 +3,7 @@ import OfflineToggleButton from "../Components/OfflineToggleButton";
 import BusinessHeaderSection from "../JustDialHome/BusinessHeaderSection";
 import BusinessServicesSection from "../JustDialHome/BusinessServiceSection";
 import BusinessCategorySection from "../JustDialHome/BusinessCategorySection";
+import BusinessCategories from "../JustDialHome/BusinessCatgories";
 
 const JustDialPages = () => {
   const [search, setSearch] = useState("");
@@ -32,6 +33,7 @@ const JustDialPages = () => {
 
       {/* Business Listings */}
       <BusinessCategorySection />
+      <BusinessCategories />
       <section className="p-6">
         <h2 className="text-lg font-bold mb-4">Available Businesses</h2>
         {filtered.map((biz, i) => (
