@@ -64,7 +64,8 @@ router.get("/google/callback-signup", async (req, res) => {
     // 2️⃣ Get user info
     const userInfoRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${idToken}`);
     const userInfo = await userInfoRes.json();
-    const { email, sub: googleId, given_name: firstname, family_name: lastname } = userInfo;
+
+    const { email, sub: googleId, given_name: firstname, family_name: lastname, birthdate: dob } = userInfo;
 
     // 3️⃣ Check if Google account already exists
     const existingUser = await User.findOne({ email });
@@ -74,7 +75,7 @@ router.get("/google/callback-signup", async (req, res) => {
 
     // 4️⃣ Redirect to frontend signup form with prefilled info
     res.redirect(
-      `http://localhost:5173/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}`
+      `http://localhost:5173/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}${dob ? `&dob=${encodeURIComponent(dob)}` : ""}`
     );
   } catch (err) {
     console.error("Google Signup Callback Error:", err);

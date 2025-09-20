@@ -47,7 +47,7 @@ const registerUser = async (req, res) => {
     return res.status(201).json({ message: "User registered successfully", user: newUser });
   } catch (error) {
     console.error("Register Error:", error);
-    return res.status(500).json({ message: "User already exits" });
+    return res.status(500).json({ message: "Server Error" });
   }
 };
 
@@ -56,18 +56,24 @@ const loginUser = async (req, res) => {
   const { username, email, phno, password } = req.body;
 
   try {
+    // Find user where ALL fields match AND is NOT a Google account
     const user = await User.findOne({
-      $or: [{ username }, { email }, { phno }],
+      username,
+      email,
+      phno,
+      isGoogleAccount: false, // ✅ exclude Google accounts
     });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found with these details" });
     }
 
-    if (!user.isGoogleAccount && user.password !== password) {
+    // Check password
+    if (user.password !== password) {
       return res.status(401).json({ message: "Invalid password" });
     }
 
+    // Set session
     req.session.user = {
       username: user.username,
       email: user.email,
@@ -83,7 +89,7 @@ const loginUser = async (req, res) => {
 
 // ================= Google Signup =================
 const googleSignup = async (req, res) => {
-  const { googleId, email, firstname, lastname, username } = req.body;
+  const { googleId, email, firstname, lastname, username,dob,gender,phno,userType } = req.body;
 
   try {
     // Check if Google account already exists
@@ -96,13 +102,23 @@ const googleSignup = async (req, res) => {
     const newUser = new User({
       firstname,
       lastname,
+      phno,
       email,
       username,
+      dob,
+      userType,
+      gender,
       isGoogleAccount: true,
       googleId,
     });
 
     await newUser.save();
+
+    req.session.user = {
+      username: newUser.username,
+      email: newUser.email,
+      phno: newUser.phno,
+    };
 
     return res.status(201).json({ message: "Google account registered successfully", user: newUser });
   } catch (error) {

@@ -67,6 +67,12 @@ const verifyOtp = async (req, res) => {
     const newUser = new User(record.userData);
     await newUser.save();
 
+    req.session.user = {
+      username: newUser.username,
+      email: newUser.email,
+      phno: newUser.phno,
+    };
+
     delete otpStore[email]; // Remove OTP after successful registration
 
     res.json({ message: "OTP verified, user registered successfully" });

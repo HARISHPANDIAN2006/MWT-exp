@@ -7,6 +7,8 @@ export default function SignupForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userExists, setUserExists] = useState(false);
 
+  const location = useLocation();
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -23,17 +25,23 @@ export default function SignupForm() {
   });
 
   const [isGoogleSignup, setIsGoogleSignup] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
+    // Prefill Google data if available in URL params
     const params = new URLSearchParams(location.search);
     const googleEmail = params.get("email");
     const googleId = params.get("googleId");
+    const googleFirstname = params.get("firstname");
+    const googleLastname = params.get("lastname");
+    const googleDob = params.get("dob");
 
     if (googleEmail && googleId) {
       setFormData((prev) => ({
         ...prev,
         email: googleEmail,
+        firstname: googleFirstname || "",
+        lastname: googleLastname || "",
+        dob: googleDob || "",
         isGoogleAccount: true,
         googleId: googleId,
       }));
@@ -43,7 +51,6 @@ export default function SignupForm() {
 
   const [currentStep, setCurrentStep] = useState("Fill in your details");
 
-  // handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -55,6 +62,7 @@ export default function SignupForm() {
       try {
         const res = await fetch("http://localhost:5000/api/auth/google-signup", {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
@@ -63,9 +71,7 @@ export default function SignupForm() {
 
         if (res.ok) {
           alert("✅ Account Created Successfully with Google!");
-          window.location.href = `/?username=${encodeURIComponent(
-            formData.username
-          )}`;
+          window.location.href = "/"; 
         } else {
           alert(`❌ ${data.message}`);
         }
@@ -74,12 +80,12 @@ export default function SignupForm() {
         alert("❌ Something went wrong. Please try again.");
       }
     } else {
-
       setCurrentStep("Verifying Data...");
 
       try {
         const res = await fetch("http://localhost:5000/api/otp/send-otp", {
           method: "POST",
+          credentials: "include",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(formData),
         });
@@ -92,7 +98,7 @@ export default function SignupForm() {
           setTimeout(() => (window.location.href = "/loginsignup/otp"), 1500);
         } else {
           if (data.message === "User already exists") {
-            setUserExists(true); // show login button
+            setUserExists(true);
           } else {
             alert(`❌ ${data.message}`);
           }
@@ -108,16 +114,12 @@ export default function SignupForm() {
 
   return (
     <div className="relative h-screen overflow-hidden">
-      {/* Background Video */}
       <video autoPlay muted loop className="absolute top-0 left-0 w-full h-full object-cover z-[-1]">
         <source src={bgVideo} type="video/mp4" />
         Your browser does not support HTML5 video.
       </video>
-
-      {/* Overlay */}
       <div className="absolute inset-0 bg-black bg-opacity-50 z-0"></div>
 
-      {/* Signup Form */}
       <div className="flex justify-center items-center h-full relative z-10 p-4">
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white">
           <h2 className="text-3xl font-bold text-center mb-3">Create Account</h2>
@@ -133,7 +135,8 @@ export default function SignupForm() {
                 value={formData.firstname}
                 onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
+                readOnly={isGoogleSignup}
+                className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""}`}
               />
               <input
                 type="text"
@@ -142,7 +145,8 @@ export default function SignupForm() {
                 value={formData.lastname}
                 onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
+                readOnly={isGoogleSignup}
+                className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""}`}
               />
             </div>
 
@@ -165,8 +169,7 @@ export default function SignupForm() {
                 onChange={handleChange}
                 required
                 readOnly={isGoogleSignup}
-                className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""
-                  }`}
+                className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""}`}
               />
             </div>
 
@@ -186,9 +189,8 @@ export default function SignupForm() {
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
-                className="p-2 bg-transparent border border-white rounded-md text-white 
-             [&::-webkit-calendar-picker-indicator]:invert"
                 required={!isGoogleSignup}
+                className="p-2 bg-transparent border border-white rounded-md text-white [&::-webkit-calendar-picker-indicator]:invert"
               />
             </div>
 
@@ -254,10 +256,9 @@ export default function SignupForm() {
               </div>
             </div>
 
-            {/* Passwords only for normal signup */}
+            {/* Passwords for normal signup */}
             {!isGoogleSignup && (
               <>
-                {/* Password */}
                 <div className="relative">
                   <input
                     type={showPassword ? "text" : "password"}
@@ -275,8 +276,6 @@ export default function SignupForm() {
                     {showPassword ? "🙈" : "👁️"}
                   </span>
                 </div>
-
-                {/* Confirm Password */}
                 <div className="relative">
                   <input
                     type={showConfirmPassword ? "text" : "password"}
@@ -297,18 +296,18 @@ export default function SignupForm() {
               </>
             )}
 
-            {/* Submit */}
             <button
               type="submit"
               className="w-full py-2 bg-blue-600 hover:bg-blue-700 transition rounded-md text-white font-semibold"
             >
               Sign Up
             </button>
+
             {userExists && (
               <div className="mt-4 text-center">
                 <p className="text-yellow-300 mb-2">User already exists. Please login.</p>
                 <button
-                  onClick={() => window.location.href = "/loginsignup/login"}
+                  onClick={() => (window.location.href = "/loginsignup/login")}
                   className="py-2 px-4 bg-green-600 hover:bg-green-700 rounded-md text-white font-semibold"
                 >
                   Go to Login

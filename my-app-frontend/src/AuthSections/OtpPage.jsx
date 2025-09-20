@@ -53,6 +53,7 @@ const OtpPage = ({ onVerified }) => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
+        credentials: "include"
       });
 
       const data = await res.json();
@@ -64,7 +65,7 @@ const OtpPage = ({ onVerified }) => {
         localStorage.removeItem("pendingSignup");
         setTimeout(() => {
           onVerified && onVerified();
-          window.location.href = `/?username=${encodeURIComponent(username)}`;
+          window.location.href = `/`;
         }, 1500);
       } else {
         setStatusMessage("❌ Invalid OTP. Please try again.");
