@@ -1,9 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import bgVideo from "/Vibe_coding_video.mp4";
+import { useLocation } from "react-router-dom";
 
 export default function SignupForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [userExists, setUserExists] = useState(false);
+
   const [formData, setFormData] = useState({
     firstname: "",
     lastname: "",
@@ -15,7 +18,28 @@ export default function SignupForm() {
     gender: "",
     password: "",
     confirmPassword: "",
+    isGoogleAccount: false,
+    googleId: "",
   });
+
+  const [isGoogleSignup, setIsGoogleSignup] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const googleEmail = params.get("email");
+    const googleId = params.get("googleId");
+
+    if (googleEmail && googleId) {
+      setFormData((prev) => ({
+        ...prev,
+        email: googleEmail,
+        isGoogleAccount: true,
+        googleId: googleId,
+      }));
+      setIsGoogleSignup(true);
+    }
+  }, [location]);
 
   const [currentStep, setCurrentStep] = useState("Fill in your details");
 
@@ -24,48 +48,68 @@ export default function SignupForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-     setCurrentStep("Sending OTP...");
 
-    try {
-      const res = await fetch("http://localhost:5000/api/otp/send-otp", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData), // send all form data
-      });
+    if (isGoogleSignup) {
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/google-signup", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (res.ok) {
-        setCurrentStep("✅ OTP sent! Redirecting to OTP page...");
-
-        // Redirect to OTP page with email + formData
-        localStorage.setItem("pendingSignup", JSON.stringify(formData));
-        // store temporarily in localStorage
-        setInterval(()=>window.location.href = "/loginsignup/otp",1500); // go to OTP page
-      } else {
-        alert(`❌ ${data.message}`);
-        setCurrentStep(`❌ ${data.message}`);
+        if (res.ok) {
+          alert("✅ Account Created Successfully with Google!");
+          window.location.href = `/?username=${encodeURIComponent(
+            formData.username
+          )}`;
+        } else {
+          alert(`❌ ${data.message}`);
+        }
+      } catch (error) {
+        console.error("Google Signup error:", error);
+        alert("❌ Something went wrong. Please try again.");
       }
-    } catch (error) {
-      console.error("Signup error:", error);
-      alert("❌ Something went wrong. Please try again.");
-      setCurrentStep("❌ Something went wrong. Please try again.");
+    } else {
+
+      setCurrentStep("Verifying Data...");
+
+      try {
+        const res = await fetch("http://localhost:5000/api/otp/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          setCurrentStep("✅ OTP sent! Redirecting to OTP page...");
+          localStorage.setItem("pendingSignup", JSON.stringify(formData));
+          setTimeout(() => (window.location.href = "/loginsignup/otp"), 1500);
+        } else {
+          if (data.message === "User already exists") {
+            setUserExists(true); // show login button
+          } else {
+            alert(`❌ ${data.message}`);
+          }
+          setCurrentStep(`❌ ${data.message}`);
+        }
+      } catch (error) {
+        console.error("Signup error:", error);
+        alert("❌ Something went wrong. Please try again.");
+        setCurrentStep("❌ Something went wrong. Please try again.");
+      }
     }
   };
-
 
   return (
     <div className="relative h-screen overflow-hidden">
       {/* Background Video */}
-      <video
-        autoPlay
-        muted
-        loop
-        className="absolute top-0 left-0 w-full h-full object-cover z-[-1]"
-      >
+      <video autoPlay muted loop className="absolute top-0 left-0 w-full h-full object-cover z-[-1]">
         <source src={bgVideo} type="video/mp4" />
         Your browser does not support HTML5 video.
       </video>
@@ -77,10 +121,8 @@ export default function SignupForm() {
       <div className="flex justify-center items-center h-full relative z-10 p-4">
         <div className="bg-black bg-opacity-50 backdrop-blur-md rounded-2xl p-8 w-full max-w-md text-white shadow-lg border-2 border-white">
           <h2 className="text-3xl font-bold text-center mb-3">Create Account</h2>
-          {/* ✅ Current Step Message */}
-          <p className="text-center text-yellow-300 font-semibold mb-6">
-            {currentStep}
-          </p>
+          <p className="text-center text-yellow-300 font-semibold mb-6">{currentStep}</p>
+
           <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {/* First & Last Name */}
             <div className="grid grid-cols-2 gap-3">
@@ -112,8 +154,8 @@ export default function SignupForm() {
                 placeholder="Phone Number"
                 value={formData.phno}
                 onChange={handleChange}
-                required
                 className="p-2 bg-transparent border border-white rounded-md placeholder-white"
+                required={!isGoogleSignup}
               />
               <input
                 type="email"
@@ -122,7 +164,9 @@ export default function SignupForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="p-2 bg-transparent border border-white rounded-md placeholder-white"
+                readOnly={isGoogleSignup}
+                className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""
+                  }`}
               />
             </div>
 
@@ -142,8 +186,9 @@ export default function SignupForm() {
                 name="dob"
                 value={formData.dob}
                 onChange={handleChange}
-                required
-                className="p-2 bg-transparent border border-white rounded-md text-white"
+                className="p-2 bg-transparent border border-white rounded-md text-white 
+             [&::-webkit-calendar-picker-indicator]:invert"
+                required={!isGoogleSignup}
               />
             </div>
 
@@ -209,43 +254,48 @@ export default function SignupForm() {
               </div>
             </div>
 
-            {/* Password */}
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
-              />
-              <span
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute top-2.5 right-3 cursor-pointer select-none"
-              >
-                {showPassword ? "🙈" : "👁️"}
-              </span>
-            </div>
+            {/* Passwords only for normal signup */}
+            {!isGoogleSignup && (
+              <>
+                {/* Password */}
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    placeholder="Password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
+                  />
+                  <span
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute top-2.5 right-3 cursor-pointer select-none"
+                  >
+                    {showPassword ? "🙈" : "👁️"}
+                  </span>
+                </div>
 
-            {/* Confirm Password */}
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-                className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
-              />
-              <span
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute top-2.5 right-3 cursor-pointer select-none"
-              >
-                {showConfirmPassword ? "🙈" : "👁️"}
-              </span>
-            </div>
+                {/* Confirm Password */}
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    placeholder="Confirm Password"
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 bg-transparent border border-white rounded-md placeholder-white"
+                  />
+                  <span
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute top-2.5 right-3 cursor-pointer select-none"
+                  >
+                    {showConfirmPassword ? "🙈" : "👁️"}
+                  </span>
+                </div>
+              </>
+            )}
 
             {/* Submit */}
             <button
@@ -254,25 +304,17 @@ export default function SignupForm() {
             >
               Sign Up
             </button>
-
-            <p className="text-center text-sm mt-3">
-              Already registered?{" "}
-              <a
-                href="/loginsignup/login"
-                className="text-blue-300 hover:underline"
-              >
-                Login
-              </a>
-            </p>
-            <p className="text-center text-sm mt-3">
-              Home Page?{" "}
-              <a
-                href="/"
-                className="text-blue-300 hover:underline"
-              >
-                Click Here
-              </a>
-            </p>
+            {userExists && (
+              <div className="mt-4 text-center">
+                <p className="text-yellow-300 mb-2">User already exists. Please login.</p>
+                <button
+                  onClick={() => window.location.href = "/loginsignup/login"}
+                  className="py-2 px-4 bg-green-600 hover:bg-green-700 rounded-md text-white font-semibold"
+                >
+                  Go to Login
+                </button>
+              </div>
+            )}
           </form>
         </div>
       </div>

@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  firstname: { type: String, required: true },
-  lastname: { type: String, required: true },
-  phno: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  username: { type: String, required: true, unique: true },
-  dob: { type: Date, required: true }, // Date of Birth
-  userType: { type: String, enum: ["user", "provider"], required: true },
-  gender: { type: String, enum: ["male", "female"], required: true },
-  password: { type: String, required: true },
-}, { timestamps: true });
+const userSchema = new mongoose.Schema(
+  {
+    firstname: { type: String },
+    lastname: { type: String },
+    phno: { type: String, unique: true, sparse: true }, // unique but optional
+    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
+    dob: { type: Date }, // optional for Google users
+    userType: { type: String, enum: ["user", "provider"], default: "user" },
+    gender: { type: String, enum: ["male", "female", "other"] },
 
-const User = mongoose.model("User", userSchema, "User"); 
+    password: { type: String },
+
+    googleId: { type: String, unique: true, sparse: true },
+    isGoogleAccount: { type: Boolean, default: false },
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model("User", userSchema, "User");
 
 module.exports = User;

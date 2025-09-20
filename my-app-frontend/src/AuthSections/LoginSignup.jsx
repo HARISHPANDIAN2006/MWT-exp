@@ -1,18 +1,62 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import sampleImg from "./assets/image.png";
-import { Link, Outlet } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [prefill, setPrefill] = useState({}); // For Google prefilled data
+  const alertShown = useRef(false);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const error = params.get("error");
+
+    if (!alertShown.current) {
+      if (error === "account_exists") {
+        alert("⚠️ Account already exists, please login.");
+        setIsLogin(true);
+        alertShown.current = true;
+      } else if (error === "not_registered") {
+        alert("⚠️ Account not registered. Please sign up first.");
+        setIsLogin(false);
+        alertShown.current = true;
+      } else if (error === "server_error") {
+        alert("⚠️ Server error. Try again later.");
+        alertShown.current = true;
+      }
+    }
+
+    // Prefill for Google Signup
+    const email = params.get("email");
+    const googleId = params.get("googleId");
+    const firstname = params.get("firstname");
+    const lastname = params.get("lastname");
+
+    if (email && googleId) {
+      setPrefill({ email, googleId, firstname, lastname });
+      setIsLogin(false); // Switch to signup automatically
+    }
+  }, [location]);
+
+  const handleGoogleClick = (type) => {
+    if (type === "signup") {
+      // Start the signup OAuth flow
+      console.log("Google Signup Clicked");
+      window.location.href = "http://localhost:5000/api/auth/google/signup";
+    } else {
+      console.log("Google Login Clicked");
+      // Start the login OAuth flow
+      window.location.href = "http://localhost:5000/api/auth/google/login";
+    }
+  };
+
 
   return (
     <div className="flex min-h-screen items-center justify-center relative bg-gray-100">
-
-      {/* Dark Overlay */}
-
       <div className="absolute inset-0 bg-black bg-opacity-25 z-0"></div>
 
-      {/* Signup/Login Box */}
       <div className="flex w-[90%] max-w-5xl bg-white rounded-lg shadow-md overflow-hidden z-10 border-black border-2">
         {/* Left Content */}
         <div className="w-1/2 bg-[#7B2D43] text-white p-10 hidden md:block">
@@ -56,14 +100,22 @@ const LoginSignup = () => {
 
           {/* Social Buttons */}
           <div className="space-y-4">
-            <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
-              <img
-                src="https://img.icons8.com/color/24/google-logo.png"
-                alt="google"
-                className="mr-2"
-              />{" "}
-              Continue with Google
-            </button>
+            {/* Social Buttons */}
+            <div className="space-y-4">
+              <button
+                type="button"
+                className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100"
+                onClick={() => handleGoogleClick(isLogin ? "login" : "signup")}
+              >
+                <img
+                  src="https://img.icons8.com/color/24/google-logo.png"
+                  alt="google"
+                  className="mr-2"
+                />
+                Continue with Google
+              </button>
+            </div>
+
             <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}>
               <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5">
                 <img
@@ -119,7 +171,7 @@ const LoginSignup = () => {
           {/* Close Button */}
           <center>
             <button
-              onClick={() => window.location.href = "/"}
+              onClick={() => (window.location.href = "/")}
               className="mt-6 px-6 py-2 bg-[#7B2D43] text-white rounded-lg hover:bg-red-400 transition duration-300 shadow-md"
             >
               Close

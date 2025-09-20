@@ -1,5 +1,6 @@
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
+const { registerUser } = require("./authController");
 
 // Temporary OTP store (replace with Redis/DB in production)
 let otpStore = {};
@@ -54,14 +55,25 @@ const verifyOtp = async (req, res) => {
   const record = otpStore[email];
   if (!record) return res.status(400).json({ message: "No OTP found for this email" });
   if (Date.now() > record.expires) return res.status(400).json({ message: "OTP expired" });
-  if (record.otp !== otp) return res.status(400).json({ message: "Invalid OTP" });
+  if (record.otp !== String(otp)) return res.status(400).json({ message: "Invalid OTP" });
 
-  // Save user
-  const newUser = new User(record.userData);
-  await newUser.save();
+  try {
+    // Attempt registration using only user data
+    const existingUser = await User.findOne({
+      $or: [{ username: record.userData.username }, { email: record.userData.email }, { phno: record.userData.phno }],
+    });
+    if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-  delete otpStore[email];
-  res.json({ message: "OTP verified, user registered successfully" });
+    const newUser = new User(record.userData);
+    await newUser.save();
+
+    delete otpStore[email]; // Remove OTP after successful registration
+
+    res.json({ message: "OTP verified, user registered successfully" });
+  } catch (error) {
+    console.error("OTP verification / registration error:", error);
+    res.status(500).json({ message: "Server error" });
+  }
 };
 
 // Resend OTP

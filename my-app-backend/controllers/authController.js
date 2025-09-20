@@ -1,6 +1,6 @@
 const User = require("../models/User");
 
-// ✅ Register User
+// ================= Normal Signup =================
 const registerUser = async (req, res) => {
   const {
     firstname,
@@ -16,23 +16,19 @@ const registerUser = async (req, res) => {
   } = req.body;
 
   try {
-    // 1. Check if user already exists (by username/email/phone)
+    // Check if user already exists
     const existingUser = await User.findOne({
       $or: [{ username }, { email }, { phno }],
     });
 
     if (existingUser) {
-      return res
-        .status(400)
-        .json({ message: "User with same username, email, or phone already exists" });
+      return res.status(400).json({ message: "User with same username, email, or phone already exists" });
     }
 
-    // 2. Check password match
     if (password !== confirmPassword) {
       return res.status(400).json({ message: "Passwords do not match" });
     }
 
-    // 3. Create new user
     const newUser = new User({
       firstname,
       lastname,
@@ -42,45 +38,34 @@ const registerUser = async (req, res) => {
       dob,
       userType,
       gender,
-      password, // ⚠️ plaintext (not safe for production)
+      password,
+      isGoogleAccount: false,
     });
 
-    // 4. Save user to DB
     await newUser.save();
 
-    // 5. Response
-    res.status(201).json({
-      message: "✅ User registered successfully",
-      user: {
-        username: newUser.username,
-        email: newUser.email,
-        phno: newUser.phno,
-        userType: newUser.userType,
-      },
-    });
+    return res.status(201).json({ message: "User registered successfully", user: newUser });
   } catch (error) {
-    console.error("❌ Register Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Register Error:", error);
+    return res.status(500).json({ message: "User already exits" });
   }
 };
 
-// ✅ Login User
+// ================= Normal Login =================
 const loginUser = async (req, res) => {
   const { username, email, phno, password } = req.body;
 
   try {
-    // 1. Match user with username/email/phone
-    const user = await User.findOne({ username, email, phno });
+    const user = await User.findOne({
+      $or: [{ username }, { email }, { phno }],
+    });
 
     if (!user) {
-      return res
-        .status(404)
-        .json({ message: "❌ User not found or details mismatch" });
+      return res.status(404).json({ message: "User not found" });
     }
 
-    // 2. Check password
-    if (user.password !== password) {
-      return res.status(401).json({ message: "⚠️ Invalid password" });
+    if (!user.isGoogleAccount && user.password !== password) {
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     req.session.user = {
@@ -89,20 +74,65 @@ const loginUser = async (req, res) => {
       phno: user.phno,
     };
 
-    // 3. Success response
-    res.json({
-      message: "✅ Login successful",
-      user: {
-        username: user.username,
-        email: user.email,
-        phno: user.phno,
-        userType: user.userType,
-      },
-    });
+    return res.json({ message: "Login successful", user });
   } catch (error) {
-    console.error("❌ Login Error:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Login Error:", error);
+    return res.status(500).json({ message: "Server error" });
   }
 };
 
-module.exports = { registerUser, loginUser };
+// ================= Google Signup =================
+const googleSignup = async (req, res) => {
+  const { googleId, email, firstname, lastname, username } = req.body;
+
+  try {
+    // Check if Google account already exists
+    const existingUser = await User.findOne({ googleId, email });
+
+    if (existingUser) {
+      return res.status(409).json({ message: "Google account already exists, please login" });
+    }
+
+    const newUser = new User({
+      firstname,
+      lastname,
+      email,
+      username,
+      isGoogleAccount: true,
+      googleId,
+    });
+
+    await newUser.save();
+
+    return res.status(201).json({ message: "Google account registered successfully", user: newUser });
+  } catch (error) {
+    console.error("Google Signup Error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ================= Google Login =================
+const googleLogin = async (req, res) => {
+  const { googleId, email } = req.body;
+
+  try {
+    const user = await User.findOne({ googleId, email, isGoogleAccount: true });
+
+    if (!user) {
+      return res.status(404).json({ message: "Google account not registered. Please sign up first." });
+    }
+
+    req.session.user = {
+      username: user.username,
+      email: user.email,
+      phno: user.phno,
+    };
+
+    return res.json({ message: "Google login successful", user });
+  } catch (error) {
+    console.error("Google Login Error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { registerUser, loginUser, googleSignup, googleLogin };
