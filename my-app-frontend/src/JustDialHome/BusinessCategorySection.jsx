@@ -26,7 +26,7 @@ const categories = [
 const BusinessCategorySection = () => {
   return (
     <div className="px-6 py-8">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6 text-center">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-10 gap-6 text-center">
         {categories.map((category, index) => (
           <div key={index} className="flex flex-col items-center">
             {/* Square box */}
