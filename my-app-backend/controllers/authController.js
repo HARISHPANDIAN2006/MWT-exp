@@ -44,7 +44,14 @@ const registerUser = async (req, res) => {
 
     await newUser.save();
 
-    return res.status(201).json({ message: "User registered successfully", user: newUser });
+     // Save session
+    req.session.user = {
+      username: newUser.username,
+      email: newUser.email,
+      phno: newUser.phno,
+    };
+
+    return res.status(201).json({ message: "OTP Verified...User registered successfully", user: newUser });
   } catch (error) {
     console.error("Register Error:", error);
     return res.status(500).json({ message: "Server Error" });

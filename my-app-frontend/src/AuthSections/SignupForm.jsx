@@ -33,6 +33,7 @@ export default function SignupForm() {
     const googleId = params.get("googleId");
     const googleFirstname = params.get("firstname");
     const googleLastname = params.get("lastname");
+    const cleanedLastname = googleLastname && googleLastname !== "undefined" ? googleLastname : "";
     const googleDob = params.get("dob");
 
     if (googleEmail && googleId) {
@@ -40,11 +41,12 @@ export default function SignupForm() {
         ...prev,
         email: googleEmail,
         firstname: googleFirstname || "",
-        lastname: googleLastname || "",
+        lastname: cleanedLastname,
         dob: googleDob || "",
         isGoogleAccount: true,
         googleId: googleId,
       }));
+
       setIsGoogleSignup(true);
     }
   }, [location]);
@@ -71,7 +73,7 @@ export default function SignupForm() {
 
         if (res.ok) {
           alert("✅ Account Created Successfully with Google!");
-          window.location.href = "/"; 
+          window.location.href = "/";
         } else {
           alert(`❌ ${data.message}`);
         }
@@ -145,7 +147,7 @@ export default function SignupForm() {
                 value={formData.lastname}
                 onChange={handleChange}
                 required
-                readOnly={isGoogleSignup}
+                readOnly={isGoogleSignup && !!formData.lastname}
                 className={`p-2 bg-transparent border border-white rounded-md placeholder-white ${isGoogleSignup ? "bg-gray-200 text-yellow-200" : ""}`}
               />
             </div>

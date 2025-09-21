@@ -71,6 +71,9 @@ const LoginSignup = () => {
 
         {/* Right Content */}
         <div className="w-full md:w-1/2 p-10 bg-white z-10 mt-6">
+          <h1 className="text-center text-4xl font-bold mb-6 -mt-3 underline">
+            {isLogin ? "Login Page" : "Signup Page"}
+          </h1>
           <h2 className="text-2xl font-semibold mb-4">
             {isLogin ? "Sign in into your Account" : "Create a new account"}
           </h2>

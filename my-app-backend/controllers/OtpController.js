@@ -22,8 +22,8 @@ const sendOtp = async (req, res) => {
     const otp = generateOtp();
     otpStore[email] = {
       otp,
-      expires: Date.now() + 60 * 1000, 
-      userData: { firstname, lastname, phno, email, username, dob, userType, gender, password },
+      expires: Date.now() + 60 * 1000,
+      userData: { firstname, lastname, phno, email, username, dob, userType, gender, password, confirmPassword },
     };
 
     const transporter = nodemailer.createTransport({
@@ -54,28 +54,31 @@ const verifyOtp = async (req, res) => {
 
   const record = otpStore[email];
   if (!record) return res.status(400).json({ message: "No OTP found for this email" });
-  if (Date.now() > record.expires) return res.status(400).json({ message: "OTP expired" });
-  if (record.otp !== String(otp)) return res.status(400).json({ message: "Invalid OTP" });
+
+  if (Date.now() > record.expires) {
+    delete otpStore[email];
+    return res.status(400).json({ message: "OTP expired" });
+  }
+
+  if (record.otp.trim() !== String(otp).trim()) {
+    return res.status(400).json({ message: "Invalid OTP" });
+  }
 
   try {
-    // Attempt registration using only user data
+    // Register new user
     const existingUser = await User.findOne({
-      $or: [{ username: record.userData.username }, { email: record.userData.email }, { phno: record.userData.phno }],
+      $or: [
+        { username: record.userData.username },
+        { email: record.userData.email },
+        { phno: record.userData.phno }
+      ]
     });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
-    const newUser = new User(record.userData);
-    await newUser.save();
+    // ✅ safer than mutating req.body
+    await registerUser({ body: record.userData, session: req.session }, res);
 
-    req.session.user = {
-      username: newUser.username,
-      email: newUser.email,
-      phno: newUser.phno,
-    };
-
-    delete otpStore[email]; // Remove OTP after successful registration
-
-    res.json({ message: "OTP verified, user registered successfully" });
+    delete otpStore[email]; // cleanup
   } catch (error) {
     console.error("OTP verification / registration error:", error);
     res.status(500).json({ message: "Server error" });
