@@ -13,8 +13,8 @@ router.post("/login", loginUser);
 // ================= Google OAuth Config =================
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_SIGNUP = "http://localhost:5000/api/auth/google/callback-signup";
-const REDIRECT_LOGIN = "http://localhost:5000/api/auth/google/callback-login";
+const REDIRECT_SIGNUP = "http://localhost:5024/api/auth/google/callback-signup";
+const REDIRECT_LOGIN = "http://localhost:5024/api/auth/google/callback-login";
 
 // Start Google OAuth flow
 // Start Google Signup flow
