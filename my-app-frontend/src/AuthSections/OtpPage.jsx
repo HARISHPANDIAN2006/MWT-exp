@@ -49,7 +49,7 @@ const OtpPage = ({ onVerified }) => {
       setLoading(true);
       setStatusMessage("🔄 Verifying OTP...");
 
-      const res = await fetch("http://localhost:5000/api/otp/verify-otp", {
+      const res = await fetch("http://localhost:5024/api/otp/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
@@ -84,7 +84,7 @@ const OtpPage = ({ onVerified }) => {
       setResending(true);
       setStatusMessage("📤 Resending OTP...");
 
-      const res = await fetch("http://localhost:5000/api/otp/resend-otp", {
+      const res = await fetch("http://localhost:5024/api/otp/resend-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

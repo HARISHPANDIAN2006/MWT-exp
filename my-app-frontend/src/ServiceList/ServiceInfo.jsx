@@ -17,7 +17,7 @@ const ServiceInfo = () => {
 
     // Fetch Top Categories
     useEffect(() => {
-        fetch(`http://localhost:5000/api/services/topcategories/${id}`)
+        fetch(`http://localhost:5024/api/services/topcategories/${id}`)
             .then((res) => res.json())
             .then((data) => setTopCategories(data))
             .catch((err) => console.error("Error fetching top categories:", err));
@@ -25,7 +25,7 @@ const ServiceInfo = () => {
 
     // Fetch service
     useEffect(() => {
-        fetch(`http://localhost:5000/api/services/${id}`)
+        fetch(`http://localhost:5024/api/services/${id}`)
             .then((res) => res.json())
             .then((data) => setService(data))
             .catch((err) => console.error("Error fetching service:", err));
@@ -33,7 +33,7 @@ const ServiceInfo = () => {
 
     // Fetch FAQs
     useEffect(() => {
-        fetch(`http://localhost:5000/api/services/servicefaqs/${id}`)
+        fetch(`http://localhost:5024/api/services/servicefaqs/${id}`)
             .then((res) => res.json())
             .then((data) => setFaqs(data))
             .catch((err) => console.error("Error fetching faqs:", err));
@@ -41,7 +41,7 @@ const ServiceInfo = () => {
 
     // Fetch Tags
     useEffect(() => {
-        fetch(`http://localhost:5000/api/services/servicetags/${id}`)
+        fetch(`http://localhost:5024/api/services/servicetags/${id}`)
             .then((res) => res.json())
             .then((data) => setTags(data))
             .catch((err) => console.error("Error fetching tags:", err));

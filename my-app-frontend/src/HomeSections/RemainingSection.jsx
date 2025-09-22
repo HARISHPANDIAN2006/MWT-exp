@@ -5,7 +5,7 @@ const RemainingSection = () => {
   const [guides, setGuides] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/guides")
+    fetch("http://localhost:5024/api/guides")
       .then((res) => res.json())
       .then((data) => setGuides(data))
       .catch((err) => console.error("Error fetching guides:", err));

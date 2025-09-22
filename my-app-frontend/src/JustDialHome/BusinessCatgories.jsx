@@ -4,7 +4,7 @@ const BusinessCategories = () => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/categories")
+    fetch("http://localhost:5024/api/categories")
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));

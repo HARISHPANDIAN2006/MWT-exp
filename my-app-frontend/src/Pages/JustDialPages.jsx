@@ -11,7 +11,7 @@ const JustDialPages = () => {
 
   // Fetch businesses from backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/businesses")
+    fetch("http://localhost:5024/api/businesses")
       .then(res => res.json())
       .then(data => setBusinesses(data))
       .catch(err => console.error("Error fetching businesses:", err));

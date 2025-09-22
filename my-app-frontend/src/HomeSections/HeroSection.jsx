@@ -7,7 +7,7 @@ const HeroSection = () => {
   const [username, setUsername] = useState(null);
 
   const handleLogout = () => {
-    fetch("http://localhost:5000/api/session/logout", {
+    fetch("http://localhost:5024/api/session/logout", {
       method: "POST",
       credentials: "include",
     })
@@ -19,7 +19,7 @@ const HeroSection = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/session/me", {
+    fetch("http://localhost:5024/api/session/me", {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -31,7 +31,7 @@ const HeroSection = () => {
       })
       .catch((err) => console.error("Error fetching session:", err));
 
-    fetch("http://localhost:5000/api/services")
+    fetch("http://localhost:5024/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error fetching services:", err));

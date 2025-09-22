@@ -8,7 +8,7 @@ const UserProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/userprofile/${userId}`)
+    fetch(`http://localhost:5024/api/userprofile/${userId}`)
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch((err) => console.error("Error fetching user profile:", err));

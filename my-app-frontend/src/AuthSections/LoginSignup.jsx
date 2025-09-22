@@ -44,11 +44,11 @@ const LoginSignup = () => {
     if (type === "signup") {
       // Start the signup OAuth flow
       console.log("Google Signup Clicked");
-      window.location.href = "http://localhost:5000/api/auth/google/signup";
+      window.location.href = "http://localhost:5024/api/auth/google/signup";
     } else {
       console.log("Google Login Clicked");
       // Start the login OAuth flow
-      window.location.href = "http://localhost:5000/api/auth/google/login";
+      window.location.href = "http://localhost:5024/api/auth/google/login";
     }
   };
 

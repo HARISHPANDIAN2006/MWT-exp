@@ -62,7 +62,7 @@ export default function SignupForm() {
 
     if (isGoogleSignup) {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/google-signup", {
+        const res = await fetch("http://localhost:5024/api/auth/google-signup", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -85,7 +85,7 @@ export default function SignupForm() {
       setCurrentStep("Verifying Data...");
 
       try {
-        const res = await fetch("http://localhost:5000/api/otp/send-otp", {
+        const res = await fetch("http://localhost:5024/api/otp/send-otp", {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

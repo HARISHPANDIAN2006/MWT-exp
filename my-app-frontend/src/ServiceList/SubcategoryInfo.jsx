@@ -11,7 +11,7 @@ const SubcategoryInfo = () => {
   console.log("Subcategory ID from URL:", subId);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/subcategory/users/${subId}`)
+    fetch(`http://localhost:5024/api/subcategory/users/${subId}`)
       .then((res) => res.json())
       .then((data) => setUsers(data))
       .catch((err) => console.error("Error fetching users:", err));

@@ -46,7 +46,7 @@ app.use("/api/userprofile", require("./routes/userProfileRoutes"));
 app.use("/api/categories", require("./routes/BusinCategory"));
 
 // ✅ Start server
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5024;
 app.listen(PORT, () =>
   console.log(`🚀 Server running on http://localhost:${PORT}`)
 );
