@@ -70,16 +70,16 @@ router.get("/google/callback-signup", async (req, res) => {
     // 3️⃣ Check if Google account already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.redirect("http://localhost:5173/loginsignup?error=account_exists");
+      return res.redirect("http://localhost:3000/loginsignup?error=account_exists");
     }
 
     // 4️⃣ Redirect to frontend signup form with prefilled info
     res.redirect(
-      `http://localhost:5173/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}${dob ? `&dob=${encodeURIComponent(dob)}` : ""}`
+      `http://localhost:3000/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}${dob ? `&dob=${encodeURIComponent(dob)}` : ""}`
     );
   } catch (err) {
     console.error("Google Signup Callback Error:", err);
-    res.redirect("http://localhost:5173/loginsignup?error=server_error");
+    res.redirect("http://localhost:3000/loginsignup?error=server_error");
   }
 });
 
@@ -111,7 +111,7 @@ router.get("/google/callback-login", async (req, res) => {
     // 3️⃣ Attempt Google Login
     const user = await User.findOne({ googleId, email, isGoogleAccount: true });
     if (!user) {
-      return res.redirect("http://localhost:5173/loginsignup?error=not_registered");
+      return res.redirect("http://localhost:3000/loginsignup?error=not_registered");
     }
 
     // 4️⃣ Set session
@@ -122,10 +122,10 @@ router.get("/google/callback-login", async (req, res) => {
     };
 
     // 5️⃣ Redirect to dashboard/home
-    res.redirect("http://localhost:5173/?login=success");
+    res.redirect("http://localhost:3000/?login=success");
   } catch (err) {
     console.error("Google Login Callback Error:", err);
-    res.redirect("http://localhost:5173/loginsignup?error=server_error");
+    res.redirect("http://localhost:3000/loginsignup?error=server_error");
   }
 });
 
