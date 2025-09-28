@@ -60,7 +60,7 @@ const OtpPage = ({ onVerified }) => {
       setLoading(false);
 
       if (res.ok) {
-        alert("Account Created Successfully! You can now log in.");
+        alert("Account Created Successfully!.");
         setStatusMessage("✅ OTP Verified! Redirecting to Home Page...");
         localStorage.removeItem("pendingSignup");
         setTimeout(() => {

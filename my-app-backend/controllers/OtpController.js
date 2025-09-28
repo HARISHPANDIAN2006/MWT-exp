@@ -106,7 +106,7 @@ const resendOtp = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Servizio" <${process.env.EMAIL_USER}>`,
+      from: `"Servizio" <${process.env.EMAIL_USER}>`, 
       to: email,
       subject: "Resent OTP Code",
       text: `Your new OTP is ${newOtp}. It is valid for 1 minute.`,

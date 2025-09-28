@@ -7,7 +7,10 @@ const ServicesSection = () => {
   useEffect(() => {
     fetch("http://localhost:5024/api/services")
       .then((res) => res.json())
-      .then((data) => setServices(data))
+      .then((data) => {
+        console.log(data);
+        setServices(data);
+      })
       .catch((err) => console.error("Error fetching services:", err));
   }, []);
 
@@ -20,8 +23,8 @@ const ServicesSection = () => {
               <div className="bg-white text-black rounded-2xl shadow-lg border-black border-2 w-50 p-3 hover:scale-105 transition flex flex-col items-center justify-between cursor-pointer">
                 <h3 className="font-bold text-md mb-3">{service.title}</h3>
                 <img
-                  src={service.homeImage || "https://picsum.photos/400/250"}
-                  className="rounded-xl"
+                  src={service.homeImage}
+                  className="rounded-xl w-full h-40 object-contain" 
                   alt={service.title}
                 />
               </div>

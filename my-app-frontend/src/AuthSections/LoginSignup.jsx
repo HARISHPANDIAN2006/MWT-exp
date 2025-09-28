@@ -1,10 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import sampleImg from "./assets/image.png";
+import sampleImg from "./assets/image1.png";
+import bgImg from "./assets/image.png";
 import { Link, useLocation } from "react-router-dom";
+
+const SocialButton = ({ onClick, icon, text }) => (
+  <button
+    onClick={onClick}
+    type="button"
+    className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 transition duration-200"
+  >
+    <img src={icon} alt={text} className="mr-2" />
+    {text}
+  </button>
+);
 
 const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
-  const [prefill, setPrefill] = useState({}); // For Google prefilled data
+  const [prefill, setPrefill] = useState({});
   const alertShown = useRef(false);
 
   const location = useLocation();
@@ -28,7 +40,7 @@ const LoginSignup = () => {
       }
     }
 
-    // Prefill for Google Signup
+    // Prefill Google Signup data
     const email = params.get("email");
     const googleId = params.get("googleId");
     const firstname = params.get("firstname");
@@ -36,51 +48,48 @@ const LoginSignup = () => {
 
     if (email && googleId) {
       setPrefill({ email, googleId, firstname, lastname });
-      setIsLogin(false); // Switch to signup automatically
+      setIsLogin(false);
     }
   }, [location]);
 
   const handleGoogleClick = (type) => {
-    if (type === "signup") {
-      // Start the signup OAuth flow
-      console.log("Google Signup Clicked");
-      window.location.href = "http://localhost:5024/api/auth/google/signup";
-    } else {
-      console.log("Google Login Clicked");
-      // Start the login OAuth flow
-      window.location.href = "http://localhost:5024/api/auth/google/login";
-    }
+    const base = "http://localhost:5024/api/auth/google";
+    window.location.href =
+      type === "signup" ? `${base}/signup` : `${base}/login`;
   };
 
-
   return (
-    <div className="flex min-h-screen items-center justify-center relative bg-gray-100">
-      <div className="absolute inset-0 bg-black bg-opacity-25 z-0"></div>
-
-      <div className="flex w-[90%] max-w-5xl bg-white rounded-lg shadow-md overflow-hidden z-10 border-black border-2">
-        {/* Left Content */}
-        <div className="w-1/2 bg-[#7B2D43] text-white p-10 hidden md:block">
-          <h2 className="text-3xl font-bold mb-6">Success starts here</h2>
-          <ul className="space-y-2 text-lg">
-            <li>✓ Over 700 categories</li>
-            <li>✓ Quality work done faster</li>
-            <li>✓ Access to talent and businesses across the globe</li>
-          </ul>
-          <img src={sampleImg} alt="work" className="mt-10 rounded-lg" />
+    <div className="flex min-h-screen items-center justify-center relative bg-gray-100 bg-cover bg-center" style={{ backgroundImage: `url(${bgImg})` }}>
+       <div
+        className="flex w-[90%] max-w-5xl rounded-lg shadow-lg overflow-hidden border border-gray-200"
+      >
+        {/* Left Panel */}
+        <div className="w-1/2 bg-[#7B2D43] text-white p-10 hidden md:flex flex-col justify-between">
+          <div>
+            <h2 className="text-3xl font-bold mb-6">Success starts here</h2>
+            <ul className="space-y-2 text-lg">
+              <li>✓ Over 700 categories</li>
+              <li>✓ Quality work done faster</li>
+              <li>✓ Access to global talent & businesses</li>
+            </ul>
+          </div>
+          <img src={sampleImg} alt="Work illustration" className="rounded-lg" />
         </div>
 
-        {/* Right Content */}
-        <div className="w-full md:w-1/2 p-10 bg-white z-10 mt-6">
-          <h1 className="text-center text-4xl font-bold mb-6 -mt-3 underline">
+        {/* Right Panel */}
+        <div className="w-full md:w-1/2 p-10 bg-white">
+          <h1 className="text-center text-4xl font-bold mb-6 underline">
             {isLogin ? "Login Page" : "Signup Page"}
           </h1>
+
           <h2 className="text-2xl font-semibold mb-4">
-            {isLogin ? "Sign in into your Account" : "Create a new account"}
+            {isLogin ? "Sign in into your account" : "Create a new account"}
           </h2>
+
           <p className="text-sm mb-6">
             {isLogin ? (
               <>
-                Don't have an account?{" "}
+                Don’t have an account?{" "}
                 <button
                   onClick={() => setIsLogin(false)}
                   className="text-blue-600 hover:underline"
@@ -102,33 +111,10 @@ const LoginSignup = () => {
           </p>
 
           {/* Social Buttons */}
-          <div className="space-y-4">
-            {/* Social Buttons */}
-            <div className="space-y-4">
-              <button
-                type="button"
-                className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100"
-                onClick={() => handleGoogleClick(isLogin ? "login" : "signup")}
-              >
-                <img
-                  src="https://img.icons8.com/color/24/google-logo.png"
-                  alt="google"
-                  className="mr-2"
-                />
-                Continue with Google
-              </button>
-            </div>
+          <div>
+            <div className="space-y-4"> <button type="button" className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100" onClick={() => handleGoogleClick(isLogin ? "login" : "signup")} > <img src="https://img.icons8.com/color/24/google-logo.png" alt="google" className="mr-2" /> Continue with Google </button> </div>
 
-            <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}>
-              <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5">
-                <img
-                  src="https://img.icons8.com/color/24/email.png"
-                  alt="email"
-                  className="mr-2"
-                />
-                Continue with Email
-              </button>
-            </Link>
+            <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}> <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5"> <img src="https://img.icons8.com/color/24/email.png" alt="email" className="mr-2" /> Continue with Email </button> </Link>
           </div>
 
           {/* Divider */}
@@ -140,22 +126,14 @@ const LoginSignup = () => {
 
           {/* Apple + Facebook */}
           <div className="grid grid-cols-2 gap-4">
-            <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
-              <img
-                src="https://img.icons8.com/ios-filled/24/mac-os.png"
-                alt="apple"
-                className="mr-2"
-              />{" "}
-              Apple
-            </button>
-            <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100">
-              <img
-                src="https://img.icons8.com/fluency/24/facebook-new.png"
-                alt="facebook"
-                className="mr-2"
-              />{" "}
-              Facebook
-            </button>
+            <SocialButton
+              icon="https://img.icons8.com/ios-filled/24/mac-os.png"
+              text="Apple"
+            />
+            <SocialButton
+              icon="https://img.icons8.com/fluency/24/facebook-new.png"
+              text="Facebook"
+            />
           </div>
 
           {/* Terms */}
@@ -171,15 +149,15 @@ const LoginSignup = () => {
             .
           </p>
 
-          {/* Close Button */}
-          <center>
+          {/* Close */}
+          <div className="text-center">
             <button
               onClick={() => (window.location.href = "/")}
-              className="mt-6 px-6 py-2 bg-[#7B2D43] text-white rounded-lg hover:bg-red-400 transition duration-300 shadow-md"
+              className="mt-6 px-6 py-2 bg-[#7B2D43] text-white rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
             >
               Close
             </button>
-          </center>
+          </div>
         </div>
       </div>
     </div>
