@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const UserProfile = () => {
+export default function UserProfile() {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
@@ -14,238 +14,244 @@ const UserProfile = () => {
       .catch((err) => console.error("Error fetching user profile:", err));
   }, [userId]);
 
-  if (!user) {
+  const handlePayment = async (packageData) => {
+    const response = await fetch("http://localhost:5024/api/payment/order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: packageData.price }),
+    });
+
+    const orderData = await response.json();
+
+    const options = {
+      key: "YOUR_RAZORPAY_TEST_KEY_ID",
+      amount: orderData.amount,
+      currency: orderData.currency,
+      name: "Freelancer Marketplace",
+      description: `Hire ${user.name}`,
+      order_id: orderData.id,
+      handler: function (response) {
+        alert(`✅ Payment Successful!\nPayment ID: ${response.razorpay_payment_id}`);
+      },
+      prefill: {
+        name: "Client Name",
+        email: "client@example.com",
+        contact: "9876543210",
+      },
+      notes: { freelancer: user.name, freelancer_id: user._id },
+      theme: { color: "#4F46E5" },
+    };
+
+    const razor = new window.Razorpay(options);
+    razor.open();
+  };
+
+  if (!user)
     return (
       <p className="text-center mt-20 text-gray-500 animate-pulse">
         Loading profile...
       </p>
     );
-  }
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-indigo-100 min-h-screen py-12 px-6">
+    <div className="min-h-screen bg-gray-50 py-10 px-6">
       {/* Back Button */}
       <motion.button
         onClick={() => navigate(-1)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="px-5 py-2 -mt-8 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 transition fixed"
+        className="px-5 py-2 mb-6 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 transition"
       >
         ← Back
       </motion.button>
 
-      {/* Profile Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="backdrop-blur-lg bg-white/70 shadow-2xl rounded-3xl p-10 max-w-4xl mx-auto border border-gray-200"
-      >
-        <div className="flex flex-col items-center">
-          <motion.img
-            src={user.image || "https://via.placeholder.com/150"}
-            alt={user.name}
-            className="w-36 h-36 rounded-full object-cover border-4 border-indigo-300 shadow-lg"
-            initial={{ scale: 0.8 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-          />
-          <h1 className="mt-4 text-4xl font-extrabold text-gray-900">
-            {user.name}
-          </h1>
-          <p className="text-lg text-gray-600 mt-1">
-            {user.profession || "Freelancer"}
-          </p>
-          <div className="mt-2 text-yellow-500 text-xl">
-            ⭐ {user.rating} / 5
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* LEFT PANEL */}
+        <aside className="col-span-1">
+          <div className="bg-white rounded-2xl shadow-md p-6 sticky top-8">
+            {/* Profile Header */}
+            <div className="flex items-center gap-4">
+              <img
+                src={user.image || "https://via.placeholder.com/150"}
+                alt={user.name}
+                className="w-20 h-20 rounded-full object-cover border-2 border-gray-200"
+              />
+              <div>
+                <h2 className="text-2xl font-bold">{user.name}</h2>
+                <p className="text-sm text-gray-600">{user.profession || "Freelancer"}</p>
+                <div className="flex items-center gap-2 mt-2 text-sm text-yellow-500">
+                  <span className="font-semibold">{user.rating || "N/A"}</span>
+                  <span>·</span>
+                  <span className="text-gray-500">{user.reviewsCount || 0} reviews</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Basic Info */}
+            <div className="mt-6 text-sm text-gray-700 space-y-2">
+              <p>📍 From: {user.location || "Not specified"}</p>
+              <p>🕒 Avg. response time: {user.responseTime || "1 hour"}</p>
+              <p>📦 Orders in queue: {user.ordersInQueue || 0}</p>
+              <p>💬 Last delivery: {user.lastDelivery || "Recently"}</p>
+              <p>🎯 Member since: {user.memberSince || "2024"}</p>
+            </div>
+
+            {/* Hire Button */}
+            <div className="mt-6 flex gap-3">
+              <button
+                className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 transition"
+                onClick={() =>
+                  handlePayment({
+                    title: "Custom Hire",
+                    price: user.price || 100,
+                  })
+                }
+              >
+                💼 Hire for ₹{user.price || 100}
+              </button>
+            </div>
+
+            {/* Dynamic About Section */}
+            <div className="mt-2 border-t pt-5">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">
+                Get to Know {user.name}
+              </h3>
+              <p className="text-gray-700 leading-relaxed text-sm">
+                {user.about || "No about information available."}
+              </p>
+
+              {user.specialties?.length > 0 && (
+                <ul className="mt-4 text-sm text-gray-700 space-y-2 list-disc list-inside">
+                  {user.specialties.map((sp, i) => (
+                    <li key={i}>{sp}</li>
+                  ))}
+                </ul>
+              )}
+
+              <p className="mt-4 text-sm text-gray-700">
+                🔥 Let’s build your digital dream together and take your business online with impact.
+              </p>
+            </div>
+
+            {/* Skills */}
+            <div className="mt-6 text-sm text-gray-600">
+              <h4 className="font-semibold mb-2">Skills</h4>
+              <div className="flex gap-2 flex-wrap">
+                {user.skills?.length > 0 ? (
+                  user.skills.map((s, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm"
+                    >
+                      {s}
+                    </span>
+                  ))
+                ) : (
+                  <p>No skills added</p>
+                )}
+              </div>
+            </div>
           </div>
-        </div>
+        </aside>
 
-        {/* Contact Info */}
-        <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-800">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-indigo-50 p-5 rounded-xl shadow-md"
-          >
-            <h2 className="font-semibold text-lg mb-2">Contact</h2>
-            <p>📞 {user.phone || "N/A"}</p>
-            <p>📧 {user.email || "N/A"}</p>
-            <p>📍 {user.location || "Not specified"}</p>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-indigo-50 p-5 rounded-xl shadow-md"
-          >
-            <h2 className="font-semibold text-lg mb-2">Availability</h2>
-            <p>{user.availability}</p>
-            <p>Experience: {user.experience} years</p>
-            <p>Completed Projects: {user.completedProjects}</p>
-          </motion.div>
-        </div>
+        {/* RIGHT PANEL */}
+        <main className="col-span-1 lg:col-span-2">
+          <div className="bg-white rounded-2xl shadow-md p-6">
 
-        {/* About Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="mt-8 bg-white/80 p-6 rounded-xl shadow"
-        >
-          <h2 className="font-semibold text-lg mb-2">About</h2>
-          <p>{user.description || "No description available"}</p>
-        </motion.div>
+            {/* Languages */}
+            <div className="mt-6">
+              <h4 className="text-sm font-semibold text-gray-700 mb-2">Languages</h4>
+              <div className="flex gap-2 flex-wrap">
+                {user.languages?.length > 0 ? (
+                  user.languages.map((lang, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                    >
+                      {lang}
+                    </span>
+                  ))
+                ) : (
+                  <span>No languages listed</span>
+                )}
+              </div>
+            </div>
 
-        {/* Skills Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="mt-8"
-        >
-          <h2 className="font-semibold text-lg mb-2">Skills</h2>
-          <div className="flex flex-wrap gap-3">
-            {user.skills?.length > 0 ? (
-              user.skills.map((skill, idx) => (
-                <motion.span
-                  key={idx}
-                  whileHover={{ scale: 1.1 }}
-                  className="px-4 py-1 bg-indigo-100 text-indigo-700 rounded-full shadow-sm text-sm"
+            {/* Contact Info */}
+            <div className="mt-6">
+              <h4 className="text-sm font-semibold text-gray-700 mb-2">Contact</h4>
+              <p>📧 {user.email}</p>
+              <p>📞 {user.phone}</p>
+              <p>
+                🔗{" "}
+                <a
+                  href={user.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-indigo-600 hover:underline"
                 >
-                  {skill}
-                </motion.span>
-              ))
-            ) : (
-              <p>No skills added</p>
+                  {user.website}
+                </a>
+              </p>
+            </div>
+            {/* Education */}
+            {user.education?.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-3">🎓 Education</h3>
+                <ul className="space-y-2 text-gray-700">
+                  {user.education.map((edu, i) => (
+                    <li key={i} className="border-b pb-2">
+                      <p className="font-semibold">{edu.degree}</p>
+                      <p className="text-sm">{edu.institution}</p>
+                      <p className="text-xs text-gray-500">Year: {edu.year}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
-          </div>
-        </motion.div>
 
-        {/* Education */}
-        {user.education?.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-8"
-          >
-            <h2 className="font-semibold text-lg mb-2">Education</h2>
-            <ul className="list-disc ml-5 space-y-1">
-              {user.education.map((edu, idx) => (
-                <li key={idx}>
-                  {edu.degree} - {edu.institution} ({edu.year})
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
-
-        {/* Projects */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="mt-8"
-        >
-          <h2 className="font-semibold text-lg mb-2">Projects</h2>
-          <ul className="space-y-3">
-            {user.projects?.length > 0 ? (
-              user.projects.map((proj, idx) => (
-                <motion.li
-                  key={idx}
-                  whileHover={{ scale: 1.02 }}
-                  className="p-4 bg-gray-100 rounded-lg shadow-sm"
-                >
-                  <h3 className="font-bold">{proj.title}</h3>
-                  <p className="text-sm text-gray-600">{proj.description}</p>
-                  {proj.link && (
+            {/* Projects */}
+            {user.projects?.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-3">💻 Projects</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {user.projects.map((p, i) => (
                     <a
-                      href={proj.link}
+                      key={i}
+                      href={p.link}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-indigo-600 text-sm underline"
+                      className="block p-4 border rounded-lg hover:shadow-md transition"
                     >
-                      View Project
+                      <h4 className="font-semibold">{p.title}</h4>
+                      <p className="text-sm text-gray-600">{p.description}</p>
                     </a>
-                  )}
-                </motion.li>
-              ))
-            ) : (
-              <p>No projects yet</p>
+                  ))}
+                </div>
+              </div>
             )}
-          </ul>
-        </motion.div>
 
-        {/* Reviews */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-8"
-        >
-          <h2 className="font-semibold text-lg mb-2">Reviews</h2>
-          {user.reviews?.length > 0 ? (
-            user.reviews.map((review, idx) => (
-              <motion.div
-                key={idx}
-                whileHover={{ scale: 1.02 }}
-                className="border p-4 rounded-lg mb-3 bg-white shadow"
-              >
-                <p className="text-gray-700">"{review.comment}"</p>
-                <span className="text-sm text-gray-500">
-                  - {review.reviewer} ⭐ {review.rating}
-                </span>
-              </motion.div>
-            ))
-          ) : (
-            <p>No reviews yet</p>
-          )}
-        </motion.div>
-
-        {/* Social Links */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="mt-8 flex gap-6 justify-center"
-        >
-          {user.linkedin && (
-            <a
-              href={user.linkedin}
-              target="_blank"
-              rel="noreferrer"
-              className="text-indigo-600 hover:scale-110 transition text-lg"
-            >
-              🔗 LinkedIn
-            </a>
-          )}
-          {user.github && (
-            <a
-              href={user.github}
-              target="_blank"
-              rel="noreferrer"
-              className="text-indigo-600 hover:scale-110 transition text-lg"
-            >
-              💻 GitHub
-            </a>
-          )}
-          {user.website && (
-            <a
-              href={user.website}
-              target="_blank"
-              rel="noreferrer"
-              className="text-indigo-600 hover:scale-110 transition text-lg"
-            >
-              🌐 Website
-            </a>
-          )}
-        </motion.div>
-      </motion.div>
+            {/* Reviews */}
+            {user.reviews?.length > 0 && (
+              <div className="mb-6">
+                <h3 className="text-xl font-bold mb-3">⭐ Reviews</h3>
+                <div className="space-y-3">
+                  {user.reviews.map((r, i) => (
+                    <div key={i} className="border rounded-lg p-3 bg-gray-50">
+                      <div className="flex justify-between items-center">
+                        <strong>{r.reviewer}</strong>
+                        <span className="text-yellow-500">{r.rating} ⭐</span>
+                      </div>
+                      <p className="text-sm text-gray-600">{r.comment}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
     </div>
   );
-};
-
-export default UserProfile;
+}
