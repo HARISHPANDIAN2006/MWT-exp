@@ -3,6 +3,7 @@ const cors = require("cors");
 const session = require("express-session");
 require("dotenv").config();
 const connectDB = require("./config/db");
+const Razorpay = require('razorpay');
 
 const app = express();
 
@@ -32,6 +33,38 @@ app.use(session({
 
 // ✅ Connect to DB
 connectDB();
+
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,      // from .env
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+
+app.post("/api/payment/create-order", async (req, res) => {
+  try {
+    const { amount } = req.body;
+
+    if (!amount || isNaN(amount)) {
+      return res.status(400).json({ error: "Invalid amount" });
+    }
+
+    const options = {
+      amount: Math.round(amount * 100),
+      currency: "INR",
+      receipt: "receipt_" + Date.now(),
+      payment_capture: 1,
+    };
+
+    const order = await razorpay.orders.create(options);
+    console.log("✅ Razorpay order created:", order);
+    return res.json({ order, key: process.env.RAZORPAY_KEY_ID });
+  } catch (err) {
+    console.error("❌ Razorpay API Error:", err);
+    return res.status(500).json({ error: err.message || "Failed to simulate orders" });
+  }
+});
+
+
 
 // ✅ Routes
 app.use("/api/auth", require("./routes/authRoutes"));
