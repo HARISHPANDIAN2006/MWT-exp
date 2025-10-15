@@ -2,16 +2,15 @@ import React, { useEffect, useState } from "react";
 import OfflineToggleButton from "../Components/OfflineToggleButton";
 import BusinessHeaderSection from "../JustDialHome/BusinessHeaderSection";
 import BusinessServicesSection from "../JustDialHome/BusinessServiceSection";
-import BusinessCategorySection from "../JustDialHome/BusinessCategorySection";
-import BusinessCategories from "../JustDialHome/BusinessCatgories";
 import BusinessFooterSection from "../JustDialHome/BusinessFooterSection";
+import HomePageJustDial from "../JustDialHome/HomePageJustDial";
 
 const JustDialPages = () => {
   const [search, setSearch] = useState("");
   const [businesses, setBusinesses] = useState([]);
 
   // Fetch businesses from backend
-  useEffect(() => {
+  /*useEffect(() => {
     fetch("http://localhost:5024/api/businesses")
       .then(res => res.json())
       .then(data => setBusinesses(data))
@@ -20,24 +19,21 @@ const JustDialPages = () => {
 
   const filtered = businesses.filter((b) =>
     b.name.toLowerCase().includes(search.toLowerCase())
-  );
+  );*/
 
   return (
     <>
     <OfflineToggleButton/>
     <div className="min-h-screen bg-gray-100">
-      {/* Header */}
+
       <BusinessHeaderSection />
 
-      {/* Categories */}
       <BusinessServicesSection />
 
-      {/* Business Listings */}
-      <BusinessCategorySection />
-      <BusinessCategories />
-      
+      <HomePageJustDial/>
 
       <BusinessFooterSection />
+      
     </div>
     </>
   );

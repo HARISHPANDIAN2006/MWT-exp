@@ -53,4 +53,4 @@ const UserListSchema = new mongoose.Schema({
 { timestamps: true }  // adds createdAt & updatedAt automatically
 );
 
-module.exports = mongoose.model("UserList", UserListSchema, "userlist");
+module.exports = mongoose.model("UserList", UserListSchema, "servicelist");

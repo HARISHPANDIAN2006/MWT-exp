@@ -15,11 +15,10 @@ import ForgetForm from "./AuthSections/ForgetForm";
 import OtpPage from "./AuthSections/OtpPage";
 import ServiceInfo from "./ServiceList/ServiceInfo";
 import SubcategoryInfo from "./ServiceList/SubcategoryInfo";
-import JustDialPages from "./Pages/JustDialPages";
 import OfflineToggleButton from "./Components/OfflineToggleButton";
 import UserProfile from "./ServiceList/UserProfile";
-import SubCategoryServices from "./JustDialHome/SubCategoryServices";
 import Payment from "./Components/Payment";
+import JustDialPages from "./Pages/JustDialPages";
 
 function HomePage() {
   return (
@@ -54,7 +53,6 @@ function App() {
         <Route path="/userprofile/:userId" element={<UserProfile />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/JustDialPages" element={<JustDialPages />} />
-        <Route path="/Busisubcategory/:subName" element={<SubCategoryServices />} />
       </Routes>
     </Router>
   );

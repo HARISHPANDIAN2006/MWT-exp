@@ -53,6 +53,10 @@ app.post("/api/payment/create-order", async (req, res) => {
       currency: "INR",
       receipt: "receipt_" + Date.now(),
       payment_capture: 1,
+      notes: {
+        payment_for: "Freelance Marketplace",
+      },
+      method: "upi"
     };
 
     const order = await razorpay.orders.create(options);
@@ -73,11 +77,8 @@ app.use("/api/session", require("./routes/sessionRoutes"));
 app.use("/api/guides", require("./routes/guideRoutes"));
 app.use("/api/otp", require("./routes/otpRoutes"));
 app.use("/api/forget", require("./routes/forgetRoutes"));
-app.use("/api/businesses", require("./routes/businessRoutes"));
 app.use("/api/subcategory", require("./routes/subcategoryRoutes"));
 app.use("/api/userprofile", require("./routes/userProfileRoutes"));
-app.use("/api/categories", require("./routes/BusinCategory"));
-app.use("/api/Busisubcategory", require("./routes/Businsubcategory"));
 
 // ✅ Start server
 const PORT = process.env.PORT || 5024;

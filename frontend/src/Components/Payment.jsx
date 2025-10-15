@@ -2,100 +2,115 @@ import React, { useState } from "react";
 import axios from "axios";
 
 export default function Payment() {
-  const [amount, setAmount] = useState("5"); // default ₹5 (recommended)
+  const [amount, setAmount] = useState("500"); // default ₹500
   const [msg, setMsg] = useState("");
 
   const handlePayment = async () => {
     setMsg("");
-    if (!amount || Number(amount) <= 0) return setMsg("Enter a valid amount");
 
     try {
-      // 1) create order on backend (amount in rupees)
+      // 1️⃣ Create test order (backend must return { order, key })
       const resp = await axios.post(
         "http://localhost:5024/api/payment/create-order",
         { amount },
         { headers: { "Content-Type": "application/json" } }
       );
-      const { order, key } = resp.data;
-      if (!order) return setMsg("Failed to create order");
 
-      // 2) Razorpay checkout options — force UPI collect flow and prefill test VPA
+      const { order, key } = resp.data;
+      if (!order) return setMsg("⚠️ Failed to create order.");
+
+      // 2️⃣ Razorpay Checkout Options
       const options = {
-        key: key, // returned from backend (rzp_test_...)
+        key: key || "rzp_test_RSdArGEUMuy9EL", // fallback test key
         amount: order.amount,
         currency: order.currency,
-        name: "Your App Name",
-        description: "Test UPI Payment (simulate)",
+        name: "AutoHub - Test Mode",
+        description: "Simulated UPI / Card / Wallet Payment",
         order_id: order.id,
+
         prefill: {
           name: "Test User",
           email: "test@example.com",
           contact: "9999999999",
         },
-        notes: { test: "UPI simulate" },
 
-        // IMPORTANT: force UPI collect flow and prefill a test VPA
+        // ✅ Enable all methods in test mode
         method: {
           card: true,
           netbanking: true,
           wallet: true,
-          upi: true,   // enable UPI
+          upi: true,
           qr: true,
           paylater: true,
         },
 
-        // this is the key part — tell checkout to use UPI collect and prefill the VPA
+        // ✅ Force UPI collect flow (use test VPA)
         upi: {
-          flow: "collect",         // 'collect' requests VPA from user or prefilled VPA
-          vpa: "test@upi",        // test VPA to prefill (test mode will accept this)
+          flow: "collect",
+          vpa: "test@upi",
         },
 
         handler: function (response) {
-          // successful payment callback
-          console.log("razorpay response:", response);
-          alert("Payment Successful (simulated). Payment ID: " + response.razorpay_payment_id);
+          console.log("Payment success (test mode):", response);
+          alert("✅ Simulated payment success!\nPayment ID: " + response.razorpay_payment_id);
         },
 
         modal: {
           ondismiss: function () {
-            console.log("Checkout closed");
+            console.log("Razorpay Checkout closed.");
           },
         },
 
-        theme: { color: "#528FF0" },
+        theme: {
+          color: "#3399cc",
+        },
       };
 
       const rzp = new window.Razorpay(options);
-
-      // open checkout
       rzp.open();
     } catch (err) {
-      console.error("Payment error:", err);
-      setMsg("Payment flow error: " + (err.response?.data?.error || err.message));
+      console.error("Payment Error:", err);
+      setMsg("❌ Error: " + (err.response?.data?.error || err.message));
     }
   };
 
   return (
-    <div style={{ padding: 20 }}>
-      <h3>Simulate UPI Payment (test)</h3>
-      <div style={{ marginBottom: 8 }}>
-        <label>Amount (INR): </label>
+    <div
+      style={{
+        padding: 40,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        fontFamily: "sans-serif",
+      }}
+    >
+      <h2>🧾 Simulate Razorpay UPI Payment (Test Mode)</h2>
+      <div style={{ margin: "10px 0" }}>
+        <label>Amount (₹): </label>
         <input
           type="number"
           min="1"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
-          style={{ width: 120 }}
+          style={{ width: "100px", padding: "5px", marginLeft: "5px" }}
         />
       </div>
-      <button onClick={handlePayment} style={{ padding: "8px 16px" }}>
-        Pay (simulate UPI)
+      <button
+        onClick={handlePayment}
+        style={{
+          padding: "10px 20px",
+          backgroundColor: "#3399cc",
+          color: "white",
+          border: "none",
+          borderRadius: "8px",
+          cursor: "pointer",
+        }}
+      >
+        Pay ₹{amount}
       </button>
-
-      {msg && <p style={{ color: "red" }}>{msg}</p>}
-
-      <p style={{ marginTop: 12 }}>
-        Test VPA to enter (if asked): <b>test@upi</b> or <b>user@upi</b>
+      {msg && <p style={{ color: "red", marginTop: "15px" }}>{msg}</p>}
+      <p style={{ marginTop: "20px", fontSize: "14px", color: "#555" }}>
+        Use test VPA: <b>test@upi</b> or <b>user@upi</b>
       </p>
     </div>
   );
