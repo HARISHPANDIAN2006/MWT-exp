@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import b2b from "./assets/b2b.png"
+import repairs from "./assets/repairs.png"
 
 const BusinessShowcase = () => {
   // Image slider data
@@ -45,13 +47,13 @@ const BusinessShowcase = () => {
       title: "B2B",
       subtitle: "Quick Quotes",
       color: "bg-[#EFDEC7]",
-      img: "./assets/education.png",
+      img: b2b,
     },
     {
       title: "REPAIRS & SERVICES",
       subtitle: "Get Nearest Vendor",
       color: "bg-[#B3B3B3]",
-      img: "./assets/education.png",
+      img: repairs,
     },
     {
       title: "REAL ESTATE",
