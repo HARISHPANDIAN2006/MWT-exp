@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import OfflineToggleButton from "../Components/OfflineToggleButton";
 import BusinessHeaderSection from "../JustDialHome/BusinessHeaderSection";
-import BusinessServicesSection from "../JustDialHome/BusinessServiceSection";
+import BusinessShowCase from "../JustDialHome/BusinessServiceSection";
 import BusinessFooterSection from "../JustDialHome/BusinessFooterSection";
 import HomePageJustDial from "../JustDialHome/HomePageJustDial";
 
@@ -28,7 +28,7 @@ const JustDialPages = () => {
 
       <BusinessHeaderSection />
 
-      <BusinessServicesSection />
+      <BusinessShowCase />
 
       <HomePageJustDial/>
 

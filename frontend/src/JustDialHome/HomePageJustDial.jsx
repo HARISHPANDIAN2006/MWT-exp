@@ -26,15 +26,15 @@ export default function HomePageJustDial() {
     <div className="min-h-screen bg-gray-100 flex flex-col items-center">
 
       {/* Categories */}
-      <section className="max-w-full mt-8 bg-white p-6 rounded-xl shadow mx-10">
-        <div className="grid grid-cols-7 gap-7">
+      <section className="max-w-full mt-8 bg-white p-6 rounded-xl shadow mx-5">
+        <div className="grid grid-cols-8 gap-7">
           {categories.map((cat, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center p-4 border-2 rounded-lg hover:shadow-lg cursor-pointer"
+              className="flex flex-col items-center justify-center p-3 border-2 rounded-lg hover:shadow-lg cursor-pointer"
             >
-              <div className="text-4xl mb-2">{cat.icon}</div>
-              <p className="text-lg font-medium text-gray-700 text-center">
+              <div className="text-5xl mb-2">{cat.icon}</div>
+              <p className="text-md font-medium text-gray-700 text-center">
                 {cat.name}
               </p>
             </div>
