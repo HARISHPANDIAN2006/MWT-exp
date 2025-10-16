@@ -5,6 +5,7 @@ import BusinessShowCase from "../JustDialHome/BusinessServiceSection";
 import BusinessFooterSection from "../JustDialHome/BusinessFooterSection";
 import HomePageJustDial from "../JustDialHome/HomePageJustDial";
 import BusinessCategory from "../JustDialHome/BusinessCategory";
+import HomePageDesign from "../JustDialHome/HomePageDesign";
 
 const JustDialPages = () => {
 
@@ -20,6 +21,8 @@ const JustDialPages = () => {
       <HomePageJustDial/>
 
       <BusinessCategory />
+
+      <HomePageDesign/>
 
       <BusinessFooterSection />
       

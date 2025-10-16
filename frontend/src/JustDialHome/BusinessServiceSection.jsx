@@ -133,7 +133,7 @@ const BusinessShowcase = () => {
             key={index}
             onMouseEnter={() => setActive(index)}
             onMouseLeave={() => setActive(null)}
-            className={`relative flex flex-col justify-between rounded-xl cursor-pointer transition-all duration-300 overflow-hidden
+            className={`relative flex flex-col justify-between rounded-xl cursor-pointer transition-all duration-300 overflow-hidden hover:scale-105
       ${active === index ? "w-56" : "w-40"} h-72 bg-cover bg-center`}
             style={{ backgroundImage: `url(${service.img})` }} // ✅ set image as background
           >
