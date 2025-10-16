@@ -50,12 +50,6 @@ const BusinessShowcase = () => {
       title: "B2B",
       subtitle: "Quick Quotes",
       color: "bg-[#EFDEC7]",
-      img: b2b,
-    },
-    {
-      title: "REPAIRS",
-      subtitle: "Nearest Vendor",
-      color: "bg-[#B3B3B3]",
       img: repairs,
     },
     {
@@ -63,6 +57,12 @@ const BusinessShowcase = () => {
       subtitle: "Finest Agents",
       color: "bg-gradient-to-r from-purple-500 to-purple-700",
       img: realestate,
+    },
+    {
+      title: "REPAIRS",
+      subtitle: "Nearest Vendor",
+      color: "bg-[#B3B3B3]",
+      img: b2b,
     },
     {
       title: "DOCTORS",

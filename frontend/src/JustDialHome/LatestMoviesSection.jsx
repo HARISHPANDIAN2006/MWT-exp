@@ -6,20 +6,38 @@ import "swiper/css/navigation";
 
 const MovieCard = ({ title, language, format, rating, imageUrl }) => {
   return (
-    <div className="w-44 sm:w-52 bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition duration-300">
-      <div className="relative">
-        <img src={imageUrl} alt={title} className="w-full h-60 object-cover" />
-        <div className="absolute bottom-2 left-2 bg-black bg-opacity-70 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
-          <span className="text-red-500">❤️</span>
-          <span>{rating}%</span>
+    <div className="w-44 sm:w-52 bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition duration-300 relative mb-5">
+      {/* Movie Poster */}
+        {/* Movie Poster + Overlay Container */}
+        <div className="relative group transform transition-transform duration-300 hover:scale-105">
+          <img
+            src={imageUrl}
+            alt={title}
+            className="w-full h-60 object-cover"
+          />
+
+          {/* Rating Badge */}
+          <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center gap-1">
+            <span className="text-red-500 text-md">❤️</span>
+            <span className="text-md">{rating}%</span>
+          </div>
+
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300">
+            <button className="bg-blue-500 text-white font-bold text-xl px-4 py-1 rounded-lg hover:bg-blue-700">
+              Book Now
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="p-2">
-        <p className="text-lg font-bold text-gray-900 truncate">{title}</p>
-        <p className="text-md text-gray-500">
-          {language} · {format}
-        </p>
-      </div>
+
+        {/* Movie Info */}
+        <div className="p-2">
+          <p className="text-lg font-bold text-gray-900 truncate">{title}</p>
+          <p className="text-md text-gray-500">
+            {language} · {format}
+          </p>
+        </div>
+
     </div>
   );
 };
@@ -44,40 +62,29 @@ const LatestMoviesSection = () => {
         <h2 className="text-2xl font-bold text-gray-900">
           🎥 Latest Movies & Reviews
         </h2>
-        <a href="#" className="text-blue-600 font-medium hover:underline pr-10">
+        <a href="#" className="text-blue-600 font-bold text-xl hover:underline pr-10">
           View All
         </a>
       </div>
 
       <Swiper
         modules={[Navigation, Autoplay]}
-        spaceBetween={5}
-        slidesPerView={6}
-        navigation={{
-          nextEl: ".custom-next", // custom next button
-        }}
-        autoplay={{
-          delay: 1000,
-          disableOnInteraction: false,
-        }}
+        spaceBetween={4}
+        autoplay={{ delay: 1500, disableOnInteraction: false }}
         breakpoints={{
-          640: { slidesPerView: 3 },
-          768: { slidesPerView: 4 },
-          1024: { slidesPerView: 5 },
+          0: { slidesPerView: 2 },    // mobile
+          640: { slidesPerView: 3 },  // small tablets
+          768: { slidesPerView: 4 },  // tablets
+          1024: { slidesPerView: 6 }, // large desktops
         }}
-        className="pb-6"
       >
+
         {movies.map((movie) => (
           <SwiperSlide key={movie.id}>
             <MovieCard {...movie} />
           </SwiperSlide>
         ))}
       </Swiper>
-
-      {/* ✅ Custom Right Arrow (Next Button Only) */}
-      <div className="custom-next absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-slate-300 shadow-md p-2 rounded-full border border-black cursor-pointer hover:bg-gray-100">
-        <span className="text-3xl font-extrabold text-black">⮕</span>
-      </div>
     </section>
   );
 };
