@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import b2b from "./assets/b2bperson.jpg"
+import b2b from "./assets/b2bperson1.jpg"
 import repairs from "./assets/repairperson.jpg"
 import doctor from "./assets/doctorperson.jpg"
 import education from "./assets/educationperson.jpg"
@@ -81,7 +81,7 @@ const BusinessShowcase = () => {
   return (
     <div className="flex items-center justify-center gap-4 pt-5 overflow-x-auto no-scrollbar">
       {/* Image Slider */}
-      <div className="relative w-[460px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
+      <div className="relative w-[560px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
         {/* Content */}
         <div className="absolute inset-0 px-12 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-8">
@@ -133,7 +133,7 @@ const BusinessShowcase = () => {
             key={index}
             onMouseEnter={() => setActive(index)}
             onMouseLeave={() => setActive(null)}
-            className={`relative flex flex-col justify-between rounded-xl cursor-pointer transition-all duration-300 overflow-hidden hover:scale-105
+            className={`relative flex flex-col justify-between rounded-xl cursor-pointer transition-all duration-300 overflow-hidden hover:scale-110
       ${active === index ? "w-56" : "w-40"} h-72 bg-cover bg-center`}
             style={{ backgroundImage: `url(${service.img})` }} // ✅ set image as background
           >
