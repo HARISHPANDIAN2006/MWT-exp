@@ -4,22 +4,9 @@ import BusinessHeaderSection from "../JustDialHome/BusinessHeaderSection";
 import BusinessShowCase from "../JustDialHome/BusinessServiceSection";
 import BusinessFooterSection from "../JustDialHome/BusinessFooterSection";
 import HomePageJustDial from "../JustDialHome/HomePageJustDial";
+import BusinessCategory from "../JustDialHome/BusinessCategory";
 
 const JustDialPages = () => {
-  const [search, setSearch] = useState("");
-  const [businesses, setBusinesses] = useState([]);
-
-  // Fetch businesses from backend
-  /*useEffect(() => {
-    fetch("http://localhost:5024/api/businesses")
-      .then(res => res.json())
-      .then(data => setBusinesses(data))
-      .catch(err => console.error("Error fetching businesses:", err));
-  }, []);
-
-  const filtered = businesses.filter((b) =>
-    b.name.toLowerCase().includes(search.toLowerCase())
-  );*/
 
   return (
     <>
@@ -31,6 +18,8 @@ const JustDialPages = () => {
       <BusinessShowCase />
 
       <HomePageJustDial/>
+
+      <BusinessCategory />
 
       <BusinessFooterSection />
       

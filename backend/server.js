@@ -79,6 +79,7 @@ app.use("/api/otp", require("./routes/otpRoutes"));
 app.use("/api/forget", require("./routes/forgetRoutes"));
 app.use("/api/subcategory", require("./routes/subcategoryRoutes"));
 app.use("/api/userprofile", require("./routes/userProfileRoutes"));
+app.use("/api/business",require("./routes/businessRoutes"));
 
 // ✅ Start server
 const PORT = process.env.PORT || 5024;

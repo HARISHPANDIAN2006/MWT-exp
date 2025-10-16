@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import b2b from "./assets/b2b.png"
-import repairs from "./assets/repairs.png"
+import b2b from "./assets/b2bperson.jpg"
+import repairs from "./assets/repairperson.jpg"
+import doctor from "./assets/doctorperson.jpg"
+import education from "./assets/educationperson.jpg"
+import realestate from "./assets/realestateperson.jpg"
 
 const BusinessShowcase = () => {
   // Image slider data
@@ -50,8 +53,8 @@ const BusinessShowcase = () => {
       img: b2b,
     },
     {
-      title: "REPAIRS & SERVICES",
-      subtitle: "Get Nearest Vendor",
+      title: "REPAIRS",
+      subtitle: "Nearest Vendor",
       color: "bg-[#B3B3B3]",
       img: repairs,
     },
@@ -59,29 +62,29 @@ const BusinessShowcase = () => {
       title: "REAL ESTATE",
       subtitle: "Finest Agents",
       color: "bg-gradient-to-r from-purple-500 to-purple-700",
-      img: "./assets/realestate.png",
+      img: realestate,
     },
     {
       title: "DOCTORS",
       subtitle: "Book Now",
       color: "bg-gradient-to-r from-green-500 to-green-700",
-      img: "./assets/doctors.png",
+      img: doctor,
     },
     {
       title: "EDUCATION",
       subtitle: "Find Tutors",
       color: "bg-gradient-to-r from-pink-500 to-pink-700",
-      img: "./assets/education.png",
+      img: education,
     },
   ];
 
   return (
-    <div className="flex items-center justify-center gap-8 p-6 overflow-x-auto no-scrollbar">
+    <div className="flex items-center justify-center gap-4 pt-5 overflow-x-auto no-scrollbar">
       {/* Image Slider */}
       <div className="relative w-[460px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
         {/* Content */}
         <div className="absolute inset-0 px-12 flex flex-col justify-center">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-8">
             <img
               src={slides[current].logo}
               alt="logo"
@@ -113,39 +116,37 @@ const BusinessShowcase = () => {
           onClick={prevSlide}
           className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white p-1 rounded-full shadow"
         >
-          <ChevronLeft size={18} />
+          <ChevronLeft size={22} />
         </button>
         <button
           onClick={nextSlide}
           className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white p-1 rounded-full shadow"
         >
-          <ChevronRight size={18} />
+          <ChevronRight size={22} />
         </button>
       </div>
 
       {/* Expanding Service Cards */}
-      <div className="flex gap-4 justify-center p-5">
+      <div className="flex gap-4 justify-center p-6">
         {services.map((service, index) => (
           <div
             key={index}
             onMouseEnter={() => setActive(index)}
             onMouseLeave={() => setActive(null)}
-            className={`relative flex flex-col justify-between text-white rounded-xl cursor-pointer transition-all duration-300 overflow-hidden
-            ${active === index ? "w-56" : "w-40"} h-72 ${service.color}`}
+            className={`relative flex flex-col justify-between rounded-xl cursor-pointer transition-all duration-300 overflow-hidden
+      ${active === index ? "w-56" : "w-40"} h-72 bg-cover bg-center`}
+            style={{ backgroundImage: `url(${service.img})` }} // ✅ set image as background
           >
-            <div className="p-4">
-              <h3 className="text-lg font-bold">{service.title}</h3>
-              <p className="text-sm">{service.subtitle}</p>
+            <div className="absolute inset-0 bg-black/10"></div> {/* optional dark overlay */}
+            <div className="relative z-10 flex flex-col items-center justify-end h-full text-center text-white px-3 py-5">
+              <h3 className="text-xl font-extrabold text-white">{service.title}</h3>
+              <p className="text-md">{service.subtitle}</p>
             </div>
-            <img
-              src={service.img}
-              alt={service.title}
-              className="object-cover w-full h-40 mt-auto"
-            />
-            <div className="absolute bottom-4 right-4 text-xl">›</div>
+            <div className="absolute bottom-4 right-4 text-2xl font-bold z-10">›</div>
           </div>
         ))}
       </div>
+
     </div>
   );
 };
