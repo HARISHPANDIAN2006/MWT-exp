@@ -79,9 +79,9 @@ const BusinessShowcase = () => {
   ];
 
   return (
-    <div className="flex items-center justify-center gap-4 pt-5 overflow-x-auto no-scrollbar">
+    <div className="flex items-center justify-center pt-5 overflow-x-auto no-scrollbar">
       {/* Image Slider */}
-      <div className="relative w-[560px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
+      <div className="relative w-[500px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
         {/* Content */}
         <div className="absolute inset-0 px-12 flex flex-col justify-center">
           <div className="flex items-center gap-2 mb-8">

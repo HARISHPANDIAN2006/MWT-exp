@@ -6,27 +6,29 @@ import BusinessFooterSection from "../JustDialHome/BusinessFooterSection";
 import HomePageJustDial from "../JustDialHome/HomePageJustDial";
 import BusinessCategory from "../JustDialHome/BusinessCategory";
 import HomePageDesign from "../JustDialHome/HomePageDesign";
+import LatestMoviesSection from "../JustDialHome/LatestMoviesSection";
 
 const JustDialPages = () => {
-
   return (
     <>
-    <OfflineToggleButton/>
-    <div className="min-h-screen bg-gray-100">
+      <OfflineToggleButton />
+      <div className="min-h-screen bg-gray-100">
+        <BusinessHeaderSection />
 
-      <BusinessHeaderSection />
+        <BusinessShowCase />
 
-      <BusinessShowCase />
+        <HomePageJustDial />
 
-      <HomePageJustDial/>
+        <BusinessCategory />
 
-      <BusinessCategory />
+        <HomePageDesign />
 
-      <HomePageDesign/>
+        <section className="max-w-[1450px] mx-auto my-5 overflow-x-hidden">
+          <LatestMoviesSection />
+        </section>
 
-      <BusinessFooterSection />
-      
-    </div>
+        <BusinessFooterSection />
+      </div>
     </>
   );
 };
