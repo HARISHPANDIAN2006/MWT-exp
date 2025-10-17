@@ -906,9 +906,46 @@ const ExploreSections = () => {
 
   return (
     <section className="px-12 bg-gray-50 text-gray-800">
+      {/* --- Popular Categories --- */}
+      <div className="mb-10">
+        <h2 className="text-3xl font-bold mb-8 underline">Popular Categories</h2>
+
+        {/* Tabs - Scrollable horizontally */}
+        <div className="overflow-x-auto whitespace-nowrap mb-4 pb-2">
+          <div className="inline-flex gap-3">
+            {categoryTabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveCategory(tab)}
+                className={`px-6 py-4 rounded-md font-semibold transition-all duration-300 shrink-0 ${
+                  activeCategory === tab
+                    ? "bg-blue-600 text-white text-xl font-extrabold"
+                    : "bg-white text-gray-800 border hover:bg-gray-100 text-xl"
+                }`}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Category Links */}
+        <div className="text-sm leading-relaxed flex flex-wrap gap-x-2">
+          {popularSearches.map((item, index) => (
+            <a
+              key={index}
+              href="#"
+              className="hover:text-blue-600 transition-colors duration-200"
+            >
+              {item}
+              {index < popularSearches.length - 1 && " |"}
+            </a>
+          ))}
+        </div>
+      </div>
       {/* --- Trending Searches --- */}
       <div className="mb-10">
-        <h2 className="text-3xl font-bold mb-4">Trending Searches</h2>
+        <h2 className="text-3xl font-bold mb-8 underline">Trending Searches</h2>
         <div className="text-sm flex flex-wrap gap-x-2 leading-relaxed">
           {[
             // --- Education & Training ---
@@ -1093,47 +1130,9 @@ const ExploreSections = () => {
         </div>
       </div>
 
-      {/* --- Popular Categories --- */}
-      <div className="mb-10">
-        <h2 className="text-3xl font-bold mb-4">Popular Categories</h2>
-
-        {/* Tabs - Scrollable horizontally */}
-        <div className="overflow-x-auto whitespace-nowrap mb-4 pb-2">
-          <div className="inline-flex gap-3">
-            {categoryTabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveCategory(tab)}
-                className={`px-6 py-4 rounded-md font-semibold transition-all duration-300 shrink-0 ${
-                  activeCategory === tab
-                    ? "bg-blue-600 text-white text-xl font-extrabold"
-                    : "bg-white text-gray-800 border hover:bg-gray-100 text-xl"
-                }`}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Category Links */}
-        <div className="text-sm leading-relaxed flex flex-wrap gap-x-2">
-          {popularSearches.map((item, index) => (
-            <a
-              key={index}
-              href="#"
-              className="hover:text-blue-600 transition-colors duration-200"
-            >
-              {item}
-              {index < popularSearches.length - 1 && " |"}
-            </a>
-          ))}
-        </div>
-      </div>
-
       {/* --- Deals and Offers --- */}
       <div className="mb-10">
-        <h2 className="text-3xl font-bold mb-4">Deals and Offers</h2>
+        <h2 className="text-3xl font-bold mb-8 underline">Deals and Offers</h2>
         <div className="text-sm flex flex-wrap gap-x-2 leading-relaxed">
           {dealsAndOffers.map((item, index) => (
             <a
