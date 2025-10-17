@@ -9,6 +9,8 @@ import HomePageDesign from "../JustDialHome/HomePageDesign";
 import LatestMoviesSection from "../JustDialHome/LatestMoviesSection";
 import TouristAndSearchPage from "../JustDialHome/TouristAndSearchPage";
 import ExploreSections from "../JustDialHome/ExploreSections";
+import DayToDayServicesSection from "../JustDialHome/DaytoDayServicesSection";
+import RecentActivitySection from "../JustDialHome/RecentActivitySection";
 
 const JustDialPages = () => {
   return (
@@ -29,13 +31,18 @@ const JustDialPages = () => {
           <LatestMoviesSection />
         </section>
 
-        <TouristAndSearchPage/>
+        <TouristAndSearchPage />
+
+        <RecentActivitySection/>
+
+        <section className="w-full max-w-full my-5 px-3 mb-10">
+          <DayToDayServicesSection />
+        </section>
 
         <ExploreSections />
 
         <BusinessFooterSection />
       </div>
-
     </>
   );
 };

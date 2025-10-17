@@ -125,7 +125,7 @@ const TouristAndSearchPage = () => {
       {/* Explore Top Tourist Places Section */}
       <div className="mb-6 border-2 border-gray-500 p-5 rounded-3xl">
         <h2 className="text-xl md:text-3xl font-bold text-gray-900 mb-6">
-          Explore Top Tourist Places <span className="text-red-600 text-sm align-top font-extrabold">NEW</span>
+          Explore Top Tourist Places <span className="text-red-600 text-sm align-top font-extrabold">NEW</span><span className='hover:text-yellow-500 ml-5'>{">>>"}</span>
         </h2>
 
         <div className="relative">
