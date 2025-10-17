@@ -69,7 +69,7 @@ const LatestMoviesSection = () => {
 
       <Swiper
         modules={[Navigation, Autoplay]}
-        spaceBetween={4}
+        spaceBetween={1}
         autoplay={{ delay: 1500, disableOnInteraction: false }}
         breakpoints={{
           0: { slidesPerView: 2 },    // mobile

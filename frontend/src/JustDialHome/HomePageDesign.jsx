@@ -33,7 +33,7 @@ const BillsAndRecharge = () => {
         {billServices.map((service, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-2xl hover:shadow-lg cursor-pointer py-8"
+            className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-2xl hover:shadow-lg hover:scale-110 transition-all cursor-pointer py-8 duration-300"
           >
             <div className="text-3xl mb-2">{service.icon}</div>
             <p className="text-md font-medium text-gray-700 text-center">
@@ -79,7 +79,7 @@ const TravelBookings = () => {
         {travelServices.map((service, i) => (
           <div
             key={i}
-            className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-2xl hover:shadow-lg cursor-pointer p-3"
+            className="flex flex-col items-center justify-center border-2 border-gray-300 rounded-2xl hover:shadow-lg cursor-pointer p-3 hover:scale-110 transition-all duration-300"
           >
             <div className="text-3xl mb-2">{service.icon}</div>
             <p className="text-md font-medium text-gray-700 text-center">

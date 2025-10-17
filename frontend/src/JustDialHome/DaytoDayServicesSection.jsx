@@ -3,7 +3,7 @@ import React from 'react';
 // Define a reusable component for each service item
 const ServiceItem = ({ title, description, icon }) => {
   return (
-    <div className="flex flex-col mb-8 p-2">
+    <div className="flex flex-col mb-2 p-5 shadow-md hover:shadow-2xl transition duration-100">
       <div className="flex items-center mb-3">
         {/* Icon Placeholder */}
         <span className="text-xl mr-3 text-gray-800">{icon}</span> 
@@ -50,22 +50,7 @@ const DayToDayServicesSection = () => {
       icon: '🎥',
       description: 'This gives you access to book tickets and keep updated with the latest movies. With the provision of a synopsis, cast, crew and trailer, you can make a better choice in the movie you would like to watch.',
     },
-    {
-      title: 'Spa & Salon',
-      icon: '💅',
-      description: 'Skip the wait to get pampered at a spa or a salon. In a few clicks, Book an Appointment online through Justdial before your next visit.',
-    },
-    {
-      title: 'Repair & Services',
-      icon: '🔧',
-      description: 'Find the Best Deal, be it for repairing your air-conditioner, getting your car serviced or cleaning your water purifier and drive your utility problems away.',
-    },
     // --- Third Row ---
-    {
-      title: 'Doctor Appointment',
-      icon: '🩺',
-      description: 'Find the suitable medical specialist to take care of your health and well-being. Healthcare made easy.',
-    },
     {
       title: 'Real Estate Agents',
       icon: '🔑',
@@ -80,8 +65,8 @@ const DayToDayServicesSection = () => {
   ];
 
   return (
-    <section className="p-6 bg-white font-sans mx-auto">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">
+    <section className="bg-white font-sans mx-auto pb-5">
+      <h2 className="text-3xl font-bold text-gray-900 mb-5 ml-5 pt-8">
         Some of our services that will prove useful to you on a day-to-day basis are :
       </h2>
 

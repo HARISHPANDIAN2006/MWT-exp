@@ -11,6 +11,7 @@ import TouristAndSearchPage from "../JustDialHome/TouristAndSearchPage";
 import ExploreSections from "../JustDialHome/ExploreSections";
 import DayToDayServicesSection from "../JustDialHome/DaytoDayServicesSection";
 import RecentActivitySection from "../JustDialHome/RecentActivitySection";
+import RelatedArticlesSlider from "../JustDialHome/RelatedArticlesSlider";
 
 const JustDialPages = () => {
   return (
@@ -35,8 +36,12 @@ const JustDialPages = () => {
 
         <RecentActivitySection/>
 
-        <section className="w-full max-w-full my-5 px-3 mb-10">
+        <section className="w-full max-w-full my-5 px-3 mb-10 bg-white -mt-2">
           <DayToDayServicesSection />
+        </section>
+
+        <section className="w-full max-w-full mb-4 bg-white -mt-10">
+          <RelatedArticlesSlider/>
         </section>
 
         <ExploreSections />

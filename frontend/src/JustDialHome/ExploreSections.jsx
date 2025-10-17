@@ -908,7 +908,7 @@ const ExploreSections = () => {
     <section className="px-12 bg-gray-50 text-gray-800">
       {/* --- Popular Categories --- */}
       <div className="mb-10">
-        <h2 className="text-3xl font-bold mb-8 underline">Popular Categories</h2>
+        <h2 className="text-3xl font-bold mb-8 underline mt-8">Popular Categories</h2>
 
         {/* Tabs - Scrollable horizontally */}
         <div className="overflow-x-auto whitespace-nowrap mb-4 pb-2">
@@ -917,10 +917,10 @@ const ExploreSections = () => {
               <button
                 key={tab}
                 onClick={() => setActiveCategory(tab)}
-                className={`px-6 py-4 rounded-md font-semibold transition-all duration-300 shrink-0 ${
+                className={`px-4 py-2 rounded-md font-semibold transition-all duration-300 shrink-0 ${
                   activeCategory === tab
-                    ? "bg-blue-600 text-white text-xl font-extrabold"
-                    : "bg-white text-gray-800 border hover:bg-gray-100 text-xl"
+                    ? "bg-blue-600 text-white text-lg font-extrabold"
+                    : "bg-white text-gray-800 border hover:bg-gray-100 text-lg"
                 }`}
               >
                 {tab}
