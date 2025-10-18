@@ -9,27 +9,62 @@ import realestate from "./assets/realestateperson.jpg"
 const BusinessShowcase = () => {
   // Image slider data
   const slides = [
-    {
-      id: 1,
-      title: "Get Loan Against Property",
-      subtitle: "At a competitive interest rate starting from",
-      rate: "9.00%",
-      company: "from Jio Finance Limited",
-      image:
-        "https://cdn.pixabay.com/photo/2016/03/31/19/56/woman-1299083_960_720.png",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Jio_logo.png",
-    },
-    {
-      id: 2,
-      title: "Grow Your Business",
-      subtitle: "Apply for Instant Business Loans at",
-      rate: "7.5%",
-      company: "No Collateral Needed",
-      image:
-        "https://cdn.pixabay.com/photo/2016/03/31/19/56/woman-1299083_960_720.png",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Jio_logo.png",
-    },
-  ];
+  {
+    id: 1,
+    title: "Get Loan Against Property",
+    subtitle: "At a competitive interest rate starting from",
+    rate: "9.00%",
+    company: "from Jio Finance Limited",
+    image: "https://images.unsplash.com/photo-1604014237800-1c52dc1dd25b?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 2,
+    title: "Grow Your Business",
+    subtitle: "Apply for Instant Business Loans at",
+    rate: "7.5%",
+    company: "No Collateral Needed",
+    image: "https://images.unsplash.com/photo-1556742400-b5b7c5121f7c?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 3,
+    title: "Dream Home Awaits You",
+    subtitle: "Affordable Home Loans starting at",
+    rate: "8.25%",
+    company: "from SBI Home Finance",
+    image: "https://images.unsplash.com/photo-1600607687920-4e3b9f52f7aa?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 4,
+    title: "Get Your First Car Easily",
+    subtitle: "Car Loans made simple — Interest from",
+    rate: "8.75%",
+    company: "from Axis Bank",
+    image: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    title: "Secure Your Future with Education Loans",
+    subtitle: "Study without limits — Interest starts from",
+    rate: "6.95%",
+    company: "from ICICI Bank",
+    image: "https://images.unsplash.com/photo-1557426272-fc759fdf7a8d?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    title: "Plan Your Travel Dreams",
+    subtitle: "Personal loans for your perfect getaway at",
+    rate: "10.25%",
+    company: "from HDFC Bank",
+    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=900&q=80",
+    logo: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=800&q=80",
+  },
+];
+
 
   const [current, setCurrent] = useState(0);
   const [active, setActive] = useState(null); // ✅ Added
@@ -81,16 +116,16 @@ const BusinessShowcase = () => {
   return (
     <div className="flex items-center justify-center pt-5 overflow-x-auto no-scrollbar">
       {/* Image Slider */}
-      <div className="relative w-[500px] h-[290px] bg-orange-50 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
+      <div className="relative w-[500px] h-[290px] bg-orange-100 rounded-2xl overflow-hidden shadow-md flex-shrink-0">
         {/* Content */}
-        <div className="absolute inset-0 px-12 flex flex-col justify-center">
+        <div className="absolute inset-0 px-12 flex flex-col justify-center items-center">
           <div className="flex items-center gap-2 mb-8">
             <img
               src={slides[current].logo}
               alt="logo"
-              className="w-10 h-10 rounded-full"
+              className="w-16 h-16 rounded-full"
             />
-            <h2 className="font-bold text-lg text-gray-800">
+            <h2 className="text-2xl text-black pl-3 font-extrabold">
               {slides[current].title}
             </h2>
           </div>
@@ -103,13 +138,6 @@ const BusinessShowcase = () => {
             Apply Now →
           </button>
         </div>
-
-        {/* Right Image */}
-        <img
-          src={slides[current].image}
-          alt="slide"
-          className="absolute right-0 bottom-0 h-full object-contain"
-        />
 
         {/* Controls */}
         <button

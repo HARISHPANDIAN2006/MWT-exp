@@ -31,7 +31,7 @@ export default function HomePageJustDial() {
           {categories.map((cat, i) => (
             <div
               key={i}
-              className="flex flex-col items-center justify-center p-3 border-2 border-gray-300 rounded-2xl hover:shadow-lg cursor-pointer"
+              className="flex flex-col items-center justify-center p-3 border-2 border-gray-300 rounded-2xl hover:shadow-2xl hover:scale-110 cursor-pointer transition-all duration-200 hover:border-2 hover:border-black"
             >
               <div className="text-3xl mb-2">{cat.icon}</div>
               <p className="text-md font-medium text-gray-700 text-center">

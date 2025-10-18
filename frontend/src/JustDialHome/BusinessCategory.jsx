@@ -12,9 +12,9 @@ const BusinessCategory = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const handleSubClick = (subTitle) => {
+  const handleSubClick = (id) => {
     // Navigate using subcategory title
-    navigate(`/Busisubcategory/${encodeURIComponent(subTitle)}`);
+    navigate(`/Businesssubcategory/${encodeURIComponent(id)}`);
   };
 
   return (
@@ -34,7 +34,7 @@ const BusinessCategory = () => {
                 <div
                   key={index}
                   className="rounded-lg shadow-lg p-2 hover:scale-105 transition cursor-pointer"
-                  onClick={() => handleSubClick(sub.title)}
+                  onClick={() => handleSubClick(sub._id)}
                 >
                   <img
                     src={sub.image}

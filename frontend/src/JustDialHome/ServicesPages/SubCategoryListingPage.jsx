@@ -1,0 +1,249 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
+const Breadcrumb = ({ subTitle }) => {
+  const navigate = useNavigate();
+
+  return (
+    <p className="text-lg text-gray-500 mb-2 flex flex-wrap gap-1">
+      <span
+        onClick={() => navigate(-1)} // navigate to previous page
+        className="cursor-pointer fiex text-blue-800 hover:text-black hover:underline transform hover:scale-105"
+      >
+        Home
+      </span>
+      <span>&gt;</span>
+      <span className="text-gray-500">{subTitle || "Subcategory"}</span>
+    </p>
+  );
+};
+// --- Reusable Components ---
+
+const FilterButton = ({ label, icon, isSelected = false }) => (
+  <button
+    className={`flex items-center px-3 py-1.5 text-sm rounded-lg border transition duration-150 ${isSelected
+      ? "bg-blue-600 text-white border-blue-600 font-semibold"
+      : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+      }`}
+  >
+    {icon && <span className="mr-1">{icon}</span>}
+    {label}
+    {(!isSelected &&
+      (label.includes("Sort") ||
+        label.includes("Occasion") ||
+        label.includes("Type") ||
+        label.includes("Ratings") ||
+        label.includes("Deals"))) && <span className="ml-1 text-xs">▼</span>}
+  </button>
+);
+
+const ListingCard = ({
+  name,
+  rating,
+  numRatings,
+  location,
+  badges,
+  tags,
+  contact,
+  whatsapp,
+  imageUrl,
+  extraInfo,
+}) => (
+  <div className="flex p-4 border border-gray-200 rounded-lg bg-white mb-6">
+    <div className="w-32 h-32 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
+      <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+    </div>
+
+    <div className="flex-grow">
+      <h3 className="text-xl font-semibold text-gray-900 mb-1">{name}</h3>
+
+      <div className="flex items-center mb-2 space-x-2">
+        <span
+          className={`px-2 py-0.5 text-white text-xs font-semibold rounded ${rating >= 4 ? "bg-green-600" : "bg-yellow-500"
+            }`}
+        >
+          {rating}★
+        </span>
+        <span className="text-sm text-gray-600">{numRatings} Ratings</span>
+        {badges?.includes("Verified") && (
+          <span className="text-xs text-blue-600 font-medium">Verified</span>
+        )}
+        {badges?.includes("Trending") && (
+          <span className="text-xs text-red-600 font-medium">Trending</span>
+        )}
+      </div>
+
+      <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
+      {extraInfo && (
+        <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
+      )}
+
+      <div className="flex flex-wrap gap-2 mb-3">
+        {tags?.map((tag) => (
+          <span
+            key={tag}
+            className="px-2 py-0.5 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-md"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-700 text-white font-medium hover:bg-green-800">
+          📞 {contact}
+        </button>
+        {whatsapp && (
+          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-500 text-white font-medium hover:bg-green-600">
+            💬 WhatsApp
+          </button>
+        )}
+        <button className="flex items-center px-3 py-1 text-sm rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
+          Get Best Deal
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+// --- Main Page ---
+
+const SubcategoryListingPage = () => {
+  const { id } = useParams();
+  const [listings, setListings] = useState([]);
+  const [subInfo, setSubInfo] = useState(null);
+  const [otherSubcategories, setOtherSubcategories] = useState([]); // for sidebar
+
+  useEffect(() => {
+    if (!id) return;
+
+    fetch(`http://localhost:5024/api/business/subcategory/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setSubInfo(data.subcategory);
+        setListings(data.listings || []);
+        setOtherSubcategories(data.otherSubcategories || []); // ✅ fetch other subcategories
+      })
+      .catch((err) => console.error("Error fetching subcategory:", err));
+  }, [id]);
+
+  if (!subInfo)
+    return (
+      <div className="p-6 text-center text-gray-600">Loading details...</div>
+    );
+
+  return (
+    <div className="p-4 md:p-6 bg-gray-50 font-sans min-h-screen">
+      <Breadcrumb subTitle={subInfo.title} />
+
+      {/* Header */}
+      <div className="flex justify-between items-end mb-4">
+        <h1 className="text-2xl font-bold text-gray-900">
+          {subInfo.title}{" "}
+          <span className="text-lg text-gray-500">
+            ({listings.length}+ Listings)
+          </span>
+        </h1>
+      </div>
+
+      {/* Filters */}
+      <div className="flex flex-wrap gap-2 py-3 border-y border-gray-200 mb-6">
+        <FilterButton label="Sort by" />
+        <FilterButton label="Occasion" />
+        <FilterButton label="Type" />
+        <FilterButton label="Top Rated" icon="⭐" />
+        <FilterButton label="Quick Response" icon="⚡" />
+        <FilterButton label="Verified" icon="✅" />
+        <FilterButton label="Ratings" />
+        <FilterButton label="Deals" icon="🏷️" />
+        <FilterButton label="Trust" icon="🛡️" />
+        <FilterButton label="All Filters" isSelected={true} icon="⚙️" />
+      </div>
+
+      {/* Main Layout */}
+      <div className="flex flex-col lg:flex-row gap-6">
+        {/* Left: Listings */}
+        <div className="w-full lg:w-2/3">
+          {listings.length > 0 ? (
+            listings.map((listing, index) => (
+              <ListingCard key={index} {...listing} />
+            ))
+          ) : (
+            <p className="text-gray-500">No listings found for this category.</p>
+          )}
+        </div>
+
+        {/* Right: Sidebar */}
+        <div className="w-full lg:w-1/3 sticky top-4 self-start space-y-6">
+          {/* Get Best Deal Box */}
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <p className="text-base text-gray-700 mb-3">
+              Get the list of top {subInfo.title}
+            </p>
+            <p className="text-xs text-gray-500 mb-4">
+              We'll send you contact details instantly
+            </p>
+
+            <input
+              type="text"
+              placeholder="Your Name"
+              className="w-full p-2 border border-gray-300 rounded-md mb-3 text-sm"
+            />
+            <input
+              type="tel"
+              placeholder="Your Phone Number"
+              className="w-full p-2 border border-gray-300 rounded-md mb-4 text-sm"
+            />
+            <button className="w-full py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition">
+              Get Best Deal &gt;&gt;
+            </button>
+          </div>
+
+          {/* Other Subcategories / Recommended */}
+          <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-4">
+            <h2 className="text-lg font-bold text-gray-900 mb-4">
+              People Also Search For
+            </h2>
+
+            <div className="space-y-3">
+              {otherSubcategories.length > 0 ? (
+                otherSubcategories.map((sub, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"
+                  >
+                    <div className="flex items-center">
+                      <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded-md mr-3">
+                        <img
+                          src={sub.image}
+                          alt={sub.title}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-800 leading-tight">
+                          {sub.title}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {sub.listings?.length || 0}+ listings
+                        </p>
+                      </div>
+                    </div>
+                    <button className="text-xs py-1 px-2 bg-blue-100 text-blue-600 border border-blue-600 rounded-md font-semibold hover:bg-blue-200 transition duration-150">
+                      Get Best Deal
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-400 text-sm">No recommendations available</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
+export default SubcategoryListingPage;

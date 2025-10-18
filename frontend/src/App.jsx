@@ -19,6 +19,7 @@ import OfflineToggleButton from "./Components/OfflineToggleButton";
 import UserProfile from "./ServiceList/UserProfile";
 import Payment from "./Components/Payment";
 import JustDialPages from "./Pages/JustDialPages";
+import SubcategoryListingPage from "./JustDialHome/ServicesPages/SubCategoryListingPage";
 
 function HomePage() {
   return (
@@ -53,6 +54,7 @@ function App() {
         <Route path="/userprofile/:userId" element={<UserProfile />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/JustDialPages" element={<JustDialPages />} />
+        <Route path="/Businesssubcategory/:id" element={<SubcategoryListingPage />}></Route>
       </Routes>
     </Router>
   );
