@@ -38,6 +38,7 @@ const FilterButton = ({ label, icon, isSelected = false }) => (
 );
 
 const ListingCard = ({
+  _id,
   name,
   rating,
   numRatings,
@@ -48,63 +49,76 @@ const ListingCard = ({
   whatsapp,
   imageUrl,
   extraInfo,
-}) => (
-  <div className="flex p-4 border border-gray-200 rounded-lg bg-white mb-6">
-    <div className="w-32 h-32 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
-      <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
-    </div>
+}) => {
+  const navigate = useNavigate();
 
-    <div className="flex-grow">
-      <h3 className="text-xl font-semibold text-gray-900 mb-1">{name}</h3>
+  const handleClick = () => {
+    // Navigate to detailed map page with subcategoryId and listing _id
+    navigate(`/SubcategoryDetails/${_id}`);
+  };
 
-      <div className="flex items-center mb-2 space-x-2">
-        <span
-          className={`px-2 py-0.5 text-white text-xs font-semibold rounded ${rating >= 4 ? "bg-green-600" : "bg-yellow-500"
-            }`}
-        >
-          {rating}★
-        </span>
-        <span className="text-sm text-gray-600">{numRatings} Ratings</span>
-        {badges?.includes("Verified") && (
-          <span className="text-xs text-blue-600 font-medium">Verified</span>
-        )}
-        {badges?.includes("Trending") && (
-          <span className="text-xs text-red-600 font-medium">Trending</span>
-        )}
+  return (
+    <div
+      className="flex border p-4 border-gray-200 rounded-lg bg-white mb-6 cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300"
+      onClick={handleClick}
+    >
+      <div className="w-72 h-32 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
+        <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
       </div>
 
-      <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
-      {extraInfo && (
-        <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
-      )}
+      <div className="flex-grow">
+        <h3 className="text-xl font-semibold text-gray-900 mb-1">{name}</h3>
 
-      <div className="flex flex-wrap gap-2 mb-3">
-        {tags?.map((tag) => (
+        <div className="flex items-center mb-2 space-x-2">
           <span
-            key={tag}
-            className="px-2 py-0.5 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-md"
+            className={`px-2 py-0.5 text-white text-xs font-semibold rounded ${
+              rating >= 4 ? "bg-green-600" : "bg-yellow-500"
+            }`}
           >
-            {tag}
+            {rating}★
           </span>
-        ))}
-      </div>
+          <span className="text-sm text-gray-600">{numRatings} Ratings</span>
+          {badges?.includes("Verified") && (
+            <span className="text-xs text-blue-600 font-medium">Verified</span>
+          )}
+          {badges?.includes("Trending") && (
+            <span className="text-xs text-red-600 font-medium">Trending</span>
+          )}
+        </div>
 
-      <div className="flex flex-wrap gap-2">
-        <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-700 text-white font-medium hover:bg-green-800">
-          📞 {contact}
-        </button>
-        {whatsapp && (
-          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-500 text-white font-medium hover:bg-green-600">
-            💬 WhatsApp
-          </button>
+        <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
+        {extraInfo && (
+          <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
         )}
-        <button className="flex items-center px-3 py-1 text-sm rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
-          Get Best Deal
-        </button>
+
+        <div className="flex flex-wrap gap-2 mb-3">
+          {tags?.map((tag) => (
+            <span
+              key={tag}
+              className="px-2 py-0.5 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-md"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap gap-2">
+          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-700 text-white font-medium hover:bg-green-800">
+            📞 {contact}
+          </button>
+          {whatsapp && (
+            <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-500 text-white font-medium hover:bg-green-600">
+              💬 WhatsApp
+            </button>
+          )}
+          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
+            Get Best Deal
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 // --- Main Page ---
 
@@ -163,7 +177,7 @@ const SubcategoryListingPage = () => {
       {/* Main Layout */}
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Left: Listings */}
-        <div className="w-full lg:w-2/3">
+        <div className="w-full lg:w-3/4 ml-5">
           {listings.length > 0 ? (
             listings.map((listing, index) => (
               <ListingCard key={index} {...listing} />
@@ -174,7 +188,7 @@ const SubcategoryListingPage = () => {
         </div>
 
         {/* Right: Sidebar */}
-        <div className="w-full lg:w-1/3 sticky top-4 self-start space-y-6">
+        <div className="ml-5 w-full lg:w-1/4 sticky top-4 self-start space-y-6">
           {/* Get Best Deal Box */}
           <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
             <p className="text-base text-gray-700 mb-3">
