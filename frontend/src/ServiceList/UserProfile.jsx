@@ -6,7 +6,7 @@ export default function UserProfile() {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
-
+  const userId1= localStorage.getItem("username");
   useEffect(() => {
     fetch(`http://localhost:5024/api/userprofile/${userId}`)
       .then((res) => res.json())
@@ -52,7 +52,7 @@ export default function UserProfile() {
         Loading profile...
       </p>
     );
-
+  console.log("user Id:", userId);
   return (
     <div className="min-h-screen bg-gray-50 py-10 px-6">
       {/* Back Button */}
@@ -110,6 +110,12 @@ export default function UserProfile() {
                 💼 Hire for ₹{user.price || 100}
               </button>
             </div>
+              <button
+    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition"
+    onClick={() => navigate(`/chat/${userId1}/${user._id}`)}
+  >
+    💬 Chat
+  </button>
 
             {/* Dynamic About Section */}
             <div className="mt-2 border-t pt-5">

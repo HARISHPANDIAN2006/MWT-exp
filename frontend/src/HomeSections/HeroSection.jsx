@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-
 const HeroSection = () => {
   const [services, setServices] = useState([]);
   const [username, setUsername] = useState(null);
@@ -19,33 +18,33 @@ const HeroSection = () => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5024/api/session/me", {
-      credentials: "include",
-    })
+    // Fetch logged-in user
+    fetch("http://localhost:5024/api/session/me", { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
-        console.log("Session Data from Backend:", data); 
         if (data.user) {
-          setUsername(data.user.username); 
+          console.log("Logged in user data:", data.user);
+          sessionStorage.setItem("userdemoId", data.user.userId);
+          setUsername(data.user._id);
+          localStorage.setItem("username", data.user._id);
         }
       })
       .catch((err) => console.error("Error fetching session:", err));
 
+    // Fetch services
     fetch("http://localhost:5024/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error fetching services:", err));
-    console.log(services);
-  }, []);
+    
+
+  }, []); // <--- single closing bracket for useEffect
 
   return (
     <div className="relative text-white">
       {/* Background Video */}
       <video autoPlay muted loop className="video-bg">
-        <source
-          src="/Homevideo.mp4"
-          type="video/mp4"
-        />
+        <source src="/Homevideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
@@ -64,7 +63,7 @@ const HeroSection = () => {
             Become a Seller
           </Link>
 
-          {username==="Guest" || !username ? (
+          {username === "Guest" || !username ? (
             <>
               <Link to="/loginsignup">
                 <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
@@ -80,9 +79,7 @@ const HeroSection = () => {
             </>
           ) : (
             <>
-              <h1 className="text-2xl font-bold text-red-500">
-                {username}
-              </h1>
+              <h1 className="text-2xl font-bold text-red-500">{username}</h1>
               <button
                 onClick={handleLogout}
                 className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition"
@@ -93,7 +90,6 @@ const HeroSection = () => {
           )}
         </div>
       </nav>
-
 
       {/* Hero Section */}
       <section className="flex flex-col justify-center h-[70vh] px-24 relative z-5 mt-16">

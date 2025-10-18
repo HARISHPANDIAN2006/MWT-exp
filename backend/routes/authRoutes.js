@@ -119,6 +119,7 @@ router.get("/google/callback-login", async (req, res) => {
       username: user.username,
       email: user.email,
       phno: user.phno,
+      userId: user._id,
     };
 
     // 5️⃣ Redirect to dashboard/home
