@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import BusinessHeaderSection from "../BusinessHeaderSection";
 
 const Breadcrumb = ({ subTitle }) => {
   const navigate = useNavigate();
@@ -58,65 +59,66 @@ const ListingCard = ({
   };
 
   return (
-    <div
-      className="flex border p-4 border-gray-200 rounded-lg bg-white mb-6 cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300"
-      onClick={handleClick}
-    >
-      <div className="w-72 h-32 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
-        <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
-      </div>
-
-      <div className="flex-grow">
-        <h3 className="text-xl font-semibold text-gray-900 mb-1">{name}</h3>
-
-        <div className="flex items-center mb-2 space-x-2">
-          <span
-            className={`px-2 py-0.5 text-white text-xs font-semibold rounded ${
-              rating >= 4 ? "bg-green-600" : "bg-yellow-500"
-            }`}
-          >
-            {rating}★
-          </span>
-          <span className="text-sm text-gray-600">{numRatings} Ratings</span>
-          {badges?.includes("Verified") && (
-            <span className="text-xs text-blue-600 font-medium">Verified</span>
-          )}
-          {badges?.includes("Trending") && (
-            <span className="text-xs text-red-600 font-medium">Trending</span>
-          )}
+    <>
+      <div
+        className="flex border p-4 border-gray-200 rounded-lg bg-white mb-6 cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300"
+        onClick={handleClick}
+      >
+        <div className="w-80 h-52 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
+          <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
         </div>
 
-        <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
-        {extraInfo && (
-          <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
-        )}
+        <div className="flex-grow flex flex-col gap-3">
+          <h3 className="text-2xl font-bold text-gray-900 mb-1">{name}</h3>
 
-        <div className="flex flex-wrap gap-2 mb-3">
-          {tags?.map((tag) => (
+          <div className="flex items-center mb-2 space-x-2">
             <span
-              key={tag}
-              className="px-2 py-0.5 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-md"
+              className={`px-2 py-0.5 text-white text-sm font-semibold rounded ${rating >= 4 ? "bg-green-600" : "bg-yellow-500"
+                }`}
             >
-              {tag}
+              {rating}★
             </span>
-          ))}
-        </div>
+            <span className="text-sm text-gray-600">{numRatings} Ratings</span>
+            {badges?.includes("Verified") && (
+              <span className="text-xs text-blue-600 font-medium">Verified</span>
+            )}
+            {badges?.includes("Trending") && (
+              <span className="text-xs text-red-600 font-medium">Trending</span>
+            )}
+          </div>
 
-        <div className="flex flex-wrap gap-2">
-          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-700 text-white font-medium hover:bg-green-800">
-            📞 {contact}
-          </button>
-          {whatsapp && (
-            <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-500 text-white font-medium hover:bg-green-600">
-              💬 WhatsApp
-            </button>
+          <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
+          {extraInfo && (
+            <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
           )}
-          <button className="flex items-center px-3 py-1 text-sm rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
-            Get Best Deal
-          </button>
+
+          <div className="flex flex-wrap gap-2 mb-3">
+            {tags?.map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 text-xs text-gray-600 bg-gray-100 border border-gray-300 rounded-md"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-700 text-white font-medium hover:bg-green-800">
+              📞 {contact}
+            </button>
+            {whatsapp && (
+              <button className="flex items-center px-3 py-1 text-sm rounded-md bg-green-500 text-white font-medium hover:bg-green-600">
+                💬 WhatsApp
+              </button>
+            )}
+            <button className="flex items-center px-3 py-1 text-sm rounded-md bg-blue-600 text-white font-medium hover:bg-blue-700">
+              Get Best Deal
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -147,115 +149,118 @@ const SubcategoryListingPage = () => {
     );
 
   return (
-    <div className="p-4 md:p-6 bg-gray-50 font-sans min-h-screen">
-      <Breadcrumb subTitle={subInfo.title} />
+    <>
+      <BusinessHeaderSection />
+      <div className="p-4 md:p-6 bg-gray-50 font-sans min-h-screen">
+        <Breadcrumb subTitle={subInfo.title} />
 
-      {/* Header */}
-      <div className="flex justify-between items-end mb-4">
-        <h1 className="text-2xl font-bold text-gray-900">
-          {subInfo.title}{" "}
-          <span className="text-lg text-gray-500">
-            ({listings.length}+ Listings)
-          </span>
-        </h1>
-      </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap gap-2 py-3 border-y border-gray-200 mb-6">
-        <FilterButton label="Sort by" />
-        <FilterButton label="Occasion" />
-        <FilterButton label="Type" />
-        <FilterButton label="Top Rated" icon="⭐" />
-        <FilterButton label="Quick Response" icon="⚡" />
-        <FilterButton label="Verified" icon="✅" />
-        <FilterButton label="Ratings" />
-        <FilterButton label="Deals" icon="🏷️" />
-        <FilterButton label="Trust" icon="🛡️" />
-        <FilterButton label="All Filters" isSelected={true} icon="⚙️" />
-      </div>
-
-      {/* Main Layout */}
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Left: Listings */}
-        <div className="w-full lg:w-3/4 ml-5">
-          {listings.length > 0 ? (
-            listings.map((listing, index) => (
-              <ListingCard key={index} {...listing} />
-            ))
-          ) : (
-            <p className="text-gray-500">No listings found for this category.</p>
-          )}
+        {/* Header */}
+        <div className="flex justify-between items-end mb-4">
+          <h1 className="text-2xl font-bold text-gray-900">
+            {subInfo.title}{" "}
+            <span className="text-lg text-gray-500">
+              ({listings.length}+ Listings)
+            </span>
+          </h1>
         </div>
 
-        {/* Right: Sidebar */}
-        <div className="ml-5 w-full lg:w-1/4 sticky top-4 self-start space-y-6">
-          {/* Get Best Deal Box */}
-          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <p className="text-base text-gray-700 mb-3">
-              Get the list of top {subInfo.title}
-            </p>
-            <p className="text-xs text-gray-500 mb-4">
-              We'll send you contact details instantly
-            </p>
+        {/* Filters */}
+        <div className="flex flex-wrap gap-2 py-3 border-y border-gray-200 mb-6">
+          <FilterButton label="Sort by" />
+          <FilterButton label="Occasion" />
+          <FilterButton label="Type" />
+          <FilterButton label="Top Rated" icon="⭐" />
+          <FilterButton label="Quick Response" icon="⚡" />
+          <FilterButton label="Verified" icon="✅" />
+          <FilterButton label="Ratings" />
+          <FilterButton label="Deals" icon="🏷️" />
+          <FilterButton label="Trust" icon="🛡️" />
+          <FilterButton label="All Filters" isSelected={true} icon="⚙️" />
+        </div>
 
-            <input
-              type="text"
-              placeholder="Your Name"
-              className="w-full p-2 border border-gray-300 rounded-md mb-3 text-sm"
-            />
-            <input
-              type="tel"
-              placeholder="Your Phone Number"
-              className="w-full p-2 border border-gray-300 rounded-md mb-4 text-sm"
-            />
-            <button className="w-full py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition">
-              Get Best Deal &gt;&gt;
-            </button>
+        {/* Main Layout */}
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left: Listings */}
+          <div className="w-full lg:w-3/4 ml-5">
+            {listings.length > 0 ? (
+              listings.map((listing, index) => (
+                <ListingCard key={index} {...listing} />
+              ))
+            ) : (
+              <p className="text-gray-500">No listings found for this category.</p>
+            )}
           </div>
 
-          {/* Other Subcategories / Recommended */}
-          <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-4">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">
-              People Also Search For
-            </h2>
+          {/* Right: Sidebar */}
+          <div className="ml-5 w-full lg:w-1/4 sticky top-4 self-start space-y-6">
+            {/* Get Best Deal Box */}
+            <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+              <p className="text-base text-gray-700 mb-3">
+                Get the list of top {subInfo.title}
+              </p>
+              <p className="text-xs text-gray-500 mb-4">
+                We'll send you contact details instantly
+              </p>
 
-            <div className="space-y-3">
-              {otherSubcategories.length > 0 ? (
-                otherSubcategories.map((sub, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"
-                  >
-                    <div className="flex items-center">
-                      <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded-md mr-3">
-                        <img
-                          src={sub.image}
-                          alt={sub.title}
-                          className="w-full h-full object-cover"
-                        />
+              <input
+                type="text"
+                placeholder="Your Name"
+                className="w-full p-2 border border-gray-300 rounded-md mb-3 text-sm"
+              />
+              <input
+                type="tel"
+                placeholder="Your Phone Number"
+                className="w-full p-2 border border-gray-300 rounded-md mb-4 text-sm"
+              />
+              <button className="w-full py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition">
+                Get Best Deal &gt;&gt;
+              </button>
+            </div>
+
+            {/* Other Subcategories / Recommended */}
+            <div className="bg-white border border-gray-100 rounded-xl shadow-lg p-4">
+              <h2 className="text-lg font-bold text-gray-900 mb-4">
+                People Also Search For
+              </h2>
+
+              <div className="space-y-3">
+                {otherSubcategories.length > 0 ? (
+                  otherSubcategories.map((sub, idx) => (
+                    <div
+                      key={idx}
+                      className="flex items-center justify-between p-3 border-b border-gray-100 last:border-b-0"
+                    >
+                      <div className="flex items-center">
+                        <div className="w-10 h-10 flex-shrink-0 overflow-hidden rounded-md mr-3">
+                          <img
+                            src={sub.image}
+                            alt={sub.title}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800 leading-tight">
+                            {sub.title}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {sub.listings?.length || 0}+ listings
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-800 leading-tight">
-                          {sub.title}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {sub.listings?.length || 0}+ listings
-                        </p>
-                      </div>
+                      <button className="text-xs py-1 px-2 bg-blue-100 text-blue-600 border border-blue-600 rounded-md font-semibold hover:bg-blue-200 transition duration-150">
+                        Get Best Deal
+                      </button>
                     </div>
-                    <button className="text-xs py-1 px-2 bg-blue-100 text-blue-600 border border-blue-600 rounded-md font-semibold hover:bg-blue-200 transition duration-150">
-                      Get Best Deal
-                    </button>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-400 text-sm">No recommendations available</p>
-              )}
+                  ))
+                ) : (
+                  <p className="text-gray-400 text-sm">No recommendations available</p>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

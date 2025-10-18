@@ -80,6 +80,7 @@ app.use("/api/forget", require("./routes/forgetRoutes"));
 app.use("/api/subcategory", require("./routes/subcategoryRoutes"));
 app.use("/api/userprofile", require("./routes/userProfileRoutes"));
 app.use("/api/business",require("./routes/businessRoutes"));
+app.use("/api/businesslist", require("./routes/businesslistRoutes"));
 
 // ✅ Start server
 const PORT = process.env.PORT || 5024;
