@@ -919,8 +919,8 @@ const ExploreSections = () => {
                 onClick={() => setActiveCategory(tab)}
                 className={`px-4 py-2 rounded-md font-semibold transition-all duration-300 shrink-0 ${
                   activeCategory === tab
-                    ? "bg-blue-600 text-white text-lg font-extrabold"
-                    : "bg-white text-gray-800 border hover:bg-gray-100 text-lg"
+                    ? "bg-blue-600 text-white text-md font-bold"
+                    : "bg-white text-gray-800 border hover:bg-gray-100 text-md"
                 }`}
               >
                 {tab}
