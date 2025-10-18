@@ -55,7 +55,9 @@ function App() {
         <Route path="/userprofile/:userId" element={<UserProfile />} />
         <Route path="*" element={<div>404 Not Found</div>} />
         <Route path="/JustDialPages" element={<JustDialPages />} />
-        <Route path="/Chat/:userId/:providerId" element={<ChatPage />} />
+        <Route path="/Chat/:userId/:providerId" element={<ChatPage />} 
+        
+        />
       </Routes>
     </Router>
   );
