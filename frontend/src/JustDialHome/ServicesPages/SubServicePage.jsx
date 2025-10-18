@@ -1,74 +1,27 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from "react-router-dom";
 
-const DbData = {
-    // 1. Business Info
-    business: {
-        name: 'Nesco Banquets',
-        rating: 4.6,
-        numRatings: 19,
-        status: 'Verified',
-        claimed: true,
-        address: 'Goregaon East, Mumbai',
-        contactNumber: '09972440192',
-        isOpen: true,
-        operatingHours: 'Open 24 Hrs',
-    },
-    // 2. Gallery & Media
-    media: {
-        mainImages: [
-            { url: '/path/to/main_img_1.jpg', alt: 'Main Hall' },
-            { url: '/path/to/main_img_2.jpg', alt: 'Entrance Decor' },
-            { url: '/path/to/main_img_3.jpg', alt: 'Wedding Setup' },
-            { url: '/path/to/main_img_4.jpg', alt: 'Catering Display' },
-        ],
-        totalPhotos: 55,
-        photoCategories: [
-            { name: 'All', count: 55 },
-            { name: 'Dining', count: 5 },
-            { name: 'Exterior', count: 3 },
-            { name: 'Food & Drink', count: 11 },
-            { name: 'Interior', count: 5 },
-        ],
-    },
-    // 3. Overview Details
-    overview: {
-        occasion: ['Baby Shower', 'Communion Ceremony', '+8 more'],
-        banquetType: ['AC', 'Open Air'],
-        contact: '09972440192',
-        addressDetails: {
-            name: 'Nesco Limited, Nesco Foods',
-            line2: 'The HUB Mall, Western Express Highway, Goregaon East-400063',
-        },
-        // Used for the "You might want to explore" section
-        exploreCategories: ['Pandits', 'Beauty Parlour', 'Caterers', 'Band', 'Decorator', 'Jewellery', 'Organiser', 'Vehicle Rent', 'Transportation'],
-        // Related listings (Pandits for Marriage)
-        relatedListings: [
-            { name: 'Ashish Kumar Dubey', rating: 4.8, reviews: 298, distance: '540 mts', location: 'Goregaon East', verified: true, trust: true, imageUrl: '/path/to/pandit1.jpg' },
-            { name: 'Gorakhnath Acharya', rating: 4.6, reviews: 33, distance: '700 mts', location: 'Andheri West', verified: true, trust: false, imageUrl: '/path/to/pandit2.jpg' },
-            { name: 'Pandit Dubey (Pandit)', rating: 5.0, reviews: 8, distance: '1.8 km', location: 'Goregaon East', verified: false, trust: false, imageUrl: '/path/to/pandit3.jpg' },
-        ],
-        faq: [
-            { q: 'Will Nesco Banquets in Goregaon East be able to arrange for catering services too?', a: 'Please check with them if they can provide catering services when you speak with them in advance.' },
-            { q: 'For what kind of occasions can I hire Nesco Banquets?', a: 'You can hire Nesco Banquets for various occasions such as birthdays, weddings, anniversaries...' },
-        ]
-    },
-    // 4. Reviews Data
-    reviews: {
-        jdRating: 4.6,
-        totalReviews: 19,
-        userReviews: [
-            { name: 'Mohd Miraz', reviewsCount: 13, date: '07 Mar', text: 'I had a great experience with Nesco Banquets. The venue is centrally located...', userImage: 'M', highlight: 'Centrally located' },
-            { name: 'Ankita', reviewsCount: 57, date: '24 Feb 2023', text: 'It\'s very good place for party nice ambience good service and food...', userImage: '/path/to/ankita_avatar.jpg', highlight: 'Modern vibe, Authentic food options' },
-        ],
-        // Used for the right sidebar "Also listed in" section
-        alsoListedIn: [
-            { category: 'AC Banquet Halls', count: '101 To 200 Persons' },
-            { category: 'AC Banquet Halls', count: '501 & Above Persons' },
-        ]
-    }
+// ====================================================================
+// Mock Data Fetching Function (Replace with actual API call)
+// ====================================================================
+
+const fetchBusinessData = async (businessId) => {
+    console.log(businessId)
+    // ⚠️ IN PRODUCTION: Replace this with your actual 'fetch' or 'axios' API call
+    const response = await fetch(`http://localhost:5024/api/businesslist/${businessId}`);
+    const data = await response.json();
+    console.log(data)
+
+    // Simulate a network delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    return data;
 };
 
-// --- REUSABLE COMPONENTS ---
+
+// ====================================================================
+// REUSABLE COMPONENTS
+// ====================================================================
 
 // 1. Image Gallery Component
 const ImageGallery = ({ images, totalPhotos }) => {
@@ -92,6 +45,7 @@ const ImageGallery = ({ images, totalPhotos }) => {
                 ))}
                 {/* Last spot for +50 More/Add More Photo */}
                 <div className="relative overflow-hidden rounded-lg">
+                    {/* Fallback for the last spot */}
                     <img src={images[4]?.url || '/placeholder/default_hall.jpg'} alt="More" className="w-full h-full object-cover opacity-60" />
                     <div className="absolute inset-0 flex items-center justify-center text-white font-bold text-lg bg-black bg-opacity-30">
                         {remaining > 0 ? `+${remaining} More` : 'Add More Photo'}
@@ -148,7 +102,7 @@ const UserReviewCard = ({ review }) => (
             <span className="text-xs text-gray-500">{review.date}</span>
         </div>
 
-        {/* Rating Stars */}
+        {/* Rating Stars (Static '1' rating for this example) */}
         <div className="text-red-500 text-lg mb-2">★★★★★ <span className="text-sm font-semibold text-gray-800 ml-1">1</span></div>
 
         {/* Highlight/Badges */}
@@ -179,6 +133,7 @@ const FloatingFooterBar = ({ business }) => {
 
     useEffect(() => {
         const handleScroll = () => {
+            // Show bar when scrolled past 480px (or some other trigger point)
             if (window.scrollY > 480) {
                 setShow(true);
             } else {
@@ -223,11 +178,80 @@ const FloatingFooterBar = ({ business }) => {
         </div>
     );
 }
-// --- MAIN PAGE COMPONENT ---
+
+// ====================================================================
+// MAIN PAGE COMPONENT (Modified for Async Data)
+// ====================================================================
 
 const SubServicePage = () => {
-    const data = DbData;
-    const [activeTab, setActiveTab] = React.useState('Overview');
+    // State for data, loading, and active tab
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [activeTab, setActiveTab] = useState('Overview');
+    const { id } = useParams()
+
+    // Mock business ID for fetching (in a real app, this comes from props or URL params)
+    const businessId = id;
+
+    // Data Fetching Hook
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                setLoading(true);
+                const fetchedData = await fetchBusinessData(businessId);
+                setData(fetchedData);
+                setError(null);
+            } catch (err) {
+                console.error("Failed to fetch business data:", err);
+                setError("Failed to load business details. Please try again.");
+                setData(null);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadData();
+    }, [businessId]);
+
+    // ================================================================
+    // A. LOADING and ERROR STATES (Early returns)
+    // ================================================================
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="text-2xl font-semibold text-blue-600 p-10">
+                    Loading Business Details... ⏳
+                </div>
+            </div>
+        );
+    }
+
+    if (error || !data) {
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-red-50">
+                <div className="text-xl font-semibold text-red-600 p-8 border border-red-300 rounded-lg">
+                    Error: {error || "Data structure missing."}
+                </div>
+            </div>
+        );
+    }
+
+    const { media, overview, reviews, locationDetails, contactDetails, name, rating, numRatings, status, claimed, contactNumber } = data;
+
+    const business = {
+        name,
+        rating,
+        numRatings,
+        status,
+        claimed,
+        contactNumber,
+    };
+
+    // ================================================================
+    // B. Reusable Content Sections (using destructured data)
+    // ================================================================
 
     // Section used in Overview and Photos tab
     const YouMightExplore = ({ categories }) => (
@@ -244,7 +268,7 @@ const SubServicePage = () => {
 
             <h4 className="text-lg font-bold text-gray-900 mt-6 mb-4">Pandits For Marriage</h4>
             <div className="space-y-4">
-                {data.overview.relatedListings.map((listing, index) => (
+                {overview.relatedListings.map((listing, index) => (
                     <div key={index} className="flex p-3 border border-gray-200 rounded-lg bg-white shadow-sm">
                         <div className="w-16 h-16 mr-3 flex-shrink-0">
                             <img src={listing.imageUrl} alt={listing.name} className="w-full h-full object-cover rounded-md" />
@@ -270,7 +294,7 @@ const SubServicePage = () => {
     );
 
     // Section used in Reviews tab
-    const ReviewsContent = ({ reviews, rating, totalReviews }) => (
+    const ReviewsContent = () => (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-900">Our Happy Customers</h2>
             <div className="flex space-x-4 border-b border-gray-200 pb-2">
@@ -288,8 +312,8 @@ const SubServicePage = () => {
             <div className="mt-8 border-t border-gray-200 pt-6">
                 <h3 className="text-xl font-bold text-gray-900 mb-3">Reviews & Ratings</h3>
                 <div className="flex items-center mb-4">
-                    <span className="text-3xl font-bold text-green-600 mr-2">{rating}</span>
-                    <span className="text-lg text-gray-600">JD rating index based on {totalReviews} ratings across the web</span>
+                    <span className="text-3xl font-bold text-green-600 mr-2">{business.rating}</span>
+                    <span className="text-lg text-gray-600">JD rating index based on {business.numRatings} ratings across the web</span>
                 </div>
                 <h4 className="text-lg font-bold text-gray-900 mb-3">Start your Review</h4>
                 <div className="flex space-x-2 text-3xl text-gray-300 mb-4">
@@ -312,11 +336,11 @@ const SubServicePage = () => {
             {/* Contact & Address */}
             <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                 <h3 className="text-lg font-bold text-gray-900 mb-3">Contact</h3>
-                <p className="text-blue-600 text-base font-medium mb-4 flex items-center"><span className="mr-2">📞</span>{data.business.contactNumber}</p>
+                <p className="text-blue-600 text-base font-medium mb-4 flex items-center"><span className="mr-2">📞</span>{business.contactNumber}</p>
 
                 <h3 className="text-lg font-bold text-gray-900 mb-3">Address</h3>
-                <p className="text-sm text-gray-700 font-semibold">{data.overview.addressDetails.name}</p>
-                <p className="text-sm text-gray-600">{data.overview.addressDetails.line2}</p>
+                <p className="text-sm text-gray-700 font-semibold">{overview.addressDetails.name}</p>
+                <p className="text-sm text-gray-600">{overview.addressDetails.line2}</p>
 
                 <div className="mt-4 border-t border-gray-100 pt-4">
                     <button className="text-blue-600 text-sm font-medium hover:underline">Get Directions</button>
@@ -360,7 +384,7 @@ const SubServicePage = () => {
             <div className="p-4 bg-white rounded-lg shadow-sm border border-gray-200">
                 <h4 className="text-lg font-bold text-gray-900 mb-3">Also listed in</h4>
                 <div className="space-y-2">
-                    {data.reviews.alsoListedIn.map((item, index) => (
+                    {reviews.alsoListedIn.map((item, index) => (
                         <p key={index} className="text-sm text-blue-600 hover:underline cursor-pointer">
                             {item.category} {item.count}
                         </p>
@@ -387,11 +411,11 @@ const SubServicePage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
                     <div>
                         <h3 className="text-base font-bold text-gray-900 mb-2 flex items-center"><span className="mr-2">✔️</span>Occasion</h3>
-                        <p className="text-sm text-gray-600">{data.overview.occasion.join(', ')}</p>
+                        <p className="text-sm text-gray-600">{overview.occasion.join(', ')}</p>
                     </div>
                     <div>
                         <h3 className="text-base font-bold text-gray-900 mb-2 flex items-center"><span className="mr-2">✔️</span>Banquet Type</h3>
-                        <p className="text-sm text-gray-600">{data.overview.banquetType.join(', ')}</p>
+                        <p className="text-sm text-gray-600">{overview.banquetType.join(', ')}</p>
                     </div>
                     <button className="text-blue-600 text-sm font-medium hover:underline justify-self-start mt-4 md:col-span-2">View all</button>
                 </div>
@@ -400,7 +424,7 @@ const SubServicePage = () => {
                 <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
                     <h3 className="text-xl font-bold text-gray-900 mb-4">Photos</h3>
                     <div className="flex space-x-4 overflow-x-auto pb-3">
-                        {data.media.photoCategories.map((cat, index) => (
+                        {media.photoCategories.map((cat, index) => (
                             <div key={index} className="flex-shrink-0 text-center">
                                 <div className="w-20 h-20 overflow-hidden rounded-lg bg-gray-100 mb-1">
                                     {/* Placeholder for actual image category preview */}
@@ -424,12 +448,12 @@ const SubServicePage = () => {
                     </div>
                 </div>
 
-                <YouMightExplore categories={data.overview.exploreCategories} />
+                <YouMightExplore categories={overview.exploreCategories} />
                 <div className="mt-8">
                     <h3 className="text-xl font-bold text-gray-900 mb-4">Our Happy Customers</h3>
                     {/* Single review preview from the image */}
                     <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm max-w-sm">
-                        <UserReviewCard review={data.reviews.userReviews[0]} />
+                        <UserReviewCard review={reviews.userReviews[0]} />
                         <button className="text-blue-600 text-sm font-medium hover:underline mt-2">...More</button>
                     </div>
                 </div>
@@ -438,8 +462,8 @@ const SubServicePage = () => {
                 <div className="mt-8 p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
                     <h3 className="text-xl font-bold text-gray-900 mb-3">Reviews & Ratings</h3>
                     <div className="flex items-center mb-4">
-                        <span className="text-3xl font-bold text-green-600 mr-2">{data.reviews.jdRating}</span>
-                        <span className="text-lg text-gray-600">JD rating index based on {data.reviews.totalReviews} ratings across the web</span>
+                        <span className="text-3xl font-bold text-green-600 mr-2">{reviews.jdRating}</span>
+                        <span className="text-lg text-gray-600">JD rating index based on {reviews.totalReviews} ratings across the web</span>
                     </div>
                     <h4 className="text-lg font-bold text-gray-900 mb-3">Start your Review</h4>
                     <div className="flex space-x-2 text-3xl text-gray-300 mb-4"><span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span></div>
@@ -450,25 +474,25 @@ const SubServicePage = () => {
                 <div className="mt-8">
                     <h3 className="text-xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h3>
                     <div className="space-y-4 text-sm text-gray-700">
-                        {data.overview.faq.slice(0, 2).map((item, index) => (
+                        {overview.faq.slice(0, 2).map((item, index) => (
                             <div key={index} className="border-b border-gray-100 pb-2">
                                 <p className="font-semibold text-gray-900 mb-1">Q: {item.q}</p>
                                 <p className="text-gray-600">A: {item.a}</p>
                             </div>
                         ))}
-                        <p className="text-blue-600 text-sm font-medium hover:underline">View All {data.overview.faq.length} Questions</p>
+                        <p className="text-blue-600 text-sm font-medium hover:underline">View All {overview.faq.length} Questions</p>
                     </div>
                 </div>
             </div>
         );
     } else if (activeTab === 'Reviews') {
-        mainContent = <ReviewsContent reviews={data.reviews} rating={data.business.rating} totalReviews={data.business.numRatings} />;
+        mainContent = <ReviewsContent />;
     } else if (activeTab === 'Photos') {
         mainContent = (
             <div className="space-y-6">
                 <h3 className="text-xl font-bold text-gray-900">Photos</h3>
                 <div className="flex space-x-4 overflow-x-auto pb-3">
-                    {data.media.photoCategories.map((cat, index) => (
+                    {media.photoCategories.map((cat, index) => (
                         <div key={index} className="flex-shrink-0 text-center">
                             <div className="w-20 h-20 overflow-hidden rounded-lg bg-gray-100 mb-1">
                                 <img src={`/path/to/cat_preview_${index}.jpg`} alt={cat.name} className="w-full h-full object-cover" />
@@ -479,12 +503,16 @@ const SubServicePage = () => {
                     ))}
                 </div>
                 <button className="py-2 px-4 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700">Upload Photos</button>
-                <YouMightExplore categories={data.overview.exploreCategories} />
+                <YouMightExplore categories={overview.exploreCategories} />
             </div>
         );
     } else {
         mainContent = <div className="text-center p-10 text-gray-500">Content for {activeTab} tab goes here...</div>;
     }
+
+    // ================================================================
+    // C. MAIN RENDER
+    // ================================================================
 
     return (
         <div className="font-sans bg-gray-50 min-h-screen pb-20"> {/* pb-20 for floating bar */}
@@ -492,7 +520,7 @@ const SubServicePage = () => {
             {/* Header/Breadcrumb (Simplified) */}
             <header className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
                 <p className="text-xs text-gray-500 mb-2">
-                    Mumbai &gt; AC Banquet Halls in Mumbai &gt; Nesco Banquets in Goregaon East, Mumbai
+                    Mumbai &gt; AC Banquet Halls in Mumbai &gt; {business.name} in {business.address}
                 </p>
             </header>
 
@@ -500,23 +528,23 @@ const SubServicePage = () => {
 
                 {/* Business Top Section */}
                 <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <ImageGallery images={data.media.mainImages} totalPhotos={data.media.totalPhotos} />
+                    <ImageGallery images={media.mainImages} totalPhotos={media.totalPhotos} />
 
                     {/* Business Info and CTAs */}
                     <div className="border-b border-gray-200 pb-4 mb-4">
-                        <h1 className="text-2xl font-bold text-gray-900">{data.business.name}</h1>
+                        <h1 className="text-2xl font-bold text-gray-900">{business.name}</h1>
                         <div className="flex items-center mb-3 text-sm">
-                            <span className="bg-green-600 text-white font-bold px-2 py-0.5 rounded mr-2">{data.business.rating}★</span>
-                            <span className="text-gray-600 mr-2">{data.business.numRatings} Ratings</span>
-                            {data.business.status === 'Verified' && <span className="text-blue-600 font-medium mr-2">Verified</span>}
-                            {data.business.claimed && <span className="text-orange-600 font-medium">Claimed</span>}
+                            <span className="bg-green-600 text-white font-bold px-2 py-0.5 rounded mr-2">{business.rating}★</span>
+                            <span className="text-gray-600 mr-2">{business.numRatings} Ratings</span>
+                            {business.status === 'Verified' && <span className="text-blue-600 font-medium mr-2">Verified</span>}
+                            {business.claimed && <span className="text-orange-600 font-medium">Claimed</span>}
                         </div>
-                        <p className="text-sm text-gray-700 mb-3">{data.business.address} · {data.business.operatingHours}</p>
+                        <p className="text-sm text-gray-700 mb-3">{business.address} · {business.operatingHours}</p>
 
                         {/* Call to Action Buttons */}
                         <div className="flex flex-wrap gap-3">
                             <button className="flex items-center bg-green-700 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800 transition">
-                                <span className="mr-1">📞</span>{data.business.contactNumber}
+                                <span className="mr-1">📞</span>{business.contactNumber}
                             </button>
                             <button className="flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition">
                                 Enquire Now
@@ -551,7 +579,7 @@ const SubServicePage = () => {
             </main>
 
             {/* Floating Footer Bar */}
-            <FloatingFooterBar business={data.business} />
+            <FloatingFooterBar business={business} />
         </div>
     );
 };

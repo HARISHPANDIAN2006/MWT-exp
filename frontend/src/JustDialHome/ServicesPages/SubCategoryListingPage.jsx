@@ -128,7 +128,12 @@ const SubcategoryListingPage = () => {
   const { id } = useParams();
   const [listings, setListings] = useState([]);
   const [subInfo, setSubInfo] = useState(null);
-  const [otherSubcategories, setOtherSubcategories] = useState([]); // for sidebar
+  const [otherSubcategories, setOtherSubcategories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  setInterval(() => {
+    setLoading(false);
+  }, 500);
 
   useEffect(() => {
     if (!id) return;
@@ -142,6 +147,15 @@ const SubcategoryListingPage = () => {
       })
       .catch((err) => console.error("Error fetching subcategory:", err));
   }, [id]);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-gray-50">
+        <div className="text-2xl font-semibold text-blue-600 p-10">
+          Loading Business Details... ⏳
+        </div>
+      </div>
+    );
 
   if (!subInfo)
     return (
