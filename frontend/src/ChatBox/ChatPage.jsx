@@ -1,38 +1,43 @@
-// src/components/ChatPage.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ChatBox from "./ChatBox";
-import { motion } from "framer-motion";
-
+import TopBanner from "../Components/TopBanner";
 
 export default function ChatPage() {
-  const { providerId } = useParams(); // only providerId from URL
+  const { providerId } = useParams();
   const navigate = useNavigate();
+  const [userId, setUserId] = useState(null);
+  const [showBanner, setShowBanner] = useState(false);
 
-  // fetch logged-in userId from session
-  const [userId, setUserId] = React.useState(null);
-  // src/components/ChatPage.jsx
-useEffect(() => {
-  fetch("http://localhost:5024/api/session/me", { credentials: "include" })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.user) {
-        console.log("Logged in user data:", data.user);
-        sessionStorage.setItem("userdemoId", data.user.userId);
-        setUserId(data.user._id);
-      } else {
-        // 🚨 Not logged in → redirect to login
-        navigate("/loginsignup");
-      }
-    })
-    .catch((err) => {
-      console.error("Error fetching session:", err);
-      navigate("/loginsignup");
-    });
-}, []);
+  useEffect(() => {
+    fetch("http://localhost:5024/api/session/me", { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          sessionStorage.setItem("userdemoId", data.user.userId);
+          setUserId(data.user._id);
+        } else {
+          setShowBanner(true); // show custom banner
+          setTimeout(() => navigate("/loginsignup"), 2000);
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching session:", err);
+        setShowBanner(true);
+        setTimeout(() => navigate("/loginsignup"), 2000);
+      });
+  }, [navigate]);
 
   return (
     <div className="h-screen w-screen flex flex-col bg-gradient-to-br from-indigo-50 via-white to-blue-50">
+      {showBanner && (
+        <TopBanner
+          message="⚠️ Please log in first to use the chat feature"
+          duration={2000}
+          onClose={() => setShowBanner(false)}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 bg-indigo-600 text-white shadow-md">
         <button
