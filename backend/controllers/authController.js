@@ -49,6 +49,7 @@ const registerUser = async (req, res) => {
       username: newUser.username,
       email: newUser.email,
       phno: newUser.phno,
+      userId: newUser._id,
     };
 
     return res.status(201).json({ message: "OTP Verified...User registered successfully", user: newUser });
@@ -69,6 +70,7 @@ const loginUser = async (req, res) => {
       email,
       phno,
       isGoogleAccount: false, // ✅ exclude Google accounts
+      __id,
     });
 
     if (!user) {
@@ -85,6 +87,7 @@ const loginUser = async (req, res) => {
       username: user.username,
       email: user.email,
       phno: user.phno,
+      userId: user._id,
     };
 
     return res.json({ message: "Login successful", user });
@@ -125,6 +128,7 @@ const googleSignup = async (req, res) => {
       username: newUser.username,
       email: newUser.email,
       phno: newUser.phno,
+      userId: newUser._id,
     };
 
     return res.status(201).json({ message: "Google account registered successfully", user: newUser });
@@ -149,6 +153,7 @@ const googleLogin = async (req, res) => {
       username: user.username,
       email: user.email,
       phno: user.phno,
+      userId: user._id,
     };
 
     return res.json({ message: "Google login successful", user });
