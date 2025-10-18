@@ -96,8 +96,9 @@ export default function UserProfile() {
               <p>🎯 Member since: {user.memberSince || "2024"}</p>
             </div>
 
-            {/* Hire Button */}
+            {/* Hire & Chat Buttons */}
             <div className="mt-6 flex gap-3">
+              {/* Hire Button */}
               <button
                 className="flex-1 bg-green-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-green-700 transition"
                 onClick={() =>
@@ -109,13 +110,26 @@ export default function UserProfile() {
               >
                 💼 Hire for ₹{user.price || 100}
               </button>
-            </div>
+
+              {/* Chat Button (depends on login) */}
               <button
-    className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md font-semibold hover:bg-blue-700 transition"
-    onClick={() => navigate(`/chat/${userId1}/${user._id}`)}
-  >
-    💬 Chat
-  </button>
+                className={`flex-1 px-4 py-2 rounded-md font-semibold transition ${
+                  userId1
+                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    : "bg-gray-400 text-white hover:bg-gray-500"
+                }`}
+                onClick={() =>
+                  userId1
+                    ? navigate(`/chat/${userId1}/${user._id}`)
+                    : navigate("/login")
+                }
+              >
+                {userId1 ? "💬 Chat" : "🔒 Login to Chat"}
+              </button>
+            </div>
+
+
+
 
             {/* Dynamic About Section */}
             <div className="mt-2 border-t pt-5">
