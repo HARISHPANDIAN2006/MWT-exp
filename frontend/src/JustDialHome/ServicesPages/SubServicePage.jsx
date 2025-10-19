@@ -3,20 +3,20 @@ import { useParams, useNavigate } from "react-router-dom";
 import BusinessHeaderSection from '../BusinessHeaderSection';
 
 const Breadcrumb = ({ subTitle }) => {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  return (
-    <p className="text-lg mx-8 my-5 text-black flex flex-wrap gap-1">
-      <span
-        onClick={() => navigate(-1)} // navigate to previous page
-        className="cursor-pointer fiex text-blue-800 hover:text-black hover:underline transform hover:scale-105"
-      >
-        Home
-      </span>
-      <span>&gt;</span>
-      <span className="text-black">{subTitle || "Subcategory"}</span>
-    </p>
-  );
+    return (
+        <p className="text-lg mx-8 my-3 text-black flex flex-wrap gap-1">
+            <span
+                onClick={() => navigate(-1)} // navigate to previous page
+                className="cursor-pointer fiex text-blue-800 hover:text-black hover:underline transform hover:scale-105"
+            >
+                Home
+            </span>
+            <span>&gt;</span>
+            <span className="text-black">{subTitle || "Subcategory"}</span>
+        </p>
+    );
 };
 
 // ====================================================================
@@ -48,9 +48,9 @@ const ImageGallery = ({ images, totalPhotos }) => {
     const remaining = totalPhotos - 4;
 
     return (
-        <div className="flex space-x-2 h-72 mb-4">
+        <div className="flex space-x-2 h-80 mb-4">
             {/* Main Image (Left) */}
-            <div className="w-2/3 h-full overflow-hidden rounded-lg">
+            <div className="w-2/4 h-full overflow-hidden rounded-lg">
                 <img src={mainImage.url} alt={mainImage.alt} className="w-full h-full object-cover" />
             </div>
 
@@ -84,14 +84,13 @@ const ImageGallery = ({ images, totalPhotos }) => {
 // 2. Listing Tabs Component
 const NavigationTabs = ({ activeTab, onTabChange }) => {
     const tabs = ['Overview', 'Services', 'Photos', 'Explore', 'Reviews'];
-
     return (
         <div className="flex space-x-6 border-b border-gray-200 mt-4 overflow-x-auto whitespace-nowrap">
             {tabs.map((tab) => (
                 <button
                     key={tab}
                     onClick={() => onTabChange(tab)}
-                    className={`pb-2 text-sm font-semibold transition duration-150 ${tab === activeTab
+                    className={`pb-2 text-md font-semibold transition duration-150 ${tab === activeTab
                         ? 'text-blue-600 border-b-2 border-blue-600'
                         : 'text-gray-600 hover:text-gray-800'
                         }`}
@@ -105,7 +104,7 @@ const NavigationTabs = ({ activeTab, onTabChange }) => {
 
 // 3. User Review Card
 const UserReviewCard = ({ review }) => (
-    <div className="p-4 border-b border-gray-200 last:border-b-0">
+    <div className="p-4 border-b border-gray-500 last:border-b-0">
         <div className="flex justify-between items-start mb-3">
             <div className="flex items-center">
                 {/* User Avatar/Initial */}
@@ -152,7 +151,7 @@ const FloatingFooterBar = ({ business }) => {
     useEffect(() => {
         const handleScroll = () => {
             // Show bar when scrolled past 480px (or some other trigger point)
-            if (window.scrollY > 480) {
+            if (window.scrollY > 600) {
                 setShow(true);
             } else {
                 setShow(false);
@@ -205,7 +204,7 @@ const SubServicePage = () => {
     // State for data, loading, and active tab
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState("");
     const [activeTab, setActiveTab] = useState('Overview');
     const { id } = useParams()
 
@@ -221,10 +220,11 @@ const SubServicePage = () => {
                 setData(fetchedData);
                 setError(null);
             } catch (err) {
+                console.log(error)
                 console.error("Failed to fetch business data:", err);
                 setError("Failed to load business details. Please try again.");
                 setData(null);
-            } 
+            }
         };
 
         loadData();
@@ -237,40 +237,56 @@ const SubServicePage = () => {
     // ================================================================
 
     if (loading)
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen">
-        {/* Rotating Circles */}
-        <div className="relative w-24 h-24 mb-8">
-          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
-          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
-        </div>
+        return (
+            <div className="flex flex-col justify-center items-center min-h-screen">
+                {/* Rotating Circles */}
+                <div className="relative w-24 h-24 mb-8">
+                    <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+                    <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+                </div>
 
-        {/* Pulsating Text */}
-        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
-          Loading Business Details ...
-        </div>
+                {/* Pulsating Text */}
+                <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+                    Loading Business Details ...
+                </div>
 
-        {/* Bouncing Dots */}
-        <div className="flex space-x-2 mt-4">
-          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
-          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
-          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
-        </div>
-      </div>
+                {/* Bouncing Dots */}
+                <div className="flex space-x-2 mt-4">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
+                </div>
+            </div>
 
-    );
+        );
 
-    const { media, overview, reviews, locationDetails, contactDetails, name, rating, numRatings, status, claimed, contactNumber } = data;
+    if (error) {
+        return (
+            <div className="flex justify-center items-center min-h-screen text-red-600 font-semibold text-lg">
+                {error}
+            </div>
+        );
+    }
+
+    if (!data) return null;
+
+    const { media, operatingHours, overview, reviews, locationDetails, name, rating, numRatings, status, claimed, contactNumber } = data;
+    console.log(operatingHours)
 
     const business = {
         name,
+        operatingHours,
+        overview,
+        reviews,
+        media,
         rating,
         numRatings,
         status,
         claimed,
         contactNumber,
-    };
+        locationDetails
+    }
 
     // ================================================================
     // B. Reusable Content Sections (using destructured data)
@@ -539,67 +555,67 @@ const SubServicePage = () => {
 
     return (
         <>
-        <div className="font-sans bg-gray-50 min-h-screen pb-20"> {/* pb-20 for floating bar */}
-            <BusinessHeaderSection/>
-            <Breadcrumb subTitle={data.name} />  {/* Shows business name */}
+            <div className="font-sans bg-gray-50 min-h-screen pb-20"> {/* pb-20 for floating bar */}
+                <BusinessHeaderSection />
+                <Breadcrumb subTitle={data.name} />  {/* Shows business name */}
 
-            <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                {/* Business Top Section */}
-                <div className="bg-white rounded-xl shadow-lg p-4 md:p-6">
-                    <ImageGallery images={media.mainImages} totalPhotos={media.totalPhotos} />
+                    {/* Business Top Section */}
+                    <div className="bg-white rounded-xl shadow-2xl border border-gray-500 px-4 md:p-6">
+                        <ImageGallery images={media.mainImages} totalPhotos={media.totalPhotos} />
 
-                    {/* Business Info and CTAs */}
-                    <div className="border-b border-gray-200 pb-4 mb-4">
-                        <h1 className="text-2xl font-bold text-gray-900">{business.name}</h1>
-                        <div className="flex items-center mb-3 text-sm">
-                            <span className="bg-green-600 text-white font-bold px-2 py-0.5 rounded mr-2">{business.rating}★</span>
-                            <span className="text-gray-600 mr-2">{business.numRatings} Ratings</span>
-                            {business.status === 'Verified' && <span className="text-blue-600 font-medium mr-2">Verified</span>}
-                            {business.claimed && <span className="text-orange-600 font-medium">Claimed</span>}
-                        </div>
-                        <p className="text-sm text-gray-700 mb-3">{business.address} · {business.operatingHours}</p>
+                        {/* Business Info and CTAs */}
+                        <div className="border-b border-gray-200">
+                            <h1 className="text-2xl font-bold text-gray-900 mb-2">{business.name}</h1>
+                            <div className="flex items-center mb-3 text-sm">
+                                <span className="bg-green-600 text-white font-bold px-2 py-0.5 rounded mr-2">{business.rating}★</span>
+                                <span className="text-gray-600 mr-2">{business.numRatings} Ratings</span>
+                                {business.status === 'Verified' && <span className="text-blue-600 font-medium mr-2">Verified</span>}
+                                {business.claimed && <span className="text-orange-600 font-medium">Claimed</span>}
+                            </div>
+                            <p className="text-sm text-gray-700 mb-3">{business.locationDetails.address} ( {business.operatingHours} )</p>
 
-                        {/* Call to Action Buttons */}
-                        <div className="flex flex-wrap gap-3">
-                            <button className="flex items-center bg-green-700 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800 transition">
-                                <span className="mr-1">📞</span>{business.contactNumber}
-                            </button>
-                            <button className="flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition">
-                                Enquire Now
-                            </button>
-                            <button className="flex items-center bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition">
-                                <span className="mr-1">💬</span> WhatsApp
-                            </button>
-                            {/* Small Icons - Click to Rate, Edit, Share, etc. */}
-                            <div className="flex space-x-3 text-gray-500 text-xl items-center ml-2">
-                                <span className="cursor-pointer hover:text-gray-700" title="Click to Rate">☆</span>
-                                <span className="cursor-pointer hover:text-gray-700" title="Edit Listing">✏️</span>
-                                <span className="cursor-pointer hover:text-gray-700" title="Share">🔗</span>
+                            {/* Call to Action Buttons */}
+                            <div className="flex flex-wrap gap-3">
+                                <button className="flex items-center bg-green-700 text-white font-bold py-2 px-4 rounded-md hover:bg-green-800 transition">
+                                    <span className="mr-1">📞</span>{business.contactNumber}
+                                </button>
+                                <button className="flex items-center bg-blue-600 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-700 transition">
+                                    Enquire Now
+                                </button>
+                                <button className="flex items-center bg-green-500 text-white font-bold py-2 px-4 rounded-md hover:bg-green-600 transition">
+                                    <span className="mr-1">💬</span> WhatsApp
+                                </button>
+                                {/* Small Icons - Click to Rate, Edit, Share, etc. */}
+                                <div className="flex space-x-3 text-gray-500 text-xl items-center ml-2">
+                                    <span className="cursor-pointer hover:text-gray-700" title="Click to Rate">☆</span>
+                                    <span className="cursor-pointer hover:text-gray-700" title="Edit Listing">✏️</span>
+                                    <span className="cursor-pointer hover:text-gray-700" title="Share">🔗</span>
+                                </div>
                             </div>
                         </div>
+
+                        {/* Navigation Tabs */}
+                        <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
                     </div>
 
-                    {/* Navigation Tabs */}
-                    <NavigationTabs activeTab={activeTab} onTabChange={setActiveTab} />
-                </div>
+                    {/* Main Content (Left/Right Layout) */}
+                    <div className="flex flex-col lg:flex-row gap-6 mt-6">
 
-                {/* Main Content (Left/Right Layout) */}
-                <div className="flex flex-col lg:flex-row gap-6 mt-6">
+                        {/* Left Column: Dynamic Content (Overview/Reviews/Photos) */}
+                        <div className="w-full lg:w-2/3">
+                            {mainContent}
+                        </div>
 
-                    {/* Left Column: Dynamic Content (Overview/Reviews/Photos) */}
-                    <div className="w-full lg:w-2/3">
-                        {mainContent}
+                        {/* Right Column: Static Sidebar */}
+                        <Sidebar />
                     </div>
+                </main>
 
-                    {/* Right Column: Static Sidebar */}
-                    <Sidebar />
-                </div>
-            </main>
-
-            {/* Floating Footer Bar */}
-            <FloatingFooterBar business={business} />
-        </div>
+                {/* Floating Footer Bar */}
+                <FloatingFooterBar business={business} />
+            </div>
         </>
     );
 };

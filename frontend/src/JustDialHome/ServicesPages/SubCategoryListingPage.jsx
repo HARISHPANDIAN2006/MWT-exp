@@ -64,14 +64,14 @@ const ListingCard = ({
         className="flex border p-4 border-gray-200 rounded-lg bg-white mb-6 cursor-pointer hover:shadow-2xl hover:scale-105 transition-all duration-300"
         onClick={handleClick}
       >
-        <div className="w-80 h-52 flex-shrink-0 relative overflow-hidden rounded-md mr-4">
-          <img src={imageUrl} alt={name} className="w-full h-full object-cover" />
+        <div className="w-96 h-56 flex-shrink-0 relative overflow-hidden rounded-md">
+          <img src={imageUrl} alt={name} className="w-full h-full object-fill" />
         </div>
 
-        <div className="flex-grow flex flex-col gap-3">
-          <h3 className="text-2xl font-bold text-gray-900 mb-1">{name}</h3>
+        <div className="flex-grow flex flex-col gap-3 ml-10">
+          <h3 className="text-3xl font-bold text-gray-900 mb-2">{name}</h3>
 
-          <div className="flex items-center mb-2 space-x-2">
+          <div className="flex items-center space-x-2">
             <span
               className={`px-2 py-0.5 text-white text-sm font-semibold rounded ${rating >= 4 ? "bg-green-600" : "bg-yellow-500"
                 }`}
@@ -87,10 +87,11 @@ const ListingCard = ({
             )}
           </div>
 
-          <p className="text-sm text-gray-700 mb-2">📍 {location}</p>
+          <div className="text-sm text-gray-700 mb-2">📍 <p className="inline">{location}</p> 
           {extraInfo && (
-            <p className="text-xs text-orange-500 font-medium mb-2">{extraInfo}</p>
+            <p className="text-xs text-orange-500 font-medium inline ml-3">{extraInfo}</p>
           )}
+          </div>
 
           <div className="flex flex-wrap gap-2 mb-3">
             {tags?.map((tag) => (
