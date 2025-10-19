@@ -6,7 +6,7 @@ const Breadcrumb = ({ subTitle }) => {
   const navigate = useNavigate();
 
   return (
-    <p className="text-lg text-gray-500 mb-2 flex flex-wrap gap-1">
+    <p className="text-lg text-gray-500 pt-2 flex flex-wrap gap-1">
       <span
         onClick={() => navigate(-1)} // navigate to previous page
         className="cursor-pointer fiex text-blue-800 hover:text-black hover:underline transform hover:scale-105"
@@ -14,7 +14,7 @@ const Breadcrumb = ({ subTitle }) => {
         Home
       </span>
       <span>&gt;</span>
-      <span className="text-gray-500">{subTitle || "Subcategory"}</span>
+      <span className="text-black">{subTitle || "Subcategory"}</span>
     </p>
   );
 };
@@ -131,10 +131,6 @@ const SubcategoryListingPage = () => {
   const [otherSubcategories, setOtherSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  setInterval(() => {
-    setLoading(false);
-  }, 500);
-
   useEffect(() => {
     if (!id) return;
 
@@ -148,35 +144,44 @@ const SubcategoryListingPage = () => {
       .catch((err) => console.error("Error fetching subcategory:", err));
   }, [id]);
 
+  setTimeout(() => setLoading(false), 2000); // 1500 milliseconds = 1.5 seconds
+
   if (loading)
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <div className="text-2xl font-semibold text-blue-600 p-10">
-          Loading Business Details... ⏳
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        {/* Rotating Circles */}
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+        </div>
+
+        {/* Pulsating Text */}
+        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+          Loading Business Details ...
+        </div>
+
+        {/* Bouncing Dots */}
+        <div className="flex space-x-2 mt-4">
+          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
         </div>
       </div>
-    );
 
-  if (!subInfo)
-    return (
-      <div className="p-6 text-center text-gray-600">Loading details...</div>
     );
 
   return (
     <>
       <BusinessHeaderSection />
       <div className="p-4 md:p-6 bg-gray-50 font-sans min-h-screen">
-        <Breadcrumb subTitle={subInfo.title} />
-
-        {/* Header */}
-        <div className="flex justify-between items-end mb-4">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {subInfo.title}{" "}
-            <span className="text-lg text-gray-500">
-              ({listings.length}+ Listings)
-            </span>
-          </h1>
-        </div>
+        <Breadcrumb subTitle={subInfo?.title} />
+        <h1 className="text-2xl font-bold text-gray-900">
+          {subInfo?.title} <span className="text-lg text-gray-500">({listings.length}+ Listings)</span>
+        </h1>
+        <p className="text-base text-gray-700 mb-3">
+          Get the list of top {subInfo?.title}
+        </p>
 
         {/* Filters */}
         <div className="flex flex-wrap gap-2 py-3 border-y border-gray-200 mb-6">
@@ -210,7 +215,7 @@ const SubcategoryListingPage = () => {
             {/* Get Best Deal Box */}
             <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
               <p className="text-base text-gray-700 mb-3">
-                Get the list of top {subInfo.title}
+                Get the list of top {subInfo?.title}
               </p>
               <p className="text-xs text-gray-500 mb-4">
                 We'll send you contact details instantly

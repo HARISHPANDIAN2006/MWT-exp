@@ -1,5 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import BusinessHeaderSection from '../BusinessHeaderSection';
+
+const Breadcrumb = ({ subTitle }) => {
+  const navigate = useNavigate();
+
+  return (
+    <p className="text-lg mx-8 my-5 text-black flex flex-wrap gap-1">
+      <span
+        onClick={() => navigate(-1)} // navigate to previous page
+        className="cursor-pointer fiex text-blue-800 hover:text-black hover:underline transform hover:scale-105"
+      >
+        Home
+      </span>
+      <span>&gt;</span>
+      <span className="text-black">{subTitle || "Subcategory"}</span>
+    </p>
+  );
+};
 
 // ====================================================================
 // Mock Data Fetching Function (Replace with actual API call)
@@ -206,37 +224,42 @@ const SubServicePage = () => {
                 console.error("Failed to fetch business data:", err);
                 setError("Failed to load business details. Please try again.");
                 setData(null);
-            } finally {
-                setLoading(false);
-            }
+            } 
         };
 
         loadData();
     }, [businessId]);
 
+    setTimeout(() => setLoading(false), 2000); // 1500 milliseconds = 1.5 seconds
+
     // ================================================================
     // A. LOADING and ERROR STATES (Early returns)
     // ================================================================
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-gray-50">
-                <div className="text-2xl font-semibold text-blue-600 p-10">
-                    Loading Business Details... ⏳
-                </div>
-            </div>
-        );
-    }
+    if (loading)
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        {/* Rotating Circles */}
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+        </div>
 
-    if (error || !data) {
-        return (
-            <div className="flex justify-center items-center min-h-screen bg-red-50">
-                <div className="text-xl font-semibold text-red-600 p-8 border border-red-300 rounded-lg">
-                    Error: {error || "Data structure missing."}
-                </div>
-            </div>
-        );
-    }
+        {/* Pulsating Text */}
+        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+          Loading Business Details ...
+        </div>
+
+        {/* Bouncing Dots */}
+        <div className="flex space-x-2 mt-4">
+          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
+        </div>
+      </div>
+
+    );
 
     const { media, overview, reviews, locationDetails, contactDetails, name, rating, numRatings, status, claimed, contactNumber } = data;
 
@@ -515,14 +538,10 @@ const SubServicePage = () => {
     // ================================================================
 
     return (
+        <>
         <div className="font-sans bg-gray-50 min-h-screen pb-20"> {/* pb-20 for floating bar */}
-
-            {/* Header/Breadcrumb (Simplified) */}
-            <header className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
-                <p className="text-xs text-gray-500 mb-2">
-                    Mumbai &gt; AC Banquet Halls in Mumbai &gt; {business.name} in {business.address}
-                </p>
-            </header>
+            <BusinessHeaderSection/>
+            <Breadcrumb subTitle={data.name} />  {/* Shows business name */}
 
             <main className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -581,6 +600,7 @@ const SubServicePage = () => {
             {/* Floating Footer Bar */}
             <FloatingFooterBar business={business} />
         </div>
+        </>
     );
 };
 

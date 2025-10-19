@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export default function UserProfile() {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const userId1= localStorage.getItem("username");
+  const userId1 = localStorage.getItem("username");
   useEffect(() => {
     fetch(`http://localhost:5024/api/userprofile/${userId}`)
       .then((res) => res.json())
@@ -46,15 +47,36 @@ export default function UserProfile() {
     razor.open();
   };
 
-  if (!user)
+  setTimeout(() => setLoading(false), 2000);
+
+  if (loading)
     return (
-      <p className="text-center mt-20 text-gray-500 animate-pulse">
-        Loading profile...
-      </p>
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        {/* Rotating Circles */}
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+        </div>
+
+        {/* Pulsating Text */}
+        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+          Loading Profile Details ...
+        </div>
+
+        {/* Bouncing Dots */}
+        <div className="flex space-x-2 mt-4">
+          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
+        </div>
+      </div>
+
     );
+
   console.log("user Id:", userId);
   return (
-    <div className="min-h-screen bg-gray-50 py-10 px-6">
+    <div className="min-h-screen bg-gray-50 py-4 px-6">
       {/* Back Button */}
       <motion.button
         onClick={() => navigate(-1)}
@@ -113,11 +135,10 @@ export default function UserProfile() {
 
               {/* Chat Button (depends on login) */}
               <button
-                className={`flex-1 px-4 py-2 rounded-md font-semibold transition ${
-                  userId1
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
-                    : "bg-gray-400 text-white hover:bg-gray-500"
-                }`}
+                className={`flex-1 px-4 py-2 rounded-md font-semibold transition ${userId1
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-400 text-white hover:bg-gray-500"
+                  }`}
                 onClick={() =>
                   userId1
                     ? navigate(`/chat/${userId1}/${user._id}`)

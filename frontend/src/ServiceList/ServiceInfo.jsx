@@ -12,6 +12,7 @@ const ServiceInfo = () => {
     const [tags, setTags] = useState([]);
     const [openIndex, setOpenIndex] = useState(null);
     const [topCategories, setTopCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const scrollRef = useRef(null);
 
@@ -56,9 +57,32 @@ const ServiceInfo = () => {
         }
     };
 
-    if (!service) {
-        return <p className="text-gray-500 p-6">Loading service...</p>;
-    }
+    setTimeout(() => setLoading(false), 2000);
+
+    if (loading)
+    return (
+      <div className="flex flex-col justify-center items-center min-h-screen">
+        {/* Rotating Circles */}
+        <div className="relative w-24 h-24 mb-8">
+          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+        </div>
+
+        {/* Pulsating Text */}
+        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+          Loading Services Details ...
+        </div>
+
+        {/* Bouncing Dots */}
+        <div className="flex space-x-2 mt-4">
+          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
+        </div>
+      </div>
+
+    );
 
     return (
         <>
