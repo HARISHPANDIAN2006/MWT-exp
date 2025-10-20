@@ -13,8 +13,8 @@ router.post("/login", loginUser);
 // ================= Google OAuth Config =================
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_SIGNUP = "http://localhost:5024/api/auth/google/callback-signup";
-const REDIRECT_LOGIN = "http://localhost:5024/api/auth/google/callback-login";
+const REDIRECT_SIGNUP = `${process.env.SERVER_URL}/auth/google/callback-signup`;
+const REDIRECT_LOGIN = `${process.env.SERVER_URL}/auth/google/callback-login`;
 
 // Start Google OAuth flow
 // Start Google Signup flow
@@ -70,16 +70,16 @@ router.get("/google/callback-signup", async (req, res) => {
     // 3️⃣ Check if Google account already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.redirect("http://localhost:3000/loginsignup?error=account_exists");
+      return res.redirect(`${process.env.CLIENT_URL}/loginsignup?error=account_exists`);
     }
 
     // 4️⃣ Redirect to frontend signup form with prefilled info
     res.redirect(
-      `http://localhost:3000/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}${dob ? `&dob=${encodeURIComponent(dob)}` : ""}`
+      `${process.env.CLIENT_URL}/loginsignup/signup?email=${encodeURIComponent(email)}&googleId=${encodeURIComponent(googleId)}&firstname=${encodeURIComponent(firstname)}&lastname=${encodeURIComponent(lastname)}${dob ? `&dob=${encodeURIComponent(dob)}` : ""}`
     );
   } catch (err) {
     console.error("Google Signup Callback Error:", err);
-    res.redirect("http://localhost:3000/loginsignup?error=server_error");
+    res.redirect(`${process.env.CLIENT_URL}/loginsignup?error=server_error`);
   }
 });
 
@@ -111,7 +111,7 @@ router.get("/google/callback-login", async (req, res) => {
     // 3️⃣ Attempt Google Login
     const user = await User.findOne({ googleId, email, isGoogleAccount: true });
     if (!user) {
-      return res.redirect("http://localhost:3000/loginsignup?error=not_registered");
+      return res.redirect(`${process.env.CLIENT_URL}/loginsignup?error=not_registered`);
     }
 
     // 4️⃣ Set session
@@ -123,10 +123,10 @@ router.get("/google/callback-login", async (req, res) => {
     };
 
     // 5️⃣ Redirect to dashboard/home
-    res.redirect("http://localhost:3000/?login=success");
+    res.redirect(`${process.env.CLIENT_URL}/?login=success`);
   } catch (err) {
     console.error("Google Login Callback Error:", err);
-    res.redirect("http://localhost:3000/loginsignup?error=server_error");
+    res.redirect(`${process.env.CLIENT_URL}/loginsignup?error=server_error`);
   }
 });
 

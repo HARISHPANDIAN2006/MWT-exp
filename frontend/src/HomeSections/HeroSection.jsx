@@ -5,8 +5,11 @@ const HeroSection = () => {
   const [services, setServices] = useState([]);
   const [username, setUsername] = useState(null);
 
+  const api=import.meta.env.VITE_SERVER_URL;
+
+
   const handleLogout = () => {
-    fetch("http://localhost:5024/api/session/logout", {
+    fetch(`${api}/session/logout`, {
       method: "POST",
       credentials: "include",
     })
@@ -19,7 +22,7 @@ const HeroSection = () => {
 
   useEffect(() => {
     // Fetch logged-in user
-    fetch("http://localhost:5024/api/session/me", { credentials: "include" })
+    fetch(`${api}/session/me`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
@@ -32,7 +35,7 @@ const HeroSection = () => {
       .catch((err) => console.error("Error fetching session:", err));
 
     // Fetch services
-    fetch("http://localhost:5024/api/services")
+    fetch(`${api}/services`)
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error fetching services:", err));

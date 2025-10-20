@@ -131,11 +131,13 @@ const SubcategoryListingPage = () => {
   const [subInfo, setSubInfo] = useState(null);
   const [otherSubcategories, setOtherSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const api=import.meta.env.VITE_SERVER_URL;
+
 
   useEffect(() => {
     if (!id) return;
 
-    fetch(`http://localhost:5024/api/business/subcategory/${id}`)
+    fetch(`${api}/business/subcategory/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setSubInfo(data.subcategory);

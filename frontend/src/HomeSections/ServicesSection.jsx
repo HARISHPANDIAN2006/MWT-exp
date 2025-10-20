@@ -3,9 +3,10 @@ import { Link } from "react-router-dom";
 
 const ServicesSection = () => {
   const [services, setServices] = useState([]);
+  const api=import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
-    fetch("http://localhost:5024/api/services")
+    fetch(`${api}/services`)
       .then((res) => res.json())
       .then((data) => {
         console.log(data);

@@ -3,9 +3,11 @@ import sampleImg from "./assets/image.png"; // adjust path based on your project
 
 const RemainingSection = () => {
   const [guides, setGuides] = useState([]);
+  const api=import.meta.env.VITE_SERVER_URL;
+
 
   useEffect(() => {
-    fetch("http://localhost:5024/api/guides")
+    fetch(`${api}/guides`)
       .then((res) => res.json())
       .then((data) => setGuides(data))
       .catch((err) => console.error("Error fetching guides:", err));

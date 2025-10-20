@@ -10,9 +10,11 @@ const SubcategoryInfo = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   console.log("Subcategory ID from URL:", subId);
+  const api=import.meta.env.VITE_SERVER_URL;
+
 
   useEffect(() => {
-    fetch(`http://localhost:5024/api/subcategory/users/${subId}`)
+    fetch(`${api}/subcategory/users/${subId}`)
       .then((res) => res.json())
       .then((data) => setUsers(data))
       .catch((err) => console.error("Error fetching users:", err));

@@ -18,8 +18,23 @@ const LoginSignup = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [prefill, setPrefill] = useState({});
   const alertShown = useRef(false);
+  const api = import.meta.env.VITE_SERVER_URL;
+   const location = useLocation();
 
-  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+
+    // Helper function to generate Link URL
+    const getLinkWithQuery = (isLoginPage) => {
+      const basePath = isLoginPage ? "/loginsignup/login" : "/loginsignup/signup";
+
+      // Only append query if chat or providerId exists
+      const filteredQuery = new URLSearchParams();
+      if (query.get("chat")) filteredQuery.set("chat", query.get("chat"));
+      if (query.get("providerId")) filteredQuery.set("providerId", query.get("providerId"));
+
+      const queryString = filteredQuery.toString();
+      return queryString ? `${basePath}?${queryString}` : basePath;
+    };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -53,14 +68,14 @@ const LoginSignup = () => {
   }, [location]);
 
   const handleGoogleClick = (type) => {
-    const base = "http://localhost:5024/api/auth/google";
+    const base = `${api}/auth/google`;
     window.location.href =
       type === "signup" ? `${base}/signup` : `${base}/login`;
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center relative bg-gray-100 bg-cover bg-center" style={{ backgroundImage: `url(${bgImg})` }}>
-       <div
+      <div
         className="flex w-[90%] max-w-5xl rounded-lg shadow-lg overflow-hidden border border-gray-200"
       >
         {/* Left Panel */}
@@ -113,8 +128,8 @@ const LoginSignup = () => {
           {/* Social Buttons */}
           <div>
             <div className="space-y-4"> <button type="button" className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100" onClick={() => handleGoogleClick(isLogin ? "login" : "signup")} > <img src="https://img.icons8.com/color/24/google-logo.png" alt="google" className="mr-2" /> Continue with Google </button> </div>
-
-            <Link to={isLogin ? "/loginsignup/login" : "/loginsignup/signup"}> <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5"> <img src="https://img.icons8.com/color/24/email.png" alt="email" className="mr-2" /> Continue with Email </button> </Link>
+            <Link to={getLinkWithQuery(isLogin)}>
+              <button className="w-full border border-gray-300 py-2 rounded flex items-center justify-center hover:bg-gray-100 mt-5"> <img src="https://img.icons8.com/color/24/email.png" alt="email" className="mr-2" /> Continue with Email </button> </Link>
           </div>
 
           {/* Divider */}

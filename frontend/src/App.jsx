@@ -59,7 +59,7 @@ function App() {
           <Route path="/JustDialPages" element={<JustDialPages />} />
           <Route path="/Businesssubcategory/:id" element={<SubcategoryListingPage />}></Route>
           <Route path="/SubcategoryDetails/:id" element={<SubServicePage />}></Route>
-          <Route path="/Chat/:userId/:providerId" element={<ChatPage />}></Route>
+          <Route path="/Chat/:providerId" element={<ChatPage />}></Route>
         </Routes>
       </Router>
     </>

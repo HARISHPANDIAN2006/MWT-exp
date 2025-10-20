@@ -13,7 +13,7 @@ const app = express();
 // ✅ CORS setup so React frontend can send cookies
 app.use(
   cors({
-    origin: "http://localhost:3000", // React frontend URL
+    origin: `${process.env.CLIENT_URL}`, // React frontend URL
     credentials: true, // allow cookies
   })
 );
@@ -92,7 +92,7 @@ const server = http.createServer(app);
 // ✅ Setup Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: `${process.env.CLIENT_URL}`,
     methods: ["GET", "POST"],
   },
 });

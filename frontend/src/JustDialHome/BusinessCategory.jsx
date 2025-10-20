@@ -4,9 +4,10 @@ import { useNavigate } from "react-router-dom";
 const BusinessCategory = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
+  const api=import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
-    fetch("http://localhost:5024/api/business")
+    fetch(`${api}/business`)
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));

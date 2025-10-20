@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import bgVideo from "/Vibe_coding_video.mp4";
 
 const OtpPage = ({ onVerified }) => {
   const storedData = JSON.parse(localStorage.getItem("pendingSignup") || "{}");
   const email = storedData.email;
   const username = storedData.username;
+  const { providerId } = useParams();
+  const { chat } = useParams();
 
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [timeLeft, setTimeLeft] = useState(60);
@@ -13,6 +16,8 @@ const OtpPage = ({ onVerified }) => {
   const [statusMessage, setStatusMessage] = useState("📩 Enter the OTP sent to your email");
   const [canVerify, setCanVerify] = useState(true); // controls verify button
   const firstInputRef = useRef(null);
+
+  const api = import.meta.env.VITE_SERVER_URL;
 
   // Timer countdown
   useEffect(() => {
@@ -49,7 +54,7 @@ const OtpPage = ({ onVerified }) => {
       setLoading(true);
       setStatusMessage("🔄 Verifying OTP...");
 
-      const res = await fetch("http://localhost:5024/api/otp/verify-otp", {
+      const res = await fetch(`${api}/otp/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp: enteredOtp }),
@@ -61,11 +66,16 @@ const OtpPage = ({ onVerified }) => {
 
       if (res.ok) {
         alert("Account Created Successfully!.");
-        setStatusMessage("✅ OTP Verified! Redirecting to Home Page...");
+        setStatusMessage("✅ OTP Verified! Redirecting...");
         localStorage.removeItem("pendingSignup");
         setTimeout(() => {
           onVerified && onVerified();
-          window.location.href = `/`;
+          if (chat === "true" && providerId) {
+            window.location.href = `/chat/${providerId}`;
+          }
+          else {
+            window.location.href = `/`;
+          }
         }, 1500);
       } else {
         setStatusMessage("❌ Invalid OTP. Please try again.");
@@ -84,7 +94,7 @@ const OtpPage = ({ onVerified }) => {
       setResending(true);
       setStatusMessage("📤 Resending OTP...");
 
-      const res = await fetch("http://localhost:5024/api/otp/resend-otp", {
+      const res = await fetch(`${api}/otp/resend-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

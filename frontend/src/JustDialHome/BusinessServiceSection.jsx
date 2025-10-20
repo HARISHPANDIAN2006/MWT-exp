@@ -48,7 +48,7 @@ const BusinessShowcase = () => {
     },
     {
       id: 5,
-      title: "Secure Your Future with Education Loans",
+      title: "Secure Your Future",
       subtitle: "Study without limits — Interest starts from",
       rate: "6.95%",
       company: "from ICICI Bank",
@@ -118,24 +118,31 @@ const BusinessShowcase = () => {
     <>
       <div className="flex items-center justify-center pt-5 overflow-x-auto no-scrollbar">
         {/* Image Slider */}
-        <div className="relative w-[500px] h-[290px] bg-orange-100 rounded-2xl overflow-hidden shadow-md flex-shrink-0 border-2 border-black">
-          {/* Content */}
-          <div className="absolute inset-0 px-12 flex flex-col justify-center items-center">
-            <div className="flex items-center gap-2 mb-8">
+        <div className="relative w-[500px] h-[290px] rounded-2xl overflow-hidden shadow-sm hover:shadow-2xl hover:scale-105 transition-all duration-200 flex-shrink-0 border-2 border-black">
+
+          {/* Background image with reduced opacity */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${slides[current].image})` }}
+          >
+            <div className="absolute inset-0 bg-black/10"></div> {/* optional overlay for better readability */}
+          </div>
+
+          {/* Content (full opacity) */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center z-10">
+            <div className="flex items-center gap-4 mb-8">
               <img
                 src={slides[current].logo}
                 alt="logo"
                 className="w-16 h-16 rounded-full"
               />
-              <h2 className="text-2xl text-black pl-3 font-extrabold">
+              <h2 className="text-3xl text-black font-bold">
                 {slides[current].title}
               </h2>
             </div>
-            <p className="text-gray-700 text-sm">{slides[current].subtitle}</p>
-            <p className="text-orange-600 text-lg font-bold">
-              {slides[current].rate}
-            </p>
-            <p className="text-gray-600 text-sm mb-4">{slides[current].company}</p>
+            <p className="text-white text-sm">{slides[current].subtitle}</p>
+            <p className="text-orange-400 text-lg font-bold">{slides[current].rate}</p>
+            <p className="text-white text-sm mb-4">{slides[current].company}</p>
             <button className="bg-orange-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-orange-800 border-black border w-fit">
               Apply Now →
             </button>
@@ -144,17 +151,20 @@ const BusinessShowcase = () => {
           {/* Controls */}
           <button
             onClick={prevSlide}
-            className="absolute left-5 top-1/2 transform -translate-y-1/2 bg-white p-2 border-black border rounded-full shadow"
+            className="absolute left-5 top-1/2 transform -translate-y-1/2 bg-white p-2 border-black border rounded-full shadow z-20"
           >
             <ChevronLeft size={22} />
           </button>
+
           <button
             onClick={nextSlide}
-            className="absolute right-5 top-1/2 transform -translate-y-1/2 bg-white p-2 border-black border rounded-full shadow"
+            className="absolute right-5 top-1/2 transform -translate-y-1/2 bg-white p-2 border-black border rounded-full shadow z-20"
           >
             <ChevronRight size={22} />
           </button>
+
         </div>
+
 
         {/* Expanding Service Cards */}
         <div className="flex gap-4 justify-center p-6">

@@ -11,7 +11,7 @@ export default function TopBanner({ message, duration = 2000, onClose }) {
   }, [duration, onClose]);
 
   return (
-    <div className="fixed top-20 right-4 font-extrabold bg-red-500 text-white px-4 py-3 rounded-2xl shadow-2xl animate-slide-in text-3xl">
+    <div className="fixed mt-28 right-4 font-extrabold bg-red-500 text-white px-4 py-3 rounded-2xl shadow-2xl animate-slide-in text-3xl">
       {message}
     </div>
   );

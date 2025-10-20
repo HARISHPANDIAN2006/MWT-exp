@@ -26,7 +26,9 @@ const Breadcrumb = ({ subTitle }) => {
 const fetchBusinessData = async (businessId) => {
     console.log(businessId)
     // ⚠️ IN PRODUCTION: Replace this with your actual 'fetch' or 'axios' API call
-    const response = await fetch(`http://localhost:5024/api/businesslist/${businessId}`);
+    const api=import.meta.env.VITE_SERVER_URL;
+
+    const response = await fetch(`${api}/businesslist/${businessId}`);
     const data = await response.json();
     console.log(data)
 

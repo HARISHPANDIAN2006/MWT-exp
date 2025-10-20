@@ -8,23 +8,26 @@ export default function ChatPage() {
   const navigate = useNavigate();
   const [userId, setUserId] = useState(null);
   const [showBanner, setShowBanner] = useState(false);
+  const api=import.meta.env.VITE_SERVER_URL;
+
 
   useEffect(() => {
-    fetch("http://localhost:5024/api/session/me", { credentials: "include" })
+    fetch(`${api}/session/me`, { credentials: "include" })
       .then((res) => res.json())
       .then((data) => {
         if (data.user) {
-          sessionStorage.setItem("userdemoId", data.user.userId);
+          console.log("User session found:", data.user);
+          console.log("Provider ID from URL:", providerId);
           setUserId(data.user._id);
         } else {
           setShowBanner(true); // show custom banner
-          setTimeout(() => navigate("/loginsignup"), 2000);
+          setTimeout(() => navigate(`/loginsignup?chat=true&&providerId=${providerId}`), 2000);
         }
       })
       .catch((err) => {
         console.error("Error fetching session:", err);
         setShowBanner(true);
-        setTimeout(() => navigate("/loginsignup"), 2000);
+        setTimeout(() => navigate(`/loginsignup?error=${err}`), 2000);
       });
   }, [navigate]);
 

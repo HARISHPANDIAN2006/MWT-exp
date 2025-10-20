@@ -8,8 +8,11 @@ import { Navigation, Pagination } from "swiper/modules";
 const PopularServices = () => {
   const [services, setServices] = useState([]);
 
+  const api=import.meta.env.VITE_SERVER_URL;
+
+
   useEffect(() => {
-    fetch("http://localhost:5024/api/services")
+    fetch(`${api}/services`)
       .then((res) => res.json())
       .then((data) => setServices(data))
       .catch((err) => console.error("Error fetching services:", err));

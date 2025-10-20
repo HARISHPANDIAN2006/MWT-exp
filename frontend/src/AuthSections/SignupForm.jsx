@@ -7,6 +7,9 @@ export default function SignupForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [userExists, setUserExists] = useState(false);
 
+  const api=import.meta.env.VITE_SERVER_URL;
+
+
   const location = useLocation();
 
   const [formData, setFormData] = useState({
@@ -62,7 +65,7 @@ export default function SignupForm() {
 
     if (isGoogleSignup) {
       try {
-        const res = await fetch("http://localhost:5024/api/auth/google-signup", {
+        const res = await fetch(`${api}/auth/google-signup`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
@@ -85,7 +88,7 @@ export default function SignupForm() {
       setCurrentStep("Verifying Data...");
 
       try {
-        const res = await fetch("http://localhost:5024/api/otp/send-otp", {
+        const res = await fetch(`${api}/otp/send-otp`, {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

@@ -3,7 +3,7 @@ import React, { useRef, useEffect } from 'react';
 // --- Trending Search Card ---
 const TrendingSearchCard = ({ title, imageUrl }) => {
   return (
-    <div className="w-44 sm:w-48 md:w-52 lg:w-56 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden shadow-md bg-gray-600 hover:shadow-lg transition-transform duration-300 hover:-translate-y-1">
+    <div className="w-44 sm:w-48 md:w-52 lg:w-56 flex-shrink-0 cursor-pointer rounded-lg overflow-hidden shadow-sm bg-gray-600 hover:shadow-2xl transition-transform duration-300 hover:-translate-y-1">
       <div className="h-28 relative overflow-hidden group">
         <img
           src={imageUrl}
@@ -37,6 +37,9 @@ const TrendingSearchesSection = () => {
     { title: 'Nightlife', imageUrl: 'https://picsum.photos/300/200?random=26' },
     { title: 'Shopping Streets', imageUrl: 'https://picsum.photos/300/200?random=27' },
     { title: 'Photography Spots', imageUrl: 'https://picsum.photos/300/200?random=28' },
+    { title: 'Seashore Spots', imageUrl: 'https://picsum.photos/300/200?random=29' },
+    { title: 'Shopping Areas', imageUrl: 'https://picsum.photos/300/200?random=30' },
+    { title: 'Bike Riding', imageUrl: 'https://picsum.photos/300/200?random=31' },
   ];
 
   useEffect(() => {
@@ -44,14 +47,14 @@ const TrendingSearchesSection = () => {
     if (!scrollContainer) return;
 
     let scrollAmount = 0;
-    const scrollStep = 250;
-    const interval = 2500;
+    const scrollStep = 260;
+    const interval = 2000;
 
     const scrollInterval = setInterval(() => {
       if (!scrollContainer) return;
 
       scrollAmount += scrollStep;
-      if (scrollAmount >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
+      if (scrollAmount >= scrollContainer.scrollWidth - scrollContainer.clientWidth+300) {
         scrollAmount = 0;
         scrollContainer.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
@@ -63,8 +66,8 @@ const TrendingSearchesSection = () => {
   }, []);
 
   return (
-    <section className="px-8 mt-1 bg-gray-100 font-sans max-w-full">
-      <div className="border-2 border-gray-500 p-3 rounded-3xl">
+    <section className="px-5 mt-1 mx-1 bg-gray-100 font-sans max-w-full">
+      <div className="border-2 border-gray-500 p-4 rounded-3xl">
         <h2 className="text-2xl font-bold text-gray-900 mb-3">
           Trending Searches Near You{' '}
           <span className="text-red-600 text-sm align-top font-extrabold">HOT</span>

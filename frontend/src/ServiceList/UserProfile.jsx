@@ -5,15 +5,28 @@ import { motion } from "framer-motion";
 export default function UserProfile() {
   const { userId } = useParams();
   const [user, setUser] = useState(null);
+  const [userId1, setUserId1] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const userId1 = localStorage.getItem("username");
+  const api=import.meta.env.VITE_SERVER_URL;
+
   useEffect(() => {
-    fetch(`http://localhost:5024/api/userprofile/${userId}`)
+    fetch(`${api}/userprofile/${userId}`)
       .then((res) => res.json())
       .then((data) => setUser(data))
       .catch((err) => console.error("Error fetching user profile:", err));
   }, [userId]);
+
+  useEffect(() => {
+    fetch(`${api}/session/me`, { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          setUserId1(data.user._id);
+        }
+      })
+      .catch((err) => console.error("Error fetching session:", err));
+  },[userId1]);
 
   const handlePayment = async (packageData) => {
     const response = await fetch("http://localhost:5024/api/payment/order", {
@@ -73,8 +86,8 @@ export default function UserProfile() {
       </div>
 
     );
-
-  console.log("user Id:", userId);
+    console.log("user:", user);
+  console.log("user Id1:", userId1);
   return (
     <div className="min-h-screen bg-gray-50 py-4 px-6">
       {/* Back Button */}
@@ -140,9 +153,7 @@ export default function UserProfile() {
                   : "bg-gray-400 text-white hover:bg-gray-500"
                   }`}
                 onClick={() =>
-                  userId1
-                    ? navigate(`/chat/${userId1}/${user._id}`)
-                    : navigate("/login")
+                  navigate(`/chat/${user._id}?chat=true`)
                 }
               >
                 {userId1 ? "💬 Chat" : "🔒 Login to Chat"}

@@ -70,7 +70,6 @@ const loginUser = async (req, res) => {
       email,
       phno,
       isGoogleAccount: false, // ✅ exclude Google accounts
-      __id,
     });
 
     if (!user) {

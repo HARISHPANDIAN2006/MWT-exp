@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import bgVideo from "/Vibe_coding_video.mp4";
+import { useLocation } from "react-router-dom";
 
 const LoginForm = () => {
+
+  const api = import.meta.env.VITE_SERVER_URL;
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const chat = query.get("chat");
+  const providerId = query.get("providerId");
+
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
@@ -23,7 +31,7 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5024/api/auth/login", {
+      const res = await fetch(`${api}/auth/login`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -39,7 +47,11 @@ const LoginForm = () => {
 
       if (res.ok) {
         alert(`✅ ${data.message}`);
-        window.location.href = "/";
+        if (chat === "true" && providerId) {
+          window.location.href = `/userprofile/${providerId}`;
+        } else {
+          window.location.href = "/";
+        }
       } else {
         alert(`❌ ${data.message}`);
       }

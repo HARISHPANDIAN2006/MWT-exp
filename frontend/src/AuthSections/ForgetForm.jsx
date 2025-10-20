@@ -17,6 +17,7 @@ const ForgetForm = () => {
   const [timeLeft, setTimeLeft] = useState(0);
   const [currentStep, setCurrentStep] = useState("Start By Entering Details");
 
+  const api=import.meta.env.VITE_SERVER_URL;
 
   // Timer
   useEffect(() => {
@@ -41,7 +42,7 @@ const ForgetForm = () => {
         setCurrentStep("Resending OTP...");
       }
 
-      const res = await fetch("http://localhost:5024/api/forget/send-otp", {
+      const res = await fetch(`${api}/forget/send-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, phno }),
@@ -77,7 +78,7 @@ const ForgetForm = () => {
     }
     try {
       setCurrentStep("Verifying OTP...");
-      const res = await fetch("http://localhost:5024/api/forget/verify-otp", {
+      const res = await fetch(`${api}/forget/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, otp }),
@@ -110,7 +111,7 @@ const ForgetForm = () => {
     }
     try {
       setCurrentStep("Resetting password...");
-      const res = await fetch("http://localhost:5024/api/forget/reset-password", {
+      const res = await fetch(`${api}/forget/reset-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, newPassword, confirmPassword }),

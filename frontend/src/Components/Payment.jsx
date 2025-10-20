@@ -5,13 +5,16 @@ export default function Payment() {
   const [amount, setAmount] = useState("500"); // default ₹500
   const [msg, setMsg] = useState("");
 
+  const api=import.meta.env.VITE_SERVER_URL;
+
+
   const handlePayment = async () => {
     setMsg("");
 
     try {
       // 1️⃣ Create test order (backend must return { order, key })
       const resp = await axios.post(
-        "http://localhost:5024/api/payment/create-order",
+        `${api}/payment/create-order`,
         { amount },
         { headers: { "Content-Type": "application/json" } }
       );

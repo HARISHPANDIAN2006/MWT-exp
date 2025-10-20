@@ -9,9 +9,13 @@ export default function ChatBox({ senderId, receiverId }) {
   const [socket, setSocket] = useState(null);
   const messagesEndRef = useRef(null);
 
+  const api=import.meta.env.VITE_SERVER_MAIN_URL;
+  const api1=import.meta.env.VITE_SERVER_URL;
+
+
   // Initialize socket only once
   useEffect(() => {
-    const newSocket = io("http://localhost:5024");
+    const newSocket = io(`${api}`);
     setSocket(newSocket);
 
     return () => newSocket.disconnect();
@@ -22,7 +26,7 @@ export default function ChatBox({ senderId, receiverId }) {
     const fetchMessages = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:5024/api/chat/${senderId}/${receiverId}`,
+          `${api1}/chat/${senderId}/${receiverId}`,
           { withCredentials: true }
         );
         setMessages(res.data);
