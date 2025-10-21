@@ -1,4 +1,5 @@
 const BusinessCategory = require("../models/Business.js");
+const BusinessList = require("../models/BusinessList.js")
 
 const getAllCategories = async (req, res) => {
   try {
@@ -46,4 +47,10 @@ const getSubcategoryById = async (req, res) => {
   }
 };
 
-module.exports = { getAllCategories,getSubcategoryById };
+const getBusinessByProviderId = async (req,res)=>{
+  const {id} = req.params;
+  const businesses = await BusinessList.find({providerId:id});
+  res.json(businesses);
+}
+
+module.exports = { getAllCategories,getSubcategoryById,getBusinessByProviderId };

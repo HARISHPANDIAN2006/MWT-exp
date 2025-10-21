@@ -86,7 +86,7 @@ app.use("/api/userprofile", require("./routes/userProfileRoutes"));
 app.use("/api/business",require("./routes/businessRoutes"));
 app.use("/api/businesslist", require("./routes/businesslistRoutes"));
 app.use("/api/chat", require("./routes/messageRoutes"));
-// ✅ Create an HTTP server (required for Socket.IO)
+
 const server = http.createServer(app);
 
 // ✅ Setup Socket.IO

@@ -22,6 +22,9 @@ import JustDialPages from "./Pages/JustDialPages";
 import SubcategoryListingPage from "./JustDialHome/ServicesPages/SubCategoryListingPage";
 import SubServicePage from "./JustDialHome/ServicesPages/SubServicePage";
 import ChatPage from "./ChatBox/ChatPage"
+import CompleteProfile from "./JustDialHome/ServicesPages/CompleteProfile";
+import MyBusinessPage from "./JustDialHome/ServicesPages/MyBusinessPage";
+import AddBusinessPage from "./JustDialHome/ServicesPages/AddBusinessPage";
 
 function HomePage() {
   return (
@@ -35,12 +38,12 @@ function HomePage() {
       <ImageGallery />
       <RemainingSection />
       <FooterSection />
-      <OfflineToggleButton />
     </>
   );
 }
 
 function App() {
+  
   return (
     <>
       <Router>
@@ -60,6 +63,9 @@ function App() {
           <Route path="/Businesssubcategory/:id" element={<SubcategoryListingPage />}></Route>
           <Route path="/SubcategoryDetails/:id" element={<SubServicePage />}></Route>
           <Route path="/Chat/:providerId" element={<ChatPage />}></Route>
+          <Route path="/justdial/completeprofile" element={<CompleteProfile/>}></Route>
+          <Route path="/mybusinesslist/:userId" element={<MyBusinessPage/>} />
+          <Route path="/addbusiness/:userId" element={<AddBusinessPage/>} />
         </Routes>
       </Router>
     </>

@@ -27,9 +27,7 @@ const HeroSection = () => {
       .then((data) => {
         if (data.user) {
           console.log("Logged in user data:", data.user);
-          sessionStorage.setItem("userdemoId", data.user.userId);
-          setUsername(data.user._id);
-          localStorage.setItem("username", data.user._id);
+          setUsername(data.user.username);
         }
       })
       .catch((err) => console.error("Error fetching session:", err));
@@ -52,7 +50,7 @@ const HeroSection = () => {
       </video>
 
       {/* Navbar */}
-      <nav className="flex justify-evenly items-center py-4 bg-white text-black shadow fixed top-0 left-0 w-full z-10">
+      <nav className="flex justify-evenly items-center py-4 bg-white text-black shadow-2xl border-b-2 border-gray-400 fixed top-0 left-0 w-full z-10">
         <div className="text-4xl font-bold text-green-600">Servizio</div>
 
         <div className="flex items-center space-x-8 text-sm font-semibold">

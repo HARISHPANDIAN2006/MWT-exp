@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import SampleImg from "./assets/image.png";
 import FooterSection from "../HomeSections/FooterSection";
@@ -15,7 +15,20 @@ const ServiceInfo = () => {
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const scrollRef = useRef(null);
-    const api=import.meta.env.VITE_SERVER_URL;
+    const [username, setUsername] = useState(null);
+    const api = import.meta.env.VITE_SERVER_URL;
+
+    const handleLogout = () => {
+        fetch(`${api}/session/logout`, {
+            method: "POST",
+            credentials: "include",
+        })
+            .then(() => {
+                alert("Logged out successfully...");
+                setUsername("Guest");
+            })
+            .catch((err) => console.error("Error logging out:", err));
+    };
 
     // Fetch Top Categories
     useEffect(() => {
@@ -27,26 +40,27 @@ const ServiceInfo = () => {
 
     // Fetch service
     useEffect(() => {
+        fetch(`${api}/session/me`, { credentials: "include" })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.user) {
+                    console.log("Logged in user data:", data.user);
+                    sessionStorage.setItem("userdemoId", data.user.userId);
+                    setUsername(data.user._id);
+                    localStorage.setItem("username", data.user._id);
+                }
+            })
+            .catch((err) => console.error("Error fetching session:", err));
         fetch(`${api}/services/${id}`)
             .then((res) => res.json())
-            .then((data) => setService(data))
+            .then((data) => {
+                setService(data)
+                setTags(data.tagsarr || []);
+                setTopCategories(data.topservices || []);
+                console.log(data.topservices)
+                setFaqs(data.faqarr || []);
+            })
             .catch((err) => console.error("Error fetching service:", err));
-    }, [id]);
-
-    // Fetch FAQs
-    useEffect(() => {
-        fetch(`${api}/services/servicefaqs/${id}`)
-            .then((res) => res.json())
-            .then((data) => setFaqs(data))
-            .catch((err) => console.error("Error fetching faqs:", err));
-    }, [id]);
-
-    // Fetch Tags
-    useEffect(() => {
-        fetch(`${api}/services/servicetags/${id}`)
-            .then((res) => res.json())
-            .then((data) => setTags(data))
-            .catch((err) => console.error("Error fetching tags:", err));
     }, [id]);
 
     const scroll = (direction) => {
@@ -61,32 +75,74 @@ const ServiceInfo = () => {
     setTimeout(() => setLoading(false), 2000);
 
     if (loading)
-    return (
-      <div className="flex flex-col justify-center items-center min-h-screen">
-        {/* Rotating Circles */}
-        <div className="relative w-24 h-24 mb-8">
-          <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
-          <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
-          <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
-        </div>
+        return (
+            <div className="flex flex-col justify-center items-center min-h-screen">
+                {/* Rotating Circles */}
+                <div className="relative w-24 h-24 mb-8">
+                    <div className="absolute inset-0 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-3 border-4 border-blue-400 border-t-transparent rounded-full animate-spin animation-delay-150"></div>
+                    <div className="absolute inset-6 border-4 border-blue-200 border-t-transparent rounded-full animate-spin animation-delay-300"></div>
+                </div>
 
-        {/* Pulsating Text */}
-        <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
-          Loading Services Details ...
-        </div>
+                {/* Pulsating Text */}
+                <div className="text-2xl font-extrabold text-black animate-pulse flex items-center">
+                    Loading Services Details ...
+                </div>
 
-        {/* Bouncing Dots */}
-        <div className="flex space-x-2 mt-4">
-          <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
-          <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
-          <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
-        </div>
-      </div>
+                {/* Bouncing Dots */}
+                <div className="flex space-x-2 mt-4">
+                    <div className="w-3 h-3 bg-blue-400 rounded-full animate-bounce"></div>
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-bounce animation-delay-150"></div>
+                    <div className="w-3 h-3 bg-yellow-400 rounded-full animate-bounce animation-delay-300"></div>
+                </div>
+            </div>
 
-    );
+        );
 
     return (
         <>
+            {/* Navbar */}
+            <nav className="flex justify-evenly items-center py-4 bg-white text-black border-b-2 border-gray-400 shadow-2xl fixed top-0 left-0 w-full z-10">
+                <div className="text-4xl font-bold text-green-600">Servizio</div>
+
+                <div className="flex items-center space-x-8 text-sm font-semibold">
+                    <Link to="#" className="hover:underline">
+                        Activate Pro
+                    </Link>
+                    <Link to="#" className="hover:underline">
+                        Explore
+                    </Link>
+                    <Link to="#" className="hover:underline">
+                        Become a Seller
+                    </Link>
+
+                    {username === "Guest" || !username ? (
+                        <>
+                            <Link to="/loginsignup">
+                                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                                    Sign in
+                                </button>
+                            </Link>
+                            <Link to="/loginsignup">
+                                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                                    Join
+                                </button>
+                            </Link>
+                            <h1 className="text-2xl font-bold">Guest</h1>
+                        </>
+                    ) : (
+                        <>
+                            <h1 className="text-2xl font-bold text-red-500">{username}</h1>
+                            <button
+                                onClick={handleLogout}
+                                className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition"
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )}
+                </div>
+            </nav>
             <div className="bg-white">
                 {/* Back Button */}
                 <div className="fixed z-50 mx-5 my-5">
@@ -99,7 +155,7 @@ const ServiceInfo = () => {
                 </div>
 
                 {/* Banner Section */}
-                <div className="relative bg-green-950 py-20 px-10 text-center flex items-center justify-center">
+                <div className="relative bg-green-950 pt-24 pb-5 px-10 text-center flex items-center justify-center">
                     <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-3xl shadow-2xl p-10 max-w-3xl mx-auto">
                         <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-green-100">
                             <Typewriter
@@ -236,7 +292,7 @@ const ServiceInfo = () => {
                             service.subcategories.map((sub, index) => (
                                 <div
                                     key={index}
-                                    onClick={() => navigate(`/subcategory/${sub._id}`)}
+                                    onClick={() => navigate(`/subcategory/${sub._id}?serviceid=${service._id}`)}
                                     className="bg-white border rounded-lg shadow-md w-80 p-4 flex flex-col items-center text-center cursor-pointer hover:scale-105 transition"
                                 >
                                     <img
@@ -304,7 +360,7 @@ const ServiceInfo = () => {
                                         key={index}
                                         className="px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm cursor-pointer hover:bg-gray-200 transition"
                                     >
-                                        {tag.name}
+                                        {tag}
                                     </span>
                                 ))
                             ) : (

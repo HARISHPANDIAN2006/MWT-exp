@@ -4,6 +4,7 @@ const businessListSchema = new mongoose.Schema(
   {
     _id:mongoose.Schema.Types.ObjectId,
     name: String,
+    providerId: mongoose.Schema.Types.ObjectId,
     mainCategoryId: mongoose.Schema.Types.ObjectId,
     subCategoryId: mongoose.Schema.Types.ObjectId,
     rating: Number,

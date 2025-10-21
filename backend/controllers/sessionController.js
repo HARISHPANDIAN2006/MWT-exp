@@ -3,11 +3,11 @@ const User = require("../models/User");
 const getSessionUser = async (req, res) => {
   try {
     if (req.session.user && req.session.user.username) {
-      // Find user in DB by username stored in session
-      const user = await User.findOne({ username: req.session.user.username }).select("_id username email");
+
+      const user = await User.findOne({ username: req.session.user.username }).select("_id username email userType");
       if (!user) return res.status(404).json({ message: "User not found" });
 
-      return res.json({ user }); // return user object with _id
+      return res.json({ user });
     } else {
       return res.status(401).json({ message: "Not logged in" });
     }

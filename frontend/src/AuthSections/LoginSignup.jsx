@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import sampleImg from "./assets/image1.png";
 import bgImg from "./assets/image.png";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,useNavigate } from "react-router-dom";
 
 const SocialButton = ({ onClick, icon, text }) => (
   <button
@@ -19,7 +19,8 @@ const LoginSignup = () => {
   const [prefill, setPrefill] = useState({});
   const alertShown = useRef(false);
   const api = import.meta.env.VITE_SERVER_URL;
-   const location = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const query = new URLSearchParams(location.search);
 
@@ -31,6 +32,7 @@ const LoginSignup = () => {
       const filteredQuery = new URLSearchParams();
       if (query.get("chat")) filteredQuery.set("chat", query.get("chat"));
       if (query.get("providerId")) filteredQuery.set("providerId", query.get("providerId"));
+      if (query.get("offline")) filteredQuery.set("offline", query.get("offline"));
 
       const queryString = filteredQuery.toString();
       return queryString ? `${basePath}?${queryString}` : basePath;
@@ -167,7 +169,7 @@ const LoginSignup = () => {
           {/* Close */}
           <div className="text-center">
             <button
-              onClick={() => (window.location.href = "/")}
+              onClick={() => navigate(-1)}
               className="mt-6 px-6 py-2 bg-[#7B2D43] text-white rounded-lg hover:bg-red-500 transition duration-300 shadow-md"
             >
               Close

@@ -2,21 +2,60 @@ import React, { useEffect, useState } from "react";
 import TipsSection from "./TipsSection";
 import FooterSection from "../HomeSections/FooterSection";
 import RemainingSection from "../HomeSections/RemainingSection";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 
 const SubcategoryInfo = () => {
   const { subId } = useParams();
   const [users, setUsers] = useState([]);
+  const [username, setUsername] = useState(null);
+  const [service, setService] = useState("");
+  const [topcategories, setTopcategories] = useState([]);
+  const [faqs, setFaqs] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  console.log("Subcategory ID from URL:", subId);
-  const api=import.meta.env.VITE_SERVER_URL;
+  const api = import.meta.env.VITE_SERVER_URL;
+
+  const handleLogout = () => {
+    fetch(`${api}/session/logout`, {
+      method: "POST",
+      credentials: "include",
+    })
+      .then(() => {
+        alert("Logged out successfully...");
+        setUsername("Guest");
+      })
+      .catch((err) => console.error("Error logging out:", err));
+  };
 
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("serviceid");
+
+    fetch(`${api}/services/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setService(data)
+        setFaqs(data.faqarr || []);
+        setTopcategories(data.topservices)
+        console.log(data.topservices)
+      })
+      .catch((err) => console.error("Error fetching service:", err));
+
+    fetch(`${api}/session/me`, { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.user) {
+          console.log("Logged in user data:", data.user);
+          setUsername(data.user._id);
+        }
+      })
+      .catch((err) => console.error("Error fetching session:", err));
     fetch(`${api}/subcategory/users/${subId}`)
       .then((res) => res.json())
-      .then((data) => setUsers(data))
+      .then((data) => {
+        setUsers(data)
+      })
       .catch((err) => console.error("Error fetching users:", err));
   }, [subId]);
 
@@ -51,6 +90,48 @@ const SubcategoryInfo = () => {
 
   return (
     <>
+      {/* Navbar */}
+      <nav className="flex justify-evenly items-center py-4 bg-white text-black border-b-2 border-gray-400 shadow-2xl fixed top-0 left-0 w-full z-10">
+        <div className="text-4xl font-bold text-green-600">Servizio</div>
+
+        <div className="flex items-center space-x-8 text-sm font-semibold">
+          <Link to="#" className="hover:underline">
+            Activate Pro
+          </Link>
+          <Link to="#" className="hover:underline">
+            Explore
+          </Link>
+          <Link to="#" className="hover:underline">
+            Become a Seller
+          </Link>
+
+          {username === "Guest" || !username ? (
+            <>
+              <Link to="/loginsignup">
+                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                  Sign in
+                </button>
+              </Link>
+              <Link to="/loginsignup">
+                <button className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition">
+                  Join
+                </button>
+              </Link>
+              <h1 className="text-2xl font-bold">Guest</h1>
+            </>
+          ) : (
+            <>
+              <h1 className="text-2xl font-bold text-red-500">{username}</h1>
+              <button
+                onClick={handleLogout}
+                className="border-2 px-4 py-1 rounded hover:bg-green-600 hover:text-white transition"
+              >
+                Logout
+              </button>
+            </>
+          )}
+        </div>
+      </nav>
       <div className="bg-gray-50 min-h-screen">
         {/* Back Button */}
         <div className="fixed z-50 mx-5 my-5">
@@ -63,7 +144,7 @@ const SubcategoryInfo = () => {
         </div>
 
         {/* Banner */}
-        <div className="bg-multi-gradient text-white py-10 px-10 text-center shadow-md">
+        <div className="bg-multi-gradient text-white pt-24 pb-5 px-10 text-center shadow-md">
           <h1 className="text-6xl text-black font-extrabold mb-3" style={{
             WebkitTextStroke: "3px yellow"
           }}>
@@ -73,89 +154,34 @@ const SubcategoryInfo = () => {
             Skilled professionals ready to deliver quality work
           </p>
         </div>
-        <div className="mt-16 px-12">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
-            Website Development
+        <div className="mt-5 px-12">
+          <h2 className="text-2xl font-bold text-gray-900 mb-3">
+            {service.title}
           </h2>
-          <p className="text-gray-600 mb-6">
-            Create, build, and develop your website with skilled website developers
+          <p className="text-gray-600 mb-5">
+            {service.description} with skilled {service.title} developers
           </p>
 
           {/* Categories */}
-          <div className="flex flex-wrap gap-4">
-            {/* WordPress */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/9/98/WordPress_blue_logo.svg"
-                alt="WordPress"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">WordPress</span>
-            </div>
-
-            {/* Custom Websites */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://img.icons8.com/external-outline-juicy-fish/60/000000/external-coding-coding-and-development-outline-outline-juicy-fish.png"
-                alt="Custom Websites"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">Custom Websites</span>
-            </div>
-
-            {/* Shopify */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://cdn.iconscout.com/icon/free/png-256/free-shopify-226579.png"
-                alt="Shopify"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">Shopify</span>
-            </div>
-
-            {/* Wix */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://cdn.worldvectorlogo.com/logos/wix-com.svg"
-                alt="Wix"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">Wix</span>
-            </div>
-
-            {/* Webflow */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://cdn.worldvectorlogo.com/logos/webflow-2.svg"
-                alt="Webflow"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">Webflow</span>
-            </div>
-
-            {/* Squarespace */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://cdn.iconscout.com/icon/free/png-256/free-squarespace-285371.png"
-                alt="Squarespace"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">Squarespace</span>
-            </div>
-
-            {/* WooCommerce */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition">
-              <img
-                src="https://cdn.iconscout.com/icon/free/png-256/free-woocommerce-3521528-2945026.png"
-                alt="WooCommerce"
-                className="w-6 h-6"
-              />
-              <span className="font-medium text-gray-800">WooCommerce</span>
+          {/* Categories Slide Bar */}
+          <div className="overflow-x-auto">
+            <div className="flex gap-2 w-max px-2 py-3">
+              {topcategories.map((category, index) => (
+                <div
+                  key={index}
+                  className="flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow cursor-pointer hover:shadow-md transition flex-shrink-0"
+                >
+                  <div className="text-xl">{category.icon}</div>
+                  <span className="font-medium text-gray-800 whitespace-nowrap">
+                    {category.name}
+                  </span>
+                </div>
+              ))}
             </div>
           </div>
 
           {/* Filters */}
-          <div className="flex flex-wrap items-center gap-4 mt-6">
+          <div className="flex flex-wrap items-center gap-4 mt-4">
             <select className="px-4 py-2 border rounded-lg text-gray-700">
               <option>Service options</option>
             </select>
@@ -185,17 +211,17 @@ const SubcategoryInfo = () => {
         </div>
 
         {/* Users Section */}
-        <section className="px-20 my-12">
+        <section className="px-20 my-6">
           <h2 className="text-3xl font-bold mb-10 text-gray-800 text-center">
             Available Experts
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3">
             {users && users.length > 0 ? (
               users.map((user, index) => (
                 <div
                   key={index}
-                  className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition transform hover:-translate-y-1 border border-gray-100"
+                  className="bg-white rounded-2xl shadow-md hover:shadow-2xl transition transform hover:-translate-y-3 border-2 hover:border-gray-300"
                 >
                   {/* Card Content */}
                   <div className="flex flex-col items-center p-6">
@@ -246,6 +272,7 @@ const SubcategoryInfo = () => {
             )}
           </div>
         </section>
+
         {/* Explore More Services */}
         <section className="my-10 px-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 text-gray-800">
@@ -324,76 +351,19 @@ const SubcategoryInfo = () => {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-700">
-            {/* FAQ 1 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                What are website development services on Fiverr?
-              </h3>
-              <p className="mt-2 text-sm">
-                Website development services on Fiverr include everything you need to create
-                or revamp your online presence. Whether you're building a new site or updating
-                an existing one, freelancers can handle it all—from simple blogs to complex
-                eCommerce stores. They work with platforms like WordPress, Shopify, and Wix,
-                ensuring your website is tailored to your needs.
-              </p>
-            </div>
-
-            {/* FAQ 2 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                What does a website developer do?
-              </h3>
-              <p className="mt-2 text-sm">
-                Website developers cover backend and frontend needs—building your website’s
-                architecture, designing UI/UX, customizing branding, and maintaining performance.
-              </p>
-            </div>
-
-            {/* FAQ 3 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                What are the stages of a website development project?
-              </h3>
-              <p className="mt-2 text-sm">
-                The process starts with defining brand goals and design needs. From there, you
-                can browse Fiverr freelancers, discuss your project, and select the right
-                developer for your requirements.
-              </p>
-            </div>
-
-            {/* FAQ 4 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                What are the most popular website development platforms?
-              </h3>
-              <p className="mt-2 text-sm">
-                Popular platforms include WordPress, Wix, Squarespace, and Shopify. Each has
-                unique strengths—from WordPress’s flexibility to Shopify’s eCommerce features.
-              </p>
-            </div>
-
-            {/* FAQ 5 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                How much does it cost to develop a website?
-              </h3>
-              <p className="mt-2 text-sm">
-                Costs depend on size and features. A simple site can cost between $175 and $1000.
-                To save money, use pre-built templates or hire a freelancer from a lower-cost region.
-              </p>
-            </div>
-
-            {/* FAQ 6 */}
-            <div>
-              <h3 className="font-semibold text-lg text-gray-900">
-                What types of websites can I develop on Fiverr?
-              </h3>
-              <p className="mt-2 text-sm">
-                Fiverr supports all types of websites—business sites, blogs, eCommerce, portfolios,
-                landing pages, and more.
-              </p>
-            </div>
+            {faqs && faqs.length > 0 ? (
+              faqs.map((faq, index) => (
+                <div key={index}>
+                  <h3 className="font-semibold text-lg text-gray-900">{faq.question}</h3>
+                  <p className="mt-2 text-sm">{faq.answer}</p>
+                </div>
+              ))
+            ) : (
+              <p className="col-span-2 text-gray-500">No FAQs available.</p>
+            )}
           </div>
+
+
         </div>
 
       </div>

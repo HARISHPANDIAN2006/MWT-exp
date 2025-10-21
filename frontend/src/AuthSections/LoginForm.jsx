@@ -9,6 +9,7 @@ const LoginForm = () => {
   const query = new URLSearchParams(location.search);
   const chat = query.get("chat");
   const providerId = query.get("providerId");
+  const offline = query.get("offline");
 
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -47,7 +48,10 @@ const LoginForm = () => {
 
       if (res.ok) {
         alert(`✅ ${data.message}`);
-        if (chat === "true" && providerId) {
+        if(offline==="true"){
+          window.location.href = "/JustDialPages";
+        }
+        else if (chat === "true" && providerId) {
           window.location.href = `/userprofile/${providerId}`;
         } else {
           window.location.href = "/";
