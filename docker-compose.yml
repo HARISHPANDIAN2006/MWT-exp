@@ -1,0 +1,31 @@
+services:
+  server:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: ecom-server
+    restart: unless-stopped
+    ports:
+      - "5024:5024"
+    env_file:
+      - ./backend/.env
+    environment:
+      - MONGO_URI=mongodb+srv://muthukumar_9360:Muthukumar%409360@cluster0.uzsaneo.mongodb.net/servizio?retryWrites=true&w=majority&appName=Cluster0
+      - PORT=5024
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+
+  client:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: ecom-client
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - server
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
