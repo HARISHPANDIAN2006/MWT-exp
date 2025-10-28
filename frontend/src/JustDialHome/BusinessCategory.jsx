@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const BusinessCategory = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
-  const api=import.meta.env.VITE_SERVER_URL;
+  const api = import.meta.env.VITE_SERVER_URL;
 
   useEffect(() => {
     fetch(`${api}/business`)
@@ -14,14 +14,28 @@ const BusinessCategory = () => {
   }, []);
 
   const handleSubClick = (id) => {
-    // Navigate using subcategory title
     navigate(`/Businesssubcategory/${encodeURIComponent(id)}`);
   };
 
+  const handleViewAll = () => {
+    navigate("/all-categories", { state: { categories } }); // pass all categories
+  };
+
   return (
-    <div className="p-6 my-3">
+    <div className="p-6 relative">
+      {/* View All Button */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={handleViewAll}
+          className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-900"
+        >
+          View All Categories
+        </button>
+      </div>
+
+      {/* Display first 4 categories only */}
       <div className="grid grid-cols-2 gap-4">
-        {categories.map((cat) => (
+        {categories.slice(0, 4).map((cat) => (
           <div
             key={cat._id}
             className="rounded-lg border-gray-300 border-2 p-6 shadow-lg hover:shadow-2xl transition"
