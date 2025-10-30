@@ -35,8 +35,10 @@ const BusinessHeaderSection = () => {
         }
       })
       .catch((err) => console.error("Error fetching session:", err));
+
+      setCity("Tirunelveli");
     // Check if geolocation is available
-    if (!navigator.geolocation) {
+    /*if (!navigator.geolocation) {
       setError("Geolocation not supported.");
       return;
     }
@@ -69,7 +71,7 @@ const BusinessHeaderSection = () => {
         setError(err.message);
       },
       { enableHighAccuracy: true }
-    );
+    );*/
   }, []);
 
   return (

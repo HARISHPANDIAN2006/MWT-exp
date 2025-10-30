@@ -18,7 +18,7 @@ const BusinessCategory = () => {
   };
 
   const handleViewAll = () => {
-    navigate("/all-categories", { state: { categories } }); // pass all categories
+    navigate("/all-categories", { state: { categories } });
   };
 
   return (
@@ -29,7 +29,7 @@ const BusinessCategory = () => {
           onClick={handleViewAll}
           className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-900"
         >
-          View All Categories
+          View All Categories and SubCategories
         </button>
       </div>
 
@@ -45,22 +45,24 @@ const BusinessCategory = () => {
             </h2>
 
             <div className="grid grid-cols-3 gap-2 mt-3">
-              {cat.subCategories?.map((sub, index) => (
-                <div
-                  key={index}
-                  className="rounded-lg shadow-lg p-2 hover:scale-105 transition cursor-pointer"
-                  onClick={() => handleSubClick(sub._id)}
-                >
-                  <img
-                    src={sub.image}
-                    alt={sub.title}
-                    className="w-full h-40 object-cover rounded-md"
-                  />
-                  <h3 className="text-md font-light mt-1 text-center">
-                    {sub.title}
-                  </h3>
-                </div>
-              ))}
+              {/* ✅ Only show first 3 subcategories */}
+              {cat.subCategories &&
+                cat.subCategories.slice(0, 3).map((sub, index) => (
+                  <div
+                    key={index}
+                    className="rounded-lg shadow-lg p-2 hover:scale-105 transition cursor-pointer"
+                    onClick={() => handleSubClick(sub._id)}
+                  >
+                    <img
+                      src={sub.image}
+                      alt={sub.title}
+                      className="w-full h-40 object-cover rounded-md"
+                    />
+                    <h3 className="text-md font-light mt-1 text-center">
+                      {sub.title}
+                    </h3>
+                  </div>
+                ))}
             </div>
           </div>
         ))}

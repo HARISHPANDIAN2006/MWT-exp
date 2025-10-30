@@ -59,7 +59,6 @@ const SettingsSidebar = ({ isOpen, onClose }) => {
         { name: "Saved", icon: Heart, action: () => console.log("Saved") },
         { name: "Edit Profile", icon: User, action: () => console.log("Edit Profile") },
         { name: "My Transactions", icon: CreditCard, action: () => console.log("My Transactions") },
-        { name: "Change Language", icon: Globe, action: () => console.log("Change Language") },
         { name: "Notifications", icon: Bell, action: () => console.log("Notifications") },
         ...(user?.userType === "provider"
             ? [{ name: "My Business", icon: Briefcase, action: () => (window.location.href = `/mybusinesslist/${user._id}`) }]
@@ -67,7 +66,6 @@ const SettingsSidebar = ({ isOpen, onClose }) => {
         { name: "Customer Service", icon: MessageSquare, action: () => console.log("Customer Service") },
         { name: "Investor Relations", icon: MessageCircleQuestion, action: () => console.log("Investor Relations") },
         { name: "Policy", icon: Shield, action: () => console.log("Policy") },
-        { name: "Feedback", icon: MessageCircleQuestion, action: () => console.log("Feedback") },
         { name: "Help", icon: HelpCircle, action: () => console.log("Help") },
     ];
 

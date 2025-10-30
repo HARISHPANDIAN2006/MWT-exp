@@ -26,7 +26,7 @@ const Breadcrumb = ({ subTitle }) => {
 const fetchBusinessData = async (businessId) => {
     console.log(businessId)
     // ⚠️ IN PRODUCTION: Replace this with your actual 'fetch' or 'axios' API call
-    const api=import.meta.env.VITE_SERVER_URL;
+    const api = import.meta.env.VITE_SERVER_URL;
 
     const response = await fetch(`${api}/businesslist/${businessId}`);
     const data = await response.json();
@@ -37,7 +37,6 @@ const fetchBusinessData = async (businessId) => {
 
     return data;
 };
-
 
 // ====================================================================
 // REUSABLE COMPONENTS
@@ -105,45 +104,47 @@ const NavigationTabs = ({ activeTab, onTabChange }) => {
 };
 
 // 3. User Review Card
-const UserReviewCard = ({ review }) => (
-    <div className="p-4 border-b border-gray-500 last:border-b-0">
-        <div className="flex justify-between items-start mb-3">
-            <div className="flex items-center">
-                {/* User Avatar/Initial */}
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${review.userImage.length === 1 ? 'bg-gray-300 text-gray-700 font-bold' : 'bg-gray-200'}`}>
-                    {review.userImage.length === 1 ? review.userImage : <img src={review.userImage} alt={review.name} className="w-full h-full object-cover rounded-full" />}
+const UserReviewCard = ({ review }) => {
+    return (
+        <div className="p-4 border-b border-gray-500 last:border-b-0">
+            <div className="flex justify-between items-start mb-3">
+                <div className="flex items-center">
+                    {/* User Avatar/Initial */}
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${review.userImage.length === 1 ? 'bg-gray-300 text-gray-700 font-bold' : 'bg-gray-200'}`}>
+                        {review.userImage.length === 1 ? review.userImage : <img src={review.userImage} alt={review.name} className="w-full h-full object-cover rounded-full" />}
+                    </div>
+                    <div>
+                        <p className="font-semibold text-gray-800">{review.name}</p>
+                        <p className="text-xs text-gray-500">{review.reviewsCount} reviews</p>
+                    </div>
                 </div>
-                <div>
-                    <p className="font-semibold text-gray-800">{review.name}</p>
-                    <p className="text-xs text-gray-500">{review.reviewsCount} reviews</p>
+                <span className="text-xs text-gray-500">{review.date}</span>
+            </div>
+
+            {/* Rating Stars (Static '1' rating for this example) */}
+            <div className="text-red-500 text-lg mb-2">★★★★★ <span className="text-sm font-semibold text-gray-800 ml-1">1</span></div>
+
+            {/* Highlight/Badges */}
+            {review.highlight && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                    {review.highlight.split(',').map((h, i) => (
+                        <span key={i} className="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full border border-gray-300">{h.trim()}</span>
+                    ))}
                 </div>
+            )}
+
+            {/* Review Text */}
+            <p className="text-sm text-gray-700 mb-3 line-clamp-4">{review.text}</p>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-4 text-sm text-gray-600">
+                <button className="flex items-center hover:text-blue-600"><span className="mr-1">👍</span>Helpful</button>
+                <button className="flex items-center hover:text-blue-600"><span className="mr-1">💬</span>Comment</button>
+                <button className="flex items-center hover:text-blue-600"><span className="mr-1">🔗</span>Share</button>
             </div>
-            <span className="text-xs text-gray-500">{review.date}</span>
         </div>
-
-        {/* Rating Stars (Static '1' rating for this example) */}
-        <div className="text-red-500 text-lg mb-2">★★★★★ <span className="text-sm font-semibold text-gray-800 ml-1">1</span></div>
-
-        {/* Highlight/Badges */}
-        {review.highlight && (
-            <div className="flex flex-wrap gap-2 mb-3">
-                {review.highlight.split(',').map((h, i) => (
-                    <span key={i} className="text-xs text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full border border-gray-300">{h.trim()}</span>
-                ))}
-            </div>
-        )}
-
-        {/* Review Text */}
-        <p className="text-sm text-gray-700 mb-3 line-clamp-4">{review.text}</p>
-
-        {/* Action Buttons */}
-        <div className="flex space-x-4 text-sm text-gray-600">
-            <button className="flex items-center hover:text-blue-600"><span className="mr-1">👍</span>Helpful</button>
-            <button className="flex items-center hover:text-blue-600"><span className="mr-1">💬</span>Comment</button>
-            <button className="flex items-center hover:text-blue-600"><span className="mr-1">🔗</span>Share</button>
-        </div>
-    </div>
-);
+    )
+};
 
 
 // 4. Floating Footer Bar (Sticky Contact Bar)
@@ -209,6 +210,20 @@ const SubServicePage = () => {
     const [error, setError] = useState("");
     const [activeTab, setActiveTab] = useState('Overview');
     const { id } = useParams()
+    const [saved, setSaved] = useState(true);
+    const [liked, setLiked] = useState(true);
+
+    const handleLike = (e) => {
+        e.stopPropagation(); // prevent triggering main click
+        setLiked(!liked);
+        // optional: call backend API to update liked list
+    };
+
+    const handleSave = (e) => {
+        e.stopPropagation();
+        setSaved(!saved);
+        // optional: call backend API to update saved list
+    };
 
     // Mock business ID for fetching (in a real app, this comes from props or URL params)
     const businessId = id;
@@ -595,6 +610,7 @@ const SubServicePage = () => {
                                     <span className="cursor-pointer hover:text-gray-700" title="Edit Listing">✏️</span>
                                     <span className="cursor-pointer hover:text-gray-700" title="Share">🔗</span>
                                 </div>
+                                
                             </div>
                         </div>
 

@@ -86,6 +86,8 @@ app.use("/api/userprofile", require("./routes/userProfileRoutes"));
 app.use("/api/business",require("./routes/businessRoutes"));
 app.use("/api/businesslist", require("./routes/businesslistRoutes"));
 app.use("/api/chat", require("./routes/messageRoutes"));
+app.use("/api/favourites", require("./routes/favouriteRoutes"));
+app.use("/api/saved", require("./routes/savedRoutes"));
 
 const server = http.createServer(app);
 

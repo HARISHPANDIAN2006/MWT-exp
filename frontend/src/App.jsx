@@ -27,6 +27,7 @@ import MyBusinessPage from "./JustDialHome/ServicesPages/MyBusinessPage";
 import AddBusinessPage from "./JustDialHome/ServicesPages/AddBusinessPage";
 import AllCategoriesPage from "./JustDialHome/AllCategoriesPage";
 import SubCategoryList from "./JustDialHome/SubCategoryList";
+import ProfileForm from "./JustDialHome/ServicesPages/ProfileForm";
 
 function HomePage() {
   return (
@@ -70,6 +71,7 @@ function App() {
           <Route path="/addbusiness/:userId" element={<AddBusinessPage/>} />
           <Route path="/all-categories" element={<AllCategoriesPage />} />
           <Route path="/subcategory-list" element={<SubCategoryList />} />
+          <Route path="/profile-form" element={<ProfileForm />} />
         </Routes>
       </Router>
     </>
